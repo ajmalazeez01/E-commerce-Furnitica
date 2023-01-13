@@ -1,132 +1,146 @@
-const userCollection = require("../models/userSchema");
-const mailer = require("../Utils/otp");
-const nodemailer = require("nodemailer");
+const userCollection = require('../models/userSchema')
+const productCollection=require('../models/productSchema')
+const categoryCollection = require('../models/categorySchema')
+const mailer = require('../utils/otp')
+require('mongoose')
+// const bcrypt = require('bcrypt')
 
 const loadSignup = (req, res) => {
-  res.render("signup");
+  res.render('signup')
+// eslint-disable-next-line semi
 };
 
-let userData;
+let userData
 const insertUser = async (req, res) => {
-  //signup post
+  // signup post
   try {
-    userData = req.body;
-    const email = req.body.email;
-    const user = await userCollection.findOne({ email: email });
+    userData = req.body
+    const email = userData.email
+    const paswword = userData.password
+    const user = await userCollection.findOne({
+      email : email
+     })
 
-    if (email == user.email) {
-      res.render("signup", { error: "E-mail already exist" });
+    // eslint-disable-next-line eqeqeq
+    if (email == user.email&&paswword == user.password ) {
+      res.render('signup', { error: 'E-mail already exist' })
     }
   } catch (error) {
-    console.log(req.body.email);
-    let mailDetails = {
-      from: "ajmalazeez776@gmail.com",
+    console.log(req.body.email)
+    const mailDetails = {
+      from: 'ajmalazeez776@gmail.com',
       to: req.body.email,
-      subject: "fashions REGISTRATION",
-      html: `<p>Your OTP for registering in fashions is ${mailer.OTP}</p>`,
-    };
-    console.log(mailer.OTP);
+      subject: 'Furnitica REGISTRATION',
+      html: `<p>Your OTP for registering in furnitica is ${mailer.OTP}</p>`
+    }
+    console.log(mailer.OTP)
     mailer.mailTransporter.sendMail(mailDetails, (err, data) => {
-      console.log(data, "12345");
+      // console.log(data, '12345')
       if (err) {
-        console.log(err, "error");
+        console.log(err, 'error')
       } else {
-        res.render("../Views/otp.ejs");
-        console.log("OTP mailed");
+        res.render('../Views/otp.ejs')
+        console.log('OTP mailed')
       }
-    });
+    })
   }
-};
+}
 
 const otp = (
   req,
-  res //get method
+  res // get method
 ) => {
-  res.render("otp");
-};
+  res.render('otp')
+}
 
-const otpvalidation = async (
-  req,
-  res //post method
-) => {
-  userotp = req.body.otp;
-  if (userotp == mailer.OTP) {
-    await userCollection.insertMany([
-      //database save method
-
-      userData,
-    ]);
-    res.redirect("/login");
+const otpvalidation = async (req,res) => {
+  userotp = req.body.otp
+  console.log(userotp);
+  if (userotp == mailer.OTP)
+  {
+    const user = new userCollection({
+     email: userData.email,
+     name: userData.name,
+     password: userData.password,
+     number: userData.number,
+      })
+    const value = await user.save();
+    res.redirect('/login')
   } else {
-    res.render("otp", { wrong: "otp is incorrect" });
+    
+    res.render('otp', { wrong: 'otp is incorrect' })
   }
-};
+}
 
-const login = (
-  req,
-  res //login get
-) => {
-  res.render("login");
-};
+// login get
+const login = (req, res) => {
+  res.render('login',req.query)
+}
 
-const userLogin = async (
-  req,
-  res //login post
-) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const userData = await userCollection.findOne({ email: email });
-  if (email == userData.email && password == userData.password) {
-    res.redirect("/home");
-  } else {
-    res.redirect("/login", { wrong: "otp is incorent haiii" });
-  }
-};
-
-const userHome = (
-  req,
-  res //get home
-) => {
-  res.render("userHome");
-};
-
-const otpVerfication = async (req, res) => {
+// login post
+const userLogin = async (req, res) => {
   try {
-    if (req.body.otp == mailer.OTP) {
-      console.log(userData.email);
-      const user1 = new userCollection(userData);
-      user1.save();
-      res.redirect("/");
-    } else {
-      res.render("../Views/user/otp.ejs", { error: "Invalid OTP" });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-  // res.render("../Views/user/otp.ejs")`
-};
-
-const userVerification = async (req, res) => {
-  try {
-    const email = req.body.email;
-    const password = req.body.password;
-    const user = await userCollection.findOne({ email: req.body.email });
-    if (user) {
-      if (email == user.email && password == user.password) {
-        // console.log(user.email);
-        res.redirect("/userhome");
-      } else {
-        res.render("../Views/userLogin.ejs", {
-          wrong: "Invalid Email or password",
-        });
+    const email = req.body.email
+    const password = req.body.password
+    const userData = await userCollection.findOne({email : email})
+    if(userData)
+    {
+      if(userData.status == true){
+      if(userData.password == password){
+        req.session.user=userData._id
+        console.log(req.session.user);
+        res.redirect('/home')
+      }else{
+        res.redirect('/login?wrong=email or pasword is inccorect')
       }
     } else {
-      res.render("../Views/userLogin.ejs", { wrong: "User not found" });
-    }
-  } catch (error) {
-    console.log(error);
+        res.redirect('/login?wrong=email or pasword is inccorect2')
+    } 
+  } else {
+        res.redirect('/login?wrong= pasword is inccorect')
   }
-};
+
+    
+  } catch (error) {
+      console.log(error);
+  }
+}
+
+
+const userHome = async (req, res) => {
+ try{
+     const product = await productCollection.find({})
+     const category = await categoryCollection.find({})
+     res.render('userHome', {product, category})
+    
+ }
+  
+ catch (error) {
+  console.log(error);
+ }
+}
+
+
+const productList = async (req,res) =>{
+  const product = await productCollection.find({category:req.query.category})
+  res.render('productlist',{product})
+  console.log(product);
+ }
+
+ const productDetail = async (req, res) =>{
+  const product = await productCollection.findById({_id:req.query.id})
+  res.render('productdetail',{product})
+ 
+}
+
+
+
+
+const checkoutList = (req, res) =>{
+  res.render('checkout')
+}
+
+
 
 module.exports = {
   loadSignup,
@@ -137,6 +151,7 @@ module.exports = {
   userLogin,
   userHome,
   insertUser,
-  otpVerfication,
-  userVerification,
-};
+  productList,
+  productDetail,
+  checkoutList
+}

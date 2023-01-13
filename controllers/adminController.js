@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
 const adminCollection = require("../models/adminSchema");
 const userCollection = require("../models/userSchema");
 const productCollection = require("../models/productSchema");
 const categoryCollection = require("../models/categorySchema");
+const { name } = require("ejs");
 
-//admin get method
+// admin get method
 const loadLogin = (req, res) => {
   res.render("adminLogin");
 };
@@ -13,7 +13,8 @@ const userLogin = async (req, res) => {
   console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
-  const userData = await adminCollection.findOne({ email: email });
+  const userData = await adminCollection.findOne({ email });
+  // eslint-disable-next-line eqeqeq
   if (email == userData.email && password == userData.password) {
     res.redirect("/adminDashboard");
   } else {
@@ -21,29 +22,30 @@ const userLogin = async (req, res) => {
   }
 };
 
-//get  method
+// get  method
 const amdinDasboard = (req, res) => {
   res.render("dashboard");
 };
 
-//user management find the user in the admin side
+// user management find the user in the admin side
 const user = async (req, res) => {
   try {
-    let userData = await userCollection.find();
+    const userData = await userCollection.find();
 
-    res.render("userManagement", { userData: userData });
+    res.render("userManagement", { userData });
   } catch (error) {
     console.log(error);
   }
   res.render("userManagement");
 };
 
-//user management
+// user management
 const userBlock = async (req, res) => {
   try {
     const id = req.query.id;
     const userdata = await userCollection.findById({ _id: id });
     console.log(userdata);
+    // eslint-disable-next-line eqeqeq
     if (userdata.status == true) {
       await userCollection.updateOne({ _id: id }, { $set: { status: false } });
       res.redirect("/user");
@@ -56,7 +58,7 @@ const userBlock = async (req, res) => {
   }
 };
 
-//product management find the datain the admin side
+// product management find the datain the admin side
 const product = async (req, res) => {
   try {
     const productData = await productCollection.find({});
@@ -67,12 +69,13 @@ const product = async (req, res) => {
   }
   res.render("productManagement");
 };
-//produtc management block and unbloxk
+// produtc management block and unbloxk
 const productBlock = async (req, res) => {
   try {
     const id = req.query.id;
     const productdata = await productCollection.findById({ _id: id });
     console.log(productdata);
+    // eslint-disable-next-line eqeqeq
     if (productdata.status == true) {
       await productCollection.updateOne(
         { _id: id },
@@ -93,7 +96,8 @@ const productBlock = async (req, res) => {
 // add product
 const insertProduct = (req, res) => {
   try {
-    let product = new productCollection({
+    // eslint-disable-next-line new-cap
+    const product = new productCollection({
       name: req.body.name,
       category: req.body.category,
       brand: req.body.brand,
@@ -108,18 +112,64 @@ const insertProduct = (req, res) => {
     console.log(error);
   }
 };
-
+//edit get method
 const editProduct = async (req, res) => {
   try {
-    let id = req.query.id;
-    const categoryData = await productCollection.findById({ _id: id });
-    if (categoryData) {
-      res.render("productManagement", { categoryData });
+    const id = req.query.id;
+    const productData = await productCollection.findById({ _id: id });
+    const categoryData = await categoryCollection.find({});
+    if (productData) {
+      res.render("productedit", { productData: productData, categoryData });
     } else {
       res.redirect("/product");
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+//edit post method
+const postEditProduct = async (req, res) => {
+  try {
+    const name = req.params.name;
+    console.log(name);
+    if (typeof req.file === "undefined") {
+      const product = await productCollection.updateOne(
+        { name: name },
+
+        {
+          $set: {
+            name: req.body.name,
+            category: req.body.category,
+            description: req.body.description,
+            brand: req.body.brand,
+            stock: req.body.stock,
+            price: req.body.price,
+          },
+        }
+      );
+      console.log(product);
+      res.redirect("/product");
+    } else {
+      const product = await productCollection.updateOne(
+        { name: name },
+
+        {
+          $set: {
+            name: req.body.name,
+            category: req.body.category,
+            description: req.body.description,
+            brand: req.body.brand,
+            stock: req.body.stock,
+            price: req.body.price,
+            image: req.file.filename,
+          },
+        }
+      );
+      console.log(product);
+    }
+  } catch (error) {
+    console.log("errfror");
   }
 };
 
@@ -132,11 +182,9 @@ const deleteproduct = async (req, res) => {
   }
 };
 
-//category management find the datain the admin side
+// category management find the datain the admin side
 const category = async (req, res) => {
   try {
-    console.log("haiii");
-
     const categoryData = await categoryCollection.find({});
     console.log(categoryData);
 
@@ -147,11 +195,12 @@ const category = async (req, res) => {
   res.render("categoryManagement");
 };
 
-//category management block and unbloxk
+// category management block and unbloxk
 const categoryBlock = async (req, res) => {
   try {
     const id = req.query.id;
     const categoryData = await categoryCollection.findById({ _id: id });
+    // eslint-disable-next-line eqeqeq
     if (categoryData.status == true) {
       await categoryCollection.updateOne(
         { _id: id },
@@ -173,8 +222,9 @@ const categoryBlock = async (req, res) => {
 const insertCategory = async (req, res) => {
   try {
     console.log(req.body.name);
-
-    let category = new categoryCollection({ name: req.body.name });
+    const name = req.body.name;
+    const image = req.file.filename;
+    const category = new categoryCollection({ name, image });
     console.log(category);
     await category.save();
     res.redirect("/category");
@@ -183,17 +233,55 @@ const insertCategory = async (req, res) => {
   }
 };
 
+//edit get method
 const editCategory = async (req, res) => {
   try {
-    let id = req.query.id;
+    const id = req.query.id;
     const categoryData = await categoryCollection.findById({ _id: id });
+    const categoryDatas = await categoryCollection.find({});
+    console.log(categoryData);
     if (categoryData) {
-      res.render("categoryManagement", { categoryData });
+      res.render("categoryedit", { categoryData: categoryData, categoryDatas });
     } else {
       res.redirect("/category");
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+//edit post method
+const postEditCategory = async (req, res) => {
+  try {
+    const name = req.params.name;
+    console.log(name);
+    if (typeof req.file === "undefined") {
+      const category = await categoryCollection.updateOne(
+        { name: name },
+
+        {
+          $set: {
+            name: req.body.name,
+          },
+        }
+      );
+      console.log(category);
+      res.redirect("/category");
+    } else {
+      const category = await categoryCollection.updateOne(
+        { name: name },
+
+        {
+          $set: {
+            name: req.body.name,
+            image: req.file.filename,
+          },
+        }
+      );
+      console.log(category);
+    }
+  } catch (error) {
+    console.log("errfror");
   }
 };
 
@@ -205,7 +293,6 @@ const deleteCategory = async (req, res) => {
     console.log(error);
   }
 };
-
 module.exports = {
   loadLogin,
   userLogin,
@@ -216,10 +303,12 @@ module.exports = {
   insertProduct,
   productBlock,
   editProduct,
+  postEditProduct,
   deleteproduct,
   category,
   categoryBlock,
   insertCategory,
   editCategory,
+  postEditCategory,
   deleteCategory,
 };
