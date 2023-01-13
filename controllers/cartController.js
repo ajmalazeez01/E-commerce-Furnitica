@@ -1,19 +1,30 @@
-import { findOne, aggregate } from "../models/userSchema";
-import { findOne as _findOne, distinct } from "../models/productSchema";
-//const categoryCollection = require("../../models/categorySchema");
-// eslint-disable-next-line no-unused-vars
-import { addSyntheticLeadingComment, ListFormat } from "typescript";
-import cartCollection, { aggregate as _aggregate, findOne as __findOne, updateOne } from "../models/cartSchema";
-import { Types } from "mongoose";
-import wishlistCollection, { aggregate as __aggregate, findOne as ___findOne, updateOne as _updateOne } from "../models/wishlistSchema";
-import { find } from "../models/categorySchema";
-import orderCollection from "../models/oderSchema";
-import { configure, payment as _payment } from "paypal-rest-sdk";
+
+// eslint-disable-next-line no-undef
+const productCollection = require('../models/productSchema')
+// eslint-disable-next-line no-undef
+const categoryCollection = require('../models/categorySchema')
+// eslint-disable-next-line no-undef
+const cartCollection = require('../models/cartSchema')
+// eslint-disable-next-line no-undef
+const mongoose = require('mongoose')
+// eslint-disable-next-line no-undef
+const wishlistCollection = require('../models/wishlistSchema')
+// eslint-disable-next-line no-undef, no-unused-vars
+// const orderCollection = require('../models/oderSchema')
+// eslint-disable-next-line no-undef
+const userCollection = require('../models/userSchema')
+// eslint-disable-next-line no-undef, no-unused-vars
+const paypal = require("paypal-rest-sdk");
 //get method
 const cartList = async (req, res) => {
   try {
-    const cartItems = await _aggregate([
-      { $match: { userId: Types.ObjectId(req.session.user) } },
+
+    const user = await userCollection.findOne({ _id: req.session.user });
+    const brands = await productCollection.distinct("brand");
+    const categories = await categoryCollection.find({ status: true });
+    const cartData = await cartCollection.aggregate([
+      // eslint-disable-next-line no-undef
+      { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
 
       { $unwind: "$cartItem" },
       {
@@ -50,11 +61,17 @@ const cartList = async (req, res) => {
         },
       },
     ]);
-    const subtotal = cartItems.reduce(function (acc, curr) {
+    const subtotal = cartData.reduce(function (acc, curr) {
       acc = acc + curr.total;
       return acc;
     }, 0);
-    res.render("cart", { cartData: cartItems, subtotal });
+    res.render("cart", { 
+
+      brands,
+      categories,
+      cartData,
+      user,
+      subtotal, });
   } catch (error) {
     console.log(error);
   }
@@ -63,21 +80,22 @@ const cartList = async (req, res) => {
 const add_to_cart = async (req, res) => {
   try {
     const proId = req.body.Id;
-    const Id = Types.ObjectId(proId);
-    const productData = await _findOne({ _id: proId });
-    const id = Types.ObjectId(req.session.user);
+    // eslint-disable-next-line no-unused-vars
+    const Id = mongoose.Types.ObjectId(proId);
+    const productData = await productCollection.findOne({ _id: proId });
+    const id = mongoose.Types.ObjectId(req.session.user);
     if (productData.stock > 0) {
-      const cartExist = await __findOne({ userId: id });
+      const cartExist = await cartCollection.findOne({ userId: id });
       if (cartExist) {
-        const exist1 = await _aggregate([
+        const exist1 = await cartCollection.aggregate([
           {
             $match: {
               $and: [
-                { userId: Types.ObjectId(req.session.user) },
+                { userId: mongoose.Types.ObjectId(req.session.user) },
                 {
                   cartItem: {
                     $elemMatch: {
-                      productId: new Types.ObjectId(proId),
+                      productId: new mongoose.Types.ObjectId(proId),
                     },
                   },
                 },
@@ -86,13 +104,13 @@ const add_to_cart = async (req, res) => {
           },
         ]);
         if (exist1.length === 0) {
-          const dataPush = await updateOne(
+          await cartCollection.updateOne(
             { userId: id },
             {
               $push: { cartItem: { productId: proId } },
             }
           );
-          const cartData = await __findOne({ userId: id });
+          const cartData = await cartCollection.findOne({ userId: id });
           const count = cartData.cartItem.length;
           res.json({ success: true, count });
         } else {
@@ -104,7 +122,7 @@ const add_to_cart = async (req, res) => {
           cartItem: [{ productId: proId }],
         });
         await addCart.save();
-        const cartData = await __findOne({ userId: id });
+        const cartData = await cartCollection.findOne({ userId: id });
         const count = cartData.cartItem.length;
         //  console.log(count);
         res.json({ success: true, count });
@@ -124,12 +142,12 @@ const productQtyAdd = async (req, res) => {
     const proId = data.Id;
 
     const qty = parseInt(data.qty);
-    const productData = await _findOne({ _id: proId });
+    const productData = await productCollection.findOne({ _id: proId });
     // console.log(productData);
     if (productData.stock > 0) {
       if (qty < 10) {
         const price = productData.price;
-        await updateOne(
+        await cartCollection.updateOne(
           { userId: req.session.user, "cartItem.productId": proId },
           { $inc: { "cartItem.$.qty": 1 } }
         );
@@ -150,11 +168,11 @@ const productQtySub = async (req, res) => {
     const data = req.body;
     const proId = data.Id;
     const qty = parseInt(data.qty);
-    const productData = await _findOne({ _id: proId });
+    const productData = await productCollection.findOne({ _id: proId });
     if (productData.stock > 0) {
       if (qty > 1) {
         const price = productData.price;
-        await updateOne(
+        await cartCollection.updateOne(
           { userId: req.session.user, "cartItem.productId": proId },
           { $inc: { "cartItem.$.qty": -1 } }
         );
@@ -174,7 +192,7 @@ const deleteCart = async (req, res) => {
   try {
     const userId = req.session.user;
     const id = req.query.id;
-    await updateOne(
+    await cartCollection.updateOne(
       { userId: userId },
       { $pull: { cartItem: { productId: id } } }
     );
@@ -186,10 +204,10 @@ const deleteCart = async (req, res) => {
 
 const view_wishList = async (req, res) => {
   try {
-    const user = await findOne({ _id: req.session.user });
-
-    const categories = await find({ status: true });
-    const wishList = await __aggregate([
+    const user = await userCollection.findOne({ _id: req.session.user });
+    // const brands = await productCollection.distinct("brand");
+    const categories = await categoryCollection.find({ status: true });
+    const wishList = await wishlistCollection.aggregate([
       { $match: { userId: user._id } },
       { $unwind: "$wishList" },
       {
@@ -233,8 +251,8 @@ const wishList = async (req, res) => {
     const data = req.body;
     const id = data.prodId;
     const userId = req.session.user;
-    const Id = Types.ObjectId(userId);
-    const wish = await ___findOne({ userId: Id });
+    const Id = mongoose.Types.ObjectId(userId);
+    const wish = await wishlistCollection.findOne({ userId: Id });
     if (wish) {
       let wishlistEx = wish.wishList.findIndex(
         (wishList) => wishList.productId == id
@@ -242,13 +260,13 @@ const wishList = async (req, res) => {
       if (wishlistEx != -1) {
         res.json({ wish: true });
       } else {
-        const dataPush = await _updateOne(
+        await wishlistCollection.updateOne(
           { userId: Id },
           {
             $push: { wishList: { productId: id } },
           }
         );
-        const wishlistData = await ___findOne({ userId: Id });
+        const wishlistData = await wishlistCollection.findOne({ userId: Id });
         const count = wishlistData.wishList.length;
         res.json({ success: true, count });
       }
@@ -258,7 +276,7 @@ const wishList = async (req, res) => {
         wishList: [{ productId: id }],
       });
       await addWish.save();
-      const wishlistData = await ___findOne({ userId: Id });
+      const wishlistData = await wishlistCollection.findOne({ userId: Id });
       const count = wishlistData.wishList.length;
       res.json({ success: true, count });
     }
@@ -271,7 +289,7 @@ const deleteWishlist = async (req, res) => {
   try {
     const userId = req.session.user;
     const id = req.query.id;
-    await _updateOne(
+    await wishlistCollection.updateOne(
       { userId: userId },
       { $pull: { wishList: { productId: id } } }
     );
@@ -286,8 +304,8 @@ const deleteWishlist = async (req, res) => {
 const checkout = async (req, res) => {
   try {
     //  let subtotal = req.query.subtotal;
-    let cartItems = await _aggregate([
-      { $match: { userId: Types.ObjectId(req.session.user) } },
+    let cartItems = await cartCollection.aggregate([
+      { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
       { $unwind: "$cartItem" },
       {
         $project: {
@@ -325,11 +343,11 @@ const checkout = async (req, res) => {
       acc = acc + curr.total;
       return acc;
     }, 0);
-    const user = await findOne({ _id: req.session.user });
-    const brands = await distinct("brand");
-    const categories = await find({ status: true });
-    const address = await aggregate([
-      { $match: { _id: Types.ObjectId(req.session.user) } },
+    const user = await userCollection.findOne({ _id: req.session.user });
+    const brands = await productCollection.distinct("brand");
+    const categories = await categoryCollection.find({ status: true });
+    const address = await userCollection.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
       { $unwind: "$address" },
       {
         $project: {
@@ -362,8 +380,8 @@ const checkout = async (req, res) => {
 const postCheckOut = async (req, res) => {
   try {
     if (req.body.payment_mode == "COD") {
-      const productData = await _aggregate([
-        { $match: { userId: Types.ObjectId(req.session.user) } },
+      await cartCollection.aggregate([
+        { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: "$cartItem" },
         {
           $project: {
@@ -374,8 +392,8 @@ const postCheckOut = async (req, res) => {
         },
       ]);
 
-      let cartItems = await _aggregate([
-        { $match: { userId: Types.ObjectId(req.session.user) } },
+      await cartCollection.aggregate([
+        { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: "$cartItem" },
         {
           $project: {
@@ -407,10 +425,12 @@ const postCheckOut = async (req, res) => {
         },
       ]);
 
-      const subtotal = cartItems.reduce((acc, curr) => {
-        acc = acc + curr.total;
-        return acc;
-      }, 0);
+      // const subtotal = cartItems.reduce((acc, curr) => {
+      //   acc = acc + curr.total;
+      //   return acc;
+      // }, 0);
+
+
       // console.log(req.body);
       // console.log(subtotal)
       //     if (req.body.couponid === ''){
@@ -465,8 +485,8 @@ const postCheckOut = async (req, res) => {
       // }
     }
     if (req.body.payment_mode == "pay") {
-      const productData = await _aggregate([
-        { $match: { userId: Types.ObjectId(req.session.user) } },
+      await cartCollection.aggregate([
+        { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: "$cartItem" },
         {
           $project: {
@@ -476,8 +496,8 @@ const postCheckOut = async (req, res) => {
           },
         },
       ]);
-      let cartItems = await _aggregate([
-        { $match: { userId: Types.ObjectId(req.session.user) } },
+      let cartItems = await cartCollection.aggregate([
+        { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: "$cartItem" },
         {
           $project: {
@@ -514,58 +534,54 @@ const postCheckOut = async (req, res) => {
         return acc;
       }, 0);
 
-      configure({
+
+      paypal.configure({
         mode: "sandbox", //sandbox or live
         client_id:
           "AZlCOOPiXuoptUcu4w-DzOdbucMs9x7eMqyVBtGXGY3B3AC7ID66RggAGl6K9EdRZLLlhWsaT6i8TsQF",
         client_secret:
           "EHzygZ-5LLHB-34MTSY4s-I96Rf6MJafMUifpWXWWs5sx2x7B4YmZ07ScniIAq9AyLeGc__vB5iWBLa-",
       });
-
-      const create_payment_json = {
-        intent: "sale",
-        payer: {
-          payment_method: "paypal",
-        },
-        redirect_urls: {
-          return_url: "http://localhost:4000/home",
-          cancel_url: "http://localhost:4000/checkout",
-        },
-        transactions: [
-          {
-            item_list: {
-              items: [
-                {
-                  name: "item",
-                  sku: "item",
-                  price: subtotal,
-                  currency: "USD",
-                  quantity: 1,
+       
+          const create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:4000/home",
+                "cancel_url": "http://localhost:4000/checkout"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "item",
+                        "sku": "item",
+                        "price":subtotal,
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
                 },
-              ],
-            },
-            amount: {
-              currency: "USD",
-              total: subtotal,
-            },
-            description: "This is the payment description.",
-          },
-        ],
-      };
-      _payment.create(
-        create_payment_json,
-        async function (error, payment) {
-          if (error) {
-            throw error;
-          } else {
-            for (let i = 0; i < payment.links.length; i++) {
-              if (payment.links[i].rel === "approval_url") {
-                res.redirect(payment.links[i].href);
+                "amount": {
+                    "currency": "USD",
+                    "total":subtotal
+                },
+                "description": "This is the payment description."
+            }]
+          };
+          paypal.payment.create(create_payment_json, async function (error, payment) {
+            if (error) {
+              throw error;
+            } else {
+              for (let i = 0; i < payment.links.length; i++) {
+                if (payment.links[i].rel === "approval_url") {
+                  res.redirect(payment.links[i].href);
+          
+          
+          }
               }
             }
-          }
-        }
-      );
+          });
 
       // console.log(req.body);
       // console.log(subtotal)
@@ -629,7 +645,8 @@ const postCheckOut = async (req, res) => {
   }
 };
 
-export default {
+// eslint-disable-next-line no-undef
+module.exports = {
   cartList,
   add_to_cart,
   productQtyAdd,

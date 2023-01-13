@@ -133,7 +133,6 @@
         <main>
           <div class="container-fluid px-4">
             <h1 class="mt-4">User Management</h1>
-
             <div class="col-lg-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
@@ -145,16 +144,17 @@
                       <th>Status</th>
                       <th>Block/Unblock</th>
                     </thead>
+
                     <tbody>
-                      <% userData.forEach((userData)=>{ %>
-                      <%console.log(userData)%>
+                      <% userData.forEach((item)=>{ %>
+
                       <tr>
-                        <td><%=userData.name%></td>
-                        <td><%=userData.email%></td>
-                        <td><%=userData.number%></td>
+                        <td><%=item.name%></td>
+                        <td><%=item.email%></td>
+                        <td><%=item.number%></td>
 
                         <td>
-                          <%if(userData.status==true){%>
+                          <%if(item.status==true){%>
                           <p class="badge badge-success">Active</p>
                           <%} else {%>
                           <p class="badge badge-danger">Inactive</p>
@@ -162,10 +162,10 @@
                         </td>
 
                         <td>
-                          <%if(userData.status==true){%>
+                          <%if(item.status==true){%>
                           <a
-                            href="/userblock?id=<%=userData.id%>"
-                            onclick="return confirm('are you sure change access to <%=userData.email%>')"
+                            href="/userblock?id=<%=item.id%>"
+                            onclick="return confirm('are you sure change access to <%=item.email%>')"
                             ><button
                               type="button"
                               class="badge badge-danger"
@@ -177,8 +177,8 @@
 
                           <%} else {%>
                           <a
-                            href="/userblock?id=<%=userData.id%>"
-                            onclick="return confirm('are you sure change access to <%=userData.email%>')"
+                            href="/userblock?id=<%=item.id%>"
+                            onclick="return confirm('are you sure change access to <%=item.email%>')"
                             ><button
                               type="button"
                               class="badge badge-success"

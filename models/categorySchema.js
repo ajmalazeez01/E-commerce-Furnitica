@@ -1,15 +1,17 @@
-const mongoose = require('mongoose')
+// eslint-disable-next-line no-undef
+const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
   name: {
-    type: String
+    type: String,
   },
   image: {
-    type: String
+    type: String,
   },
 
-  status: { type: Boolean, default: true }
-})
+  status: { type: Boolean, default: true },
+});
 
-const categoryCollection = mongoose.model('category', categorySchema)
-module.exports = categoryCollection
+const categoryCollection = mongoose.model("category", categorySchema);
+// eslint-disable-next-line no-undef
+module.exports = categoryCollection;

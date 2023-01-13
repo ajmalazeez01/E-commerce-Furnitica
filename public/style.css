@@ -24,6 +24,7 @@ body {
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 7rem;
   padding: 0 2rem;
+  justify-content: center;
 }
 
 .img {
@@ -221,3 +222,5 @@ a:hover {
     justify-content: center;
   }
 }
+
+

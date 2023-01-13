@@ -1,9 +1,13 @@
-const adminCollection = require("../models/adminSchema");
-const userCollection = require("../models/userSchema");
-const productCollection = require("../models/productSchema");
-const categoryCollection = require("../models/categorySchema");
-const { name } = require("ejs");
-
+// eslint-disable-next-line no-undef
+const adminCollection = require('../models/adminSchema')
+// eslint-disable-next-line no-undef
+const userCollection = require('../models/userSchema')
+// eslint-disable-next-line no-undef
+const productCollection = require('../models/productSchema')
+// eslint-disable-next-line no-undef
+const categoryCollection = require('../models/categorySchema')
+// eslint-disable-next-line no-undef, no-unused-vars
+const mongoose = require('mongoose')
 // admin get method
 const loadLogin = (req, res) => {
   res.render("adminLogin");
@@ -13,7 +17,7 @@ const userLogin = async (req, res) => {
   console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
-  const userData = await adminCollection.findOne({ email });
+  const userData = await adminCollection.findOne({ email:email });
   // eslint-disable-next-line eqeqeq
   if (email == userData.email && password == userData.password) {
     res.redirect("/adminDashboard");
@@ -117,9 +121,9 @@ const editProduct = async (req, res) => {
   try {
     const id = req.query.id;
     const productData = await productCollection.findById({ _id: id });
-    const categoryData = await categoryCollection.find({});
+    const categoryData = await productCollection.find({});
     if (productData) {
-      res.render("productedit", { productData: productData, categoryData });
+      res.render("productEdit", { productData: productData, categoryData });
     } else {
       res.redirect("/product");
     }
@@ -169,7 +173,7 @@ const postEditProduct = async (req, res) => {
       console.log(product);
     }
   } catch (error) {
-    console.log("errfror");
+    console.log(error);
   }
 };
 
@@ -241,7 +245,7 @@ const editCategory = async (req, res) => {
     const categoryDatas = await categoryCollection.find({});
     console.log(categoryData);
     if (categoryData) {
-      res.render("categoryedit", { categoryData: categoryData, categoryDatas });
+      res.render("categoryEdit", { categoryData: categoryData, categoryDatas });
     } else {
       res.redirect("/category");
     }
@@ -281,7 +285,7 @@ const postEditCategory = async (req, res) => {
       console.log(category);
     }
   } catch (error) {
-    console.log("errfror");
+    console.log(error);
   }
 };
 
@@ -293,7 +297,8 @@ const deleteCategory = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = {
+// eslint-disable-next-line no-undef
+module.exports =  {
   loadLogin,
   userLogin,
   amdinDasboard,

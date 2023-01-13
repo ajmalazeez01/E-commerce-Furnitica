@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>signup</title>
+    <title>login</title>
     <link rel="stylesheet" type="text/css" href="/public/style.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap"
@@ -11,13 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
-    <img class="wave" src="img/wave.png" />
+    <img class="wave" src="../public/proimg/wave.png" />
     <div class="container">
       <div class="img"></div>
       <div class="login-content">
         <form action="/login" method="post">
-          <img src="img/avatar.svg" />
+          <img src="../public/proimg/logo.png" />
           <h2 class="title">Furnitica</h2>
+          <%=locals.wrong%>
           <div class="input-div one">
             <div class="i">
               <i class="fas fa-user"></i>
@@ -45,13 +46,12 @@
                 required
               />
             </div>
-            <%= locals.wrong%>
-          </div>
 
+            <%=locals.warning%>
+          </div>
+          <a href="/">Register Account</a>
           <input type="submit" class="btn" value="login" />
         </form>
-
-        <a href="/">signup</a>
       </div>
     </div>
 

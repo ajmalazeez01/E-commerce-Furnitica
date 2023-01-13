@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 
 app.set('view engine', 'ejs') // view engine setup
 
-app.listen(3002, () => console.log('http://localhost:3002/login'))
+app.listen(3002, () => console.log('http://localhost:3002/home'))
 
 const staticPath = path.join(__dirname, 'public') // Static paths
 app.use(express.static(staticPath))
