@@ -1,17 +1,14 @@
 // eslint-disable-next-line no-undef
-const userCollection = require('../models/userSchema')
+const userCollection = require("../models/userSchema");
 // eslint-disable-next-line no-undef
-const productCollection = require('../models/productSchema')
+const productCollection = require("../models/productSchema");
 // eslint-disable-next-line no-undef
-const categoryCollection = require('../models/categorySchema')
+const categoryCollection = require("../models/categorySchema");
 // eslint-disable-next-line no-undef
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 // eslint-disable-next-line no-undef, no-unused-vars
-const nodemailer = require('../utils/otp')
-const { OTP } = require('../utils/otp')
-
-
-// const bcrypt = require('bcrypt')
+const nodemailer = require("../utils/otp");
+const orderCollection = require("../models/oderSchema");
 
 const loadSignup = (req, res) => {
   res.render("signup");
@@ -25,20 +22,16 @@ const insertUser = async (req, res) => {
     userData = req.body;
     const email = userData.email;
     const password = userData.password;
-    const cpassword  = userData.cpassword
-    const user = await userCollection.findOne({email: email,
-    });
+    const cpassword = userData.cpassword;
+    const user = await userCollection.findOne({ email: email });
     // eslint-disable-next-line eqeqeq
-    if (email == user.email && password == user.password ) {
-    if (password !== cpassword) {
-      res.render("signup", { warning: "incorrect password" })
+    if (email == user.email && password == user.password) {
+      if (password !== cpassword) {
+        res.render("signup", { warning: "incorrect password" });
       }
-      res.render("signup", { error: "E-mail already exist" });
+      res.render("signup", { error: "you have already in member" });
     }
-    
-  }catch (error) {
-    console.log(req.body.email);
-    console.log(nodemailer)
+  } catch (error) {
     const mailDetails = {
       from: "ajmalazeez776@gmail.com",
       to: req.body.email,
@@ -46,14 +39,13 @@ const insertUser = async (req, res) => {
       // eslint-disable-next-line no-undef
       html: `<p>Your OTP for registering in furnitica is ${nodemailer.OTP}</p>`,
     };
+    console.log(nodemailer.OTP);
+
     // eslint-disable-next-line no-undef
     // eslint-disable-next-line no-undef
     nodemailer.mailTransporter.sendMail(mailDetails, (err) => {
-     
-
       if (err) {
         console.log(err, "error");
-        console.log('hiiiiii')
       } else {
         res.render("otp.ejs");
         console.log("OTP mailed");
@@ -72,8 +64,6 @@ const otp = (
 const otpvalidation = async (req, res) => {
   // eslint-disable-next-line no-undef
   userotp = req.body.otp;
-  // eslint-disable-next-line no-undef
-  console.log(userotp);
   // eslint-disable-next-line no-undef
   if (nodemailer.OTP == userotp) {
     const user = new userCollection({
@@ -105,8 +95,7 @@ const userLogin = async (req, res) => {
       if (userData.status == true) {
         if (userData.password == password) {
           req.session.user = userData._id;
-          // console.log(req.session.user);
-          res.redirect("/home");
+          res.redirect("/");
         } else {
           res.redirect("/login?wrong=email or pasword is inccorect");
         }
@@ -124,11 +113,14 @@ const userLogin = async (req, res) => {
 const userHome = async (req, res) => {
   try {
     const id = mongoose.Types.ObjectId(req.session.user);
-    // console.log(id);
-    const userName = await productCollection.findOne({ _id: id });
-    // console.log(userName);
-    const product = await productCollection.find({});
-    const category = await  categoryCollection.find({});
+    const userName = await userCollection.findOne({ _id: id });
+    const product = await productCollection.find({
+      // product: req.query.id, status : true
+    });
+    const category = await categoryCollection.find({
+      category: req.query.category,
+      status: true,
+    });
 
     res.render("userHome", { product, category, userName });
   } catch (error) {
@@ -139,9 +131,9 @@ const userHome = async (req, res) => {
 const productList = async (req, res) => {
   const product = await productCollection.find({
     category: req.query.category,
+    status: true,
   });
   res.render("productList", { product });
-  // console.log(product);
 };
 
 const productDetail = async (req, res) => {
@@ -158,6 +150,7 @@ const profile = async (req, res) => {
     const brands = await productCollection.distinct("brand");
     const categories = await categoryCollection.find({ status: true });
     const user = await userCollection.findOne({ _id: req.session.user });
+    const userName = await userCollection.find({ _id: req.session.user });
     const address = await userCollection.aggregate([
       { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
       { $unwind: "$address" },
@@ -181,12 +174,12 @@ const profile = async (req, res) => {
     ]);
     const wrong = req.query.wrong;
     const success = req.query.success;
-    console.log(address);
     res.render("profile", {
       brands,
       categories,
       address,
       user,
+      userName,
       userDetails,
       wrong,
       success,
@@ -199,7 +192,6 @@ const profile = async (req, res) => {
 // address addd
 let insertProfile = async (req, res) => {
   try {
-    console.log(req.body);
     await userCollection.updateOne(
       { _id: req.session.user },
       {
@@ -224,7 +216,172 @@ let insertProfile = async (req, res) => {
   }
 };
 
-// eslint-disable-next-line no-undef
+let id;
+//get edit profile address
+const editAddress = async (req, res) => {
+  try {
+    id = req.query.id;
+    const address = await userCollection.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
+      { $unwind: "$address" },
+      {
+        $project: {
+          name: "$address.name",
+          addressline1: "$address.addressline1",
+          addressline2: "$address.addressline2",
+          district: "$address.district",
+          state: "$address.state",
+          country: "$address.country",
+          pin: "$address.pin",
+          mobile: "$address.mobile",
+          _id: "$address._id",
+          status: "$address.status",
+        },
+      },
+      { $match: { _id: mongoose.Types.ObjectId(id) } },
+    ]);
+    res.render("editAddress", { address: address });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+var posteditAddress = async (req, res) => {
+  try {
+    id = req.query.id;
+    const EditData = await userCollection.find(
+      { _id: req.session.user },
+      { address: { $elemMatch: { _id: req.query.id } } }
+    );
+    const brands = await productCollection.distinct("brand");
+    const categories = await categoryCollection.find({ status: true });
+    const address = await userCollection.findOne({ _id: req.session.user });
+    res.render("editAddress", {
+      brands,
+      categories,
+      EditData,
+      address,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//post edit profile address
+// const posteditAddress = async (req, res) => {
+//   try {
+//     const name = req.params.name;
+//     console.log(name);
+//     {
+//       await userCollection.updateOne(
+//         { name: name },
+
+//         {
+//           $set: {
+//             name: req.body.name,
+//             addressline1: req.body.addressline1,
+//             addressline2: req.body.addressline2,
+//             district: req.body.district,
+//             state: req.body.state,
+//             country: req.body.country,
+//             pin: req.body.pin,
+//             mobile: req.body.mobile,
+//           },
+//         }
+//       );
+//       res.redirect("/profile");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+//delete address
+let deleteAddress = async (req, res) => {
+  try {
+    await userCollection.updateOne(
+      { _id: req.session.user },
+      { $pull: { address: { _id: req.query.id } } }
+    );
+    res.redirect("/profile");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const orderPage = async (req, res) => {
+  try {
+    const brands = await productCollection.distinct("brand");
+    const categories = await categoryCollection.find({ status: true });
+    const user = await userCollection.findOne({ _id: req.session.user });
+    const order = await orderCollection.find({ userId: req.session.user });
+    res.render("orderPage", { order, brands, categories, user });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const viewOrderDetails = async (req, res) => {
+  try {
+    let id = req.query.id;
+    id = mongoose.Types.ObjectId(id);
+    const brands = await productCollection.distinct("brand");
+    const categories = await categoryCollection.find({ status: true });
+    const user = await userCollection.findOne({ _id: req.session.user });
+    const productData = await orderCollection.aggregate([
+      { $match: { _id: id } },
+      { $unwind: "$orderItems" },
+      {
+        $project: {
+          address: "$address",
+          totalAmount: "$totalAmount",
+          productId: "$orderItems.productId",
+          productQty: "$orderItems.quantity",
+          orderStatus: "$orderStatus",
+        },
+      },
+      {
+        $lookup: {
+          from: "poducts",
+          localField: "productId",
+          foreignField: "_id",
+          as: "data",
+        },
+      },
+      { $unwind: "$data" },
+      {
+        $project: {
+          address: "$address",
+          totalAmount: "$totalAmount",
+          productQty: "$productQty",
+          orderStatus: "$orderStatus",
+          image: "$data.image",
+          name: "$data.name",
+          brand: "$data.brand",
+          price: "$data.price",
+        },
+      },
+      {
+        $addFields: {
+          total: { $multiply: ["$productQty", "$price"] },
+        },
+      },
+    ]);
+
+    res.render("orderDetail", { productData, brands, categories, user });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const errorPage = (req, res) => {
+  try {
+    res.render("errorPage");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   loadSignup,
   insertUser,
@@ -237,4 +394,10 @@ module.exports = {
   productDetail,
   profile,
   insertProfile,
+  editAddress,
+  posteditAddress,
+  deleteAddress,
+  orderPage,
+  viewOrderDetails,
+  errorPage,
 };

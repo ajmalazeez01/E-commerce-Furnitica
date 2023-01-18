@@ -7,7 +7,7 @@
 
 
 <!-- home509:49-->
-<head>
+<h  ead>
     <!-- Basic Page Needs -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -82,37 +82,13 @@
                             <div class="cart-content">
                                 <table>
                                     <tbody>
-                                        <tr>
-                                            <td class="product-image">
-                                                <a href="/productdetail">
-                                                    <img src="public/images/product/5.jpg" alt="Product">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <div class="product-name">
-                                                    <a href="/productdetail">Organic Strawberry Fruits</a>
-                                                </div>
-                                                <div>
-                                                    2 x
-                                                    <span class="product-price">£28.98</span>
-                                                </div>
-                                            </td>
-                                            <td class="action">
-                                                <a class="remove" href="#">
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr class="total">
-                                            <td colspan="2">Total:</td>
-                                            <td>£92.96</td>
-                                        </tr>
-
+                                       
+                                       
                                         <tr>
                                             <td colspan="3" class="d-flex justify-content-center">
                                                 <div class="cart-button">
                                                     <a href="/cartlist" title="View Cart">View Cart</a>
-                                                    <a href="product-checkout.html" title="Checkout">Checkout</a>
+                                                    <a href="/checkout" title="Checkout">Checkout</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -175,7 +151,7 @@
                         <i class="fa fa-search search"></i>
                     </div>
 
-                    <% if(userName){ %>
+                    <%if(userName){%>
                     <div id="block_myaccount_infos" class="hidden-sm-down dropdown d-flex align-items-center justify-content-center">
                         <div class="myaccount-title">
                             <a href="#acount" data-toggle="collapse" class="acount">
@@ -184,7 +160,7 @@
                             </a>
                         </div>
                            
-                        <h5><%= userName.name %></h5>
+                        <h5><%=userName.name%></h5>
                         
                         <div id="acount" class="collapse">
                             <div class="account-list-content">
@@ -244,7 +220,7 @@
                             
                         </div> 
                     
-                        <% } else { %>
+                        <%}else{%>
 
                             <div>
                                 <a class="register" href="/login" rel="nofollow" title="Register Account">
@@ -253,7 +229,7 @@
                                 </a>
                             </div>
 
-                            <% } %>
+                            <%}%>
 
                     </div>
                    
@@ -774,8 +750,8 @@
         </div>
     </div>
 
+   
     <!-- Page Loader -->
-    
 
     <!-- search -->
     <div id="tiva-searchBox" class="d-flex align-items-center text-center active">

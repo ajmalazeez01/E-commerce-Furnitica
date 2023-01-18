@@ -30594,5 +30594,8 @@ div.tagsinput span.tag a {
     display: none;
   }
 }
+img {
+  width: 4rem;
+}
 
 /*# sourceMappingURL=../maps/vertical-layout-light/style.css.map */

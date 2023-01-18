@@ -22,24 +22,14 @@
             <div class="col-12 col-md-9 col-lg-7 col-xl-6">
               <div class="card" style="border-radius: 15px">
                 <div class="card-body p-5">
-                  <h4 class="text-uppercase text-center">Edit product</h4>
+                  <h4 class="text-uppercase text-center">Edit address</h4>
 
                   <form
                     method="post"
-                    action="/posteditproduct/<%= productData?.name %>z"
-                    enctype="multipart/form-data"
+                    action="/editaddress"
+                    
                   >
-                    <div class="form-outline mb-2">
-                      <label class="form-label" for="form3Example1cg"
-                        >Image</label
-                      >
-                      <input
-                        type="file"
-                        name="image"
-                        value="/public/proimg/<%=productData.image%>"
-                        class="form-control form-control"
-                      />
-                    </div>
+                      
                     <div class="form-outline mb-2">
                       <label class="form-label" for="form3Example1cg"
                         >Name</label
@@ -47,70 +37,85 @@
                       <input
                         type="text"
                         name="name"
-                        value="<%=productData.name %>"
-                        class="form-control form-control"
-                      />
-                    </div>
-                    <div class="mb-3">
-                      <label for="recipient-name" class="col-form-label"
-                        >Category</label
-                      >
-                      <select
-                        name="category"
-                        id="new"
-                        value="<%=productData.category %>"
-                        class="form-select"
-                        aria-label="Default select example"
-                      >
-                        <% categoryData.forEach((categoryData)=>{ %>
-                        <option value="<%=categoryData.name%>">
-                          <%=categoryData.name%>
-                        </option>
-
-                        <%})%>
-                      </select>
-                    </div>
-                    <div class="form-outline mb-2">
-                      <label class="form-label" for="form3Example1cg"
-                        >Description</label
-                      >
-                      <input
-                        type="text"
-                        name="description"
-                        value="<%= productData.description%>"
+                        value="<%=address[0].name%>"
                         class="form-control form-control"
                       />
                     </div>
                     <div class="form-outline mb-2">
                       <label class="form-label" for="form3Example1cg"
-                        >Brand</label
+                        >Addressline 1</label
                       >
                       <input
                         type="text"
-                        name="brand"
-                        value="<%= productData.brand %>"
+                        name="addressline1"
+                        value="<%=address[0].addressline1%>"
                         class="form-control form-control"
                       />
                     </div>
                     <div class="form-outline mb-2">
                       <label class="form-label" for="form3Example1cg"
-                        >stock</label
+                        >addressline2</label
                       >
                       <input
                         type="text"
-                        name="stock"
-                        value="<%= productData.stock %>"
+                        name="addressline2"
+                        value="<%=address[0].addressline2%>"
+                        class="form-control form-control"
+                      />
+                    </div>
+                    
+                    <div class="form-outline mb-2">
+                      <label class="form-label" for="form3Example1cg"
+                        >District</label
+                      >
+                      <input
+                        type="text"
+                        name="district"
+                        value="<%=address[0].district%>"
                         class="form-control form-control"
                       />
                     </div>
                     <div class="form-outline mb-2">
                       <label class="form-label" for="form3Example1cg"
-                        >Price</label
+                        >state</label
                       >
                       <input
                         type="text"
-                        name="price"
-                        value="<%= productData.price %>"
+                        name="state"
+                        value="<%=address[0].state%>"
+                        class="form-control form-control"
+                      />
+                    </div>
+                    <div class="form-outline mb-2">
+                      <label class="form-label" for="form3Example1cg"
+                        >country</label
+                      >
+                      <input
+                        type="text"
+                        name="country"
+                        value="<%=address[0].country%>"
+                        class="form-control form-control"
+                      />
+                    </div>
+                    <div class="form-outline mb-2">
+                      <label class="form-label" for="form3Example1cg"
+                        >Pin No</label
+                      >
+                      <input
+                        type="text"
+                        name="pin"
+                        value="<%=address[0].pin%>"
+                        class="form-control form-control"
+                      />
+                    </div>
+                    <div class="form-outline mb-2">
+                      <label class="form-label" for="form3Example1cg"
+                        >mobile</label
+                      >
+                      <input
+                        type="text"
+                        name="mobile"
+                        value="<%=address[0].mobile%>"
                         class="form-control form-control"
                       />
                     </div>
@@ -127,8 +132,9 @@
                       value="submit"
                       class="btn btn-outline-info btn-block gradient-custom-4 text-body"
                     >
-                      <a href="/product">back</a>
+                      <a href="/profile">back</a>
                     </button>
+                    
                   </form>
                 </div>
               </div>

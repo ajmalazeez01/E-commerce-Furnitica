@@ -289,7 +289,7 @@
               <div class="container">
                 <div class="content">
                   <div class="row">
-                    <div class="col-sm-8 col-lg-9 col-md-9">
+                    <div class="col-sm-8 col-md-9 col-md-9">
                       <div class="main-product-detail">
                         <h2><%=product.name%></h2>
                         <div class="product-single row" style="background-color: #EEEEEE; ">
@@ -317,20 +317,10 @@
                                     <i class="fa fa-expand"></i>
                                   </div>
                                 </div>
-                                <!-- <ul class="product-tab nav nav-tabs d-flex">
-                                                                
-                                                                
-                                                                <li class="col">
-                                                                    <a href="#item3" data-toggle="tab">
-                                                                        <img src="public/images/product/3.jpg" alt="img">
-                                                                    </a>
-                                                                </li>
-                                                                <li class="col">
-                                                                    <a href="#item4" data-toggle="tab">
-                                                                        <img src="public/images/product/5.jpg" alt="img">
-                                                                    </a>
-                                                                </li>
-                                                            </ul> -->
+                               
+
+
+                                                            
                                 <div
                                   class="modal fade"
                                   id="product-modal"
@@ -338,19 +328,35 @@
                                 >
                                   <div class="modal-dialog">
                                     <!-- Modal content-->
+                                   
                                     <div class="modal-content">
                                       <div class="modal-header">
-                                        <div class="modal-body">
-                                          <div class="product-detail">
-                                            <div>
-                                              <div
-                                                class="images-container"
-                                              ></div>
-                                            </div>
+                                          <div class="modal-body">
+                                              <div class="product-detail">
+                                                  <div>
+                                                      <div class="images-container">
+                                                          <div class="js-qv-mask mask tab-content">
+                                                              <div id="modal-item1" class="tab-pane fade active in show">
+                                                                  <img src="/public/proimg/<%=product.image%>" alt="img">
+                                                              </div>
+                                                            
+                                                          </div>
+                                                          <ul class="product-tab nav nav-tabs">
+                                                              <li class="active">
+                                                                  <a href="#modal-item1" data-toggle="tab" class=" active show">
+                                                                      <img src="/public/proimg/<%=product.image%>" alt="img">
+                                                                  </a>
+                                                              </li>
+                                                              
+                                                              
+                                                          </ul>
+                                                      </div>
+                                                  </div>
+                                              </div>
                                           </div>
-                                        </div>
                                       </div>
-                                    </div>
+                                  </div>
+
                                   </div>
                                 </div>
                               </div>
@@ -1097,12 +1103,7 @@
                         title: 'Product Already in Wishlist..!',
                         showConfirmButton: false,
                         timer: 1500
-                    // title: "Product Already in Wishlist..!",
-                    // icon: "warning",
-                    // confirmButtonText: false,
-                    // timer: 1000
-                //   }).then(function () {
-                //     location.reload();
+                   
                   });
                 
                 }

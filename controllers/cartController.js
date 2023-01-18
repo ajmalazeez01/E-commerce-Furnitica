@@ -1,24 +1,16 @@
-
-// eslint-disable-next-line no-undef
-const productCollection = require('../models/productSchema')
-// eslint-disable-next-line no-undef
-const categoryCollection = require('../models/categorySchema')
-// eslint-disable-next-line no-undef
-const cartCollection = require('../models/cartSchema')
-// eslint-disable-next-line no-undef
-const mongoose = require('mongoose')
-// eslint-disable-next-line no-undef
-const wishlistCollection = require('../models/wishlistSchema')
-// eslint-disable-next-line no-undef, no-unused-vars
-// const orderCollection = require('../models/oderSchema')
-// eslint-disable-next-line no-undef
-const userCollection = require('../models/userSchema')
-// eslint-disable-next-line no-undef, no-unused-vars
+const productCollection = require("../models/productSchema");
+const categoryCollection = require("../models/categorySchema");
+const cartCollection = require("../models/cartSchema");
+const mongoose = require("mongoose");
+const wishlistCollection = require("../models/wishlistSchema");
+const orderCollection = require("../models/oderSchema");
+const userCollection = require("../models/userSchema");
+const couponCollection = require("../models/couponSchema");
 const paypal = require("paypal-rest-sdk");
+
 //get method
 const cartList = async (req, res) => {
   try {
-
     const user = await userCollection.findOne({ _id: req.session.user });
     const brands = await productCollection.distinct("brand");
     const categories = await categoryCollection.find({ status: true });
@@ -65,13 +57,13 @@ const cartList = async (req, res) => {
       acc = acc + curr.total;
       return acc;
     }, 0);
-    res.render("cart", { 
-
+    res.render("cart", {
       brands,
       categories,
       cartData,
       user,
-      subtotal, });
+      subtotal,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -376,11 +368,38 @@ const checkout = async (req, res) => {
   }
 };
 
+const setAddressCheckout = async (req, res) => {
+  try {
+    const addresId = req.body.addresId;
+    const address = await userCollection.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
+      { $unwind: "$address" },
+      {
+        $project: {
+          name: "$address.name",
+          addressline1: "$address.addressline1",
+          addressline2: "$address.addressline2",
+          district: "$address.district",
+          state: "$address.state",
+          country: "$address.country",
+          pin: "$address.pin",
+          mobile: "$address.mobile",
+          _id: "$address._id",
+        },
+      },
+      { $match: { _id: new mongoose.Types.ObjectId(addresId) } },
+    ]);
+    res.json({ data: address });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //checkout post
 const postCheckOut = async (req, res) => {
   try {
     if (req.body.payment_mode == "COD") {
-      await cartCollection.aggregate([
+      const productData = await cartCollection.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: "$cartItem" },
         {
@@ -391,8 +410,9 @@ const postCheckOut = async (req, res) => {
           },
         },
       ]);
+      console.log();
 
-      await cartCollection.aggregate([
+      const cartItems = await cartCollection.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
         { $unwind: "$cartItem" },
         {
@@ -424,66 +444,75 @@ const postCheckOut = async (req, res) => {
           },
         },
       ]);
+      // console.log(cartItems);
 
-      // const subtotal = cartItems.reduce((acc, curr) => {
-      //   acc = acc + curr.total;
-      //   return acc;
-      // }, 0);
+      const subtotal = cartItems.reduce((acc, curr) => {
+        acc = acc + curr.total;
+        return acc;
+      }, 0);
 
+      console.log(subtotal);
 
-      // console.log(req.body);
-      // console.log(subtotal)
-      //     if (req.body.couponid === ''){
+      if (req.body.couponid === "") {
+        const orderDetails = new orderCollection({
+          userId: req.session.user,
+          name: req.body.name,
+          number: req.body.mobile,
+          address: {
+            addressline1: req.body.addressline1,
+            addressline2: req.body.addressline2,
+            district: req.body.district,
+            state: req.body.state,
+            country: req.body.country,
+            pin: req.body.pin,
+          },
+          orderItems: productData,
+          subTotal: subtotal,
+          totalAmount: subtotal,
+          paymentMethod: "COD",
+        });
+        console.log();
 
-      //     const orderDetails = new orderCollection({
-      //       userId: req.session.user,
-      //       name: req.body.name,
-      //       number: req.body.mobile,
-      //       address: {
-      //         addressline1: req.body.addressline1,
-      //         addressline2: req.body.addressline2,
-      //         district: req.body.district,
-      //         state: req.body.state,
-      //         country: req.body.country,
-      //         pin: req.body.pin,
-      //       },
-      //       orderItems: productData,
-      //       subTotal: subtotal,
-      //       totalAmount: subtotal,
-      //       paymentMethod: "COD",
-      //     });
-      //     // console.log(orderDetails);
-      //     await orderDetails.save();
-      //     let productDetails=productData
-      //     // console.log(productDetails);
-      // for(let i =0;i<productDetails.length;i++){
-      //     await product.updateOne({_id:productDetails[i].productId},{$inc:{stock:-(productDetails[i].quantity)}})
-      // }
-      //   }else{
-      //   await coupon.updateOne({_id:req.body.couponid}, { $push: { users: { userId:req.session.user} } })
+        // console.log(orderDetails);
+        await orderDetails.save();
+        let productDetails = productData;
+        // console.log(productDetails);
+        for (let i = 0; i < productDetails.length; i++) {
+          await productCollection.updateOne(
+            { _id: productDetails[i].productId },
+            { $inc: { stock: -productDetails[i].quantity } }
+          );
+        }
+      } else {
+        await couponCollection.updateOne(
+          { _id: req.body.couponid },
+          { $push: { users: { userId: req.session.user } } }
+        );
 
-      //   const orderDetails = new orderCollection({
-      //     userId: req.session.user,
-      //     name: req.body.name,
-      //     number: req.body.mobile,
-      //     address: {
-      //       addressline1: req.body.addressline1,
-      //       addressline2: req.body.addressline2,
-      //       district: req.body.district,
-      //       state: req.body.state,
-      //       country: req.body.country,
-      //       pin: req.body.pin,
-      //     },
-      //     orderItems: productData,
-      //     couponUsed:req.body.couponid,
-      //     subTotal: subtotal,
-      //     totalAmount: req.body.total,
-      //     paymentMethod: "COD",
-      //   });
-      //   // console.log(orderDetails);
-      //   await orderDetails.save();
-      // }
+        const orderDetails = new orderCollection({
+          userId: req.session.user,
+          name: req.body.name,
+          number: req.body.mobile,
+          address: {
+            addressline1: req.body.addressline1,
+            addressline2: req.body.addressline2,
+            district: req.body.district,
+            state: req.body.state,
+            country: req.body.country,
+            pin: req.body.pin,
+          },
+          orderItems: productData,
+          couponUsed: req.body.couponid,
+          subTotal: subtotal,
+          totalAmount: req.body.total,
+          paymentMethod: "COD",
+        });
+        // console.log(orderDetails);
+        await orderDetails.save();
+        res.redirect("/success");
+      }
     }
+
     if (req.body.payment_mode == "pay") {
       await cartCollection.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
@@ -528,12 +557,68 @@ const postCheckOut = async (req, res) => {
           },
         },
       ]);
-      console.log(cartItems);
+      // console.log(cartItems);
       const subtotal = cartItems.reduce((acc, curr) => {
         acc = acc + curr.total;
         return acc;
       }, 0);
 
+      // console.log(req.body);
+      // console.log(subtotal)
+      if (req.body.couponid === "") {
+        const orderDetails = {
+          userId: req.session.user,
+          name: req.body.name,
+          number: req.body.mobile,
+          address: {
+            addressline1: req.body.addressline1,
+            addressline2: req.body.addressline2,
+            district: req.body.district,
+            state: req.body.state,
+            country: req.body.country,
+            pin: req.body.pin,
+          },
+          orderItems: productData,
+          subTotal: subtotal,
+          totalAmount: subtotal,
+          paymentMethod: "Online Payment",
+        };
+        var options = {
+          amount: subtotal * 100, // amount in the smallest currency unit
+          currency: "INR",
+          receipt: "order_rcptid_11",
+        };
+
+        instance.orders.create(options, function (err, order) {
+          if (err) {
+            console.log(err);
+            console.log("online payment error");
+          } else {
+            // console.log(order);
+            res.json({ order, orderDetails });
+          }
+        });
+      } else {
+        const orderDetails = new orderCollection({
+          userId: req.session.user,
+          name: req.body.name,
+          number: req.body.mobile,
+          address: {
+            addressline1: req.body.addressline1,
+            addressline2: req.body.addressline2,
+            district: req.body.district,
+            state: req.body.state,
+            country: req.body.country,
+            pin: req.body.pin,
+          },
+          orderItems: productData,
+          couponUsed: req.body.couponid,
+          subTotal: subtotal,
+          totalAmount: req.body.total,
+          paymentMethod: "Online Payment",
+        });
+        console.log(orderDetails);
+      }
 
       paypal.configure({
         mode: "sandbox", //sandbox or live
@@ -542,107 +627,108 @@ const postCheckOut = async (req, res) => {
         client_secret:
           "EHzygZ-5LLHB-34MTSY4s-I96Rf6MJafMUifpWXWWs5sx2x7B4YmZ07ScniIAq9AyLeGc__vB5iWBLa-",
       });
-       
-          const create_payment_json = {
-            "intent": "sale",
-            "payer": {
-                "payment_method": "paypal"
-            },
-            "redirect_urls": {
-                "return_url": "http://localhost:4000/home",
-                "cancel_url": "http://localhost:4000/checkout"
-            },
-            "transactions": [{
-                "item_list": {
-                    "items": [{
-                        "name": "item",
-                        "sku": "item",
-                        "price":subtotal,
-                        "currency": "USD",
-                        "quantity": 1
-                    }]
+
+      const create_payment_json = {
+        intent: "sale",
+        payer: {
+          payment_method: "paypal",
+        },
+        redirect_urls: {
+          return_url: "http://localhost:3002/success",
+          cancel_url: "http://localhost:3002/failed",
+        },
+        transactions: [
+          {
+            item_list: {
+              items: [
+                {
+                  name: "item",
+                  sku: "item",
+                  price: subtotal,
+                  currency: "USD",
+                  quantity: 1,
                 },
-                "amount": {
-                    "currency": "USD",
-                    "total":subtotal
-                },
-                "description": "This is the payment description."
-            }]
-          };
-          paypal.payment.create(create_payment_json, async function (error, payment) {
-            if (error) {
-              throw error;
-            } else {
-              for (let i = 0; i < payment.links.length; i++) {
-                if (payment.links[i].rel === "approval_url") {
-                  res.redirect(payment.links[i].href);
-          
-          
-          }
+              ],
+            },
+            amount: {
+              currency: "USD",
+              total: subtotal,
+            },
+            description: "This is the payment description.",
+          },
+        ],
+      };
+      paypal.payment.create(
+        create_payment_json,
+        async function (error, payment) {
+          if (error) {
+            throw error;
+          } else {
+            for (let i = 0; i < payment.links.length; i++) {
+              if (payment.links[i].rel === "approval_url") {
+                res.redirect(payment.links[i].href);
               }
             }
-          });
-
-      // console.log(req.body);
-      // console.log(subtotal)
-      //   if (req.body.couponid === ''){
-      //   const orderDetails =({
-      //     userId: req.session.user,
-      //     name: req.body.name,
-      //     number: req.body.mobile,
-      //     address: {
-      //       addressline1: req.body.addressline1,
-      //       addressline2: req.body.addressline2,
-      //       district: req.body.district,
-      //       state: req.body.state,
-      //       country: req.body.country,
-      //       pin: req.body.pin,
-      //     },
-      //     orderItems: productData,
-      //     subTotal: subtotal,
-      //     totalAmount: subtotal,
-      //     paymentMethod: "Online Payment",
-      //   });
-      //   var options = {
-      //     amount: subtotal*100,  // amount in the smallest currency unit
-      //     currency: "INR",
-      //     receipt: "order_rcptid_11"
-      //   };
-
-      //   instance.orders.create(options, function(err, order) {
-      //     if(err){
-      //     console.log(err);
-      //     console.log('online payment error');
-      //     }else{
-      //       // console.log(order);
-      //       res.json({order,orderDetails})
-      //     }
-      //   });
-      // }else{
-      //   const orderDetails = new orderCollection({
-      //     userId: req.session.user,
-      //     name: req.body.name,
-      //     number: req.body.mobile,
-      //     address: {
-      //       addressline1: req.body.addressline1,
-      //       addressline2: req.body.addressline2,
-      //       district: req.body.district,
-      //       state: req.body.state,
-      //       country: req.body.country,
-      //       pin: req.body.pin,
-      //     },
-      //     orderItems: productData,
-      //     couponUsed:req.body.couponid,
-      //     subTotal: subtotal,
-      //     totalAmount: req.body.total,
-      //     paymentMethod: "Online Payment",
-      //   });
-      //   console.log(orderDetails);
-      // }
+          }
+        }
+      );
     }
   } catch (error) {
     console.log(error);
   }
+};
+
+const couponCheck = async (req, res) => {
+  try {
+    const code = req.body.input;
+    console.log(code);
+    let total = req.body.total;
+    couponCollection.findOne({ code: code }).then((couponExist) => {
+      if (couponExist) {
+        let currentDate = new Date();
+        if (
+          currentDate >= couponExist.startingDate &&
+          currentDate <= couponExist.expiryDate
+        ) {
+          let id = req.session.user;
+          id = mongoose.Types.ObjectId(req.session.user);
+          // const userExist = couponExist.users.findIndex((couponExist) => couponExist.users == id);
+          couponCollection
+            .findOne({ code: code }, { users: { $elemMatch: { userId: id } } })
+            .then((exist) => {
+              if (exist.users.length === 0) {
+                console.log(total);
+                console.log(couponExist.minAmount);
+                if (total >= couponExist.minAmount) {
+                  console.log(total);
+                  res.json({ couponApplied: couponExist });
+                } else {
+                  let minAmount = couponExist.minAmount;
+                  res.json({ minAmount });
+                }
+              } else {
+                res.json({ userUsed: true });
+              }
+            });
+        } else {
+          res.json({ expired: true });
+        }
+      } else {
+        res.json({ notExist: true });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//payment
+const success = (req, res) => {
+  res.render("success");
+};
+
+const failed = (req, res) => {
+  res.render("failed");
 };
 
 // eslint-disable-next-line no-undef
@@ -656,5 +742,9 @@ module.exports = {
   view_wishList,
   deleteWishlist,
   checkout,
+  setAddressCheckout,
   postCheckOut,
+  couponCheck,
+  success,
+  failed,
 };

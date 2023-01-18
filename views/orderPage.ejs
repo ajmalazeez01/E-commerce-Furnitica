@@ -41,6 +41,12 @@
 </head>
 
 <body class="user-acount">
+
+
+
+<body>
+
+
     <header>
         <!-- header left mobie -->
         <div class="header-mobile d-md-none">
@@ -193,272 +199,65 @@
         </div>
     </header>
 
-    <!-- main content -->
-    <div class="main-content">
-        <div class="wrap-banner">
-
-            <!-- breadcrumb -->
-            <nav class="breadcrumb-bg">
-                <div class="container no-index">
-                    <div class="breadcrumb">
-                        <ol>
-                            <li>
-                                <a href="#">
-                                    <span>Home</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span>My Account</span>
-                                </a>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </nav>
-
-<header>
-    <!-- Sidebar -->
-
-    <div class="col-md-9 col-xs-12 check-info" >
-    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-      <div class="position-sticky">
-        <div class="list-group list-group-flush mx-3 mt-4">
-         
-            <p>
-                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
-                  account details
-                </a>
-                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">
-                    address
-                  </a>
-                  <a class="btn btn-primary" href="/order">
-                    order management
-                  </a>
-              </p>
-              <div class="collapse" id="collapseExample1">
-               
 
 
-                    <% userName.forEach(function(user) { %>
-        
-        
-                        <div class="card ml-5 border-radius:2rem text-dark ">
-                            
-                            <div class="card-body ">
-                              <h5 class="card-title ">user details</h5>
     
-                              <b><p>Name:  <%=user.name%> </p></b>
-                              <b><p>email:  <%=user.email%></p></b>
-                              <b><p>number:  <%=user.number%></p></b>
-                             
-    
-                  </div>
-               </div>
-    
-             <% }) %>
-
-
-              </div>
-              <div class="collapse" id="collapseExample2">
-                
-                    <div class="acount head-acount">
+    <section class="h-100 gradient-custom ">
+        <div class="container py-5 h-100 ">
+          <div class="row d-flex justify-content-center align-items-center h-100 text-dark">
+            <div class="col-lg-10 col-xl-10">
+              
+              <div class="card mb-5" style="border-radius: 10px;">
+            
              
-                        <button type="button"
-                        class="btn btn-primary ml-5"
-                        data-toggle="modal"
-                        data-target="#exampleModal"
-                        data-whatever="@getbootstrap">Add Address </button>
-        
-        
-                        <div
-                      class="modal fade"
-                      id="exampleModal"
-                      tabindex="-1"
-                      role="dialog"
-                      aria-labelledby="exampleModalLabel"
-                      aria-hidden="true"
-                     >
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-body">
-                            <form
-                              action="/profile"
-                              method="post"
-                              
-                            >
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label">
-                                   Name</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="name"
-                                  id="recipient-name"
-                                  required
-                                />
-                             </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >Address line1</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="addressline1"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                  <label for="recipient-name" class="form-label"
-                                    >Address line2</label
-                                  >
-                                  <input
-                                    type="text"
-                                    class="form-control"
-                                    name="addressline2"
-                                    id="recipient-name"
-                                    required
-                                  />
-                                </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >District</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="district"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >State</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="state"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >Country</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="country"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >Pin code</label
-                                >
-                                <input
-                                  type="number"
-                                  class="form-control"
-                                  name="pin"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                  <label for="recipient-name" class="form-label"
-                                    >Mobile</label
-                                  >
-                                  <input
-                                    type="number"
-                                    class="form-control"
-                                    name="mobile"
-                                    id="recipient-name"
-                                    required
-                                  />
-                                </div>
-                           
-                              <div class="modal-footer">
-                                <button
-                                  type="button"
-                                  class="btn btn-secondary"
-                                  data-dismiss="modal"
-                                >
-                                  Close
-                                </button>
-                                <button type="submit" class="btn btn-primary">
-                                  Submit
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                       
-                        <% address.forEach(function(address) { %>
-        
-        
-                            <div class="card ml-5 border-radius:2rem text-dark ">
-                                
-                                <div class="card-body ">
-                                  <h5 class="card-title ">Address</h5>
-        
-                                  <b><p>Name:  <%=address.name%> </p></b>
-                                  <b><p>Address line1:  <%=address.addressline1%></p></b>
-                                  <b><p>Address line2:  <%=address.addressline2%></p></b>
-                                  <b><p>District:  <%=address.district%></p></b>
-                                  <b><p>State:  <%=address.state%></p></b>
-                                  <b><p>Country:  <%=address.country%></p></b>
-                                  <b><p>Pin code:  <%=address.pin%></p></b>
-                                  <b><p>Mobile:  <%=address.mobile%></p></b>
-        
-                              <a href="/editaddress?id=<%= address._id %>" class="btn btn-primary">Edit Address</a>
-        
-        
-                        <a href="/deleteaddress?id=<%=address._id%>" class="btn btn-primary">Delete Address</a>
-                     </div>
-                 </div>
-        
-                 <% }) %>
-              </div>
-              </div>  
-              <div class="collapse" id="collapseExample3">
-                <div class="card card-body">
+                <% order.forEach(function(order) { %>
 
-
+                <div class="card-body p-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    
+                    <% let date = order.orderDate %>
+                    <% const format = new Date(date  ); %>
+                    <% const todate = format.toLocaleDateString(); %>
+                    <td><%=todate %></td>
+                    
+                    <p class="large text-muted mb-0"><span>Order ID -</span><%=order._id%></p>
+                  </div>
+                
+                 
+                  <div class="d-flex justify-content-between pt-2">
+                    <p class="pt-2"><span>Status -</span><%=order.orderStatus%>  </p>
+                    <h5 class="text-muted mb-0"><span class="fw-bold me-4">Total₹</span> <%=order.totalAmount%>  </h5>
+                  </div>
+                  <p class="pt-2"><span>Payment method -</span><%=order.paymentMethod%>  </p>
+                  <div class="d-flex justify-content-between pt-2">
+                    <div></div>
+    
+                    
+                    <a href="/orderdetails?id=<%=order._id%>" class="btn btn-secondary px-2">View details</a>
+                    
+                  </div>
+                 
                 </div>
+
+                <% }) %>
               </div>
-          <!-- Collapse 1 -->
-  
-         
-         
+             
+             
+                <div class="d-flex justify-content-center">
+                  <img class="img-fluid" style="width: 500px;" src="/Public/user/images/Empty order.png" alt="">
+                </div>
+                <!-- <div class="d-flex justify-content-center">
+                    <h4><a href="/shop">Back to shop</a></h4>
+                </div>
+                -->
+              
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
-    </div>
-    <!-- Sidebar -->
-  
-      </div>
-      <!-- Container wrapper -->
-   
+      </section>
 
-           
-        </div>
 
-        
-
-           
-        </div>
-    </div>
-    <!-- footer -->
-    <footer class="footer-one">
+      <footer class="footer-one">
         <div class="inner-footer">
             <div class="container">
                 <div class="footer-top col-lg-12 col-xs-12">
@@ -625,116 +424,9 @@
                 </div>
             </div>
         </div>
-        <div id="tiva-copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="text-center col-lg-12 ">
-                        <span>
-                            <a target="_blank" href="https://www.templateshub.net">Templates Hub</a>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </footer>
 
-    <!-- back top top -->
-    <div class="back-to-top">
-        <a href="#">
-            <i class="fa fa-long-arrow-up"></i>
-        </a>
-    </div>
-
-    <!-- menu mobie left -->
-    <div class="mobile-top-menu d-md-none">
-        <button type="button" class="close" aria-label="Close">
-            <i class="zmdi zmdi-close"></i>
-        </button>
-        <div class="tiva-verticalmenu block" data-count_showmore="17">
-            <div class="box-content block-content">
-                <div class="verticalmenu" role="navigation">
-                    <ul class="menu level1">
-                        <li class="item  parent">
-                            <a href="#" class="hasicon" title="SIDE TABLE">
-                                <img src="img/home/table-lamp.png" alt="img">SIDE TABLE</a>
-                            <span class="arrow collapsed" data-toggle="collapse" data-target="#SIDE-TABLE" aria-expanded="false" role="status">
-                                <i class="zmdi zmdi-minus"></i>
-                                <i class="zmdi zmdi-plus"></i>
-                            </span>
-                            <div class="subCategory collapse" id="SIDE-TABLE" aria-expanded="true" role="status">
-                                <ul>
-                                    <li class="item">
-                                        <a href="#" title="Aliquam lobortis">Aliquam lobortis</a>
-                                    </li>
-                                    <li class="item  parent-submenu">
-                                        <a href="#" title="Duis Reprehenderit">Duis Reprehenderit</a>
-                                        <span class="arrow collapsed" data-toggle="collapse" data-target="#sub-Category" aria-expanded="false" role="status">
-                                            <i class="zmdi zmdi-minus"></i>
-                                            <i class="zmdi zmdi-plus"></i>
-                                        </span>
-                                        <div class="subCategory collapse" id="sub-Category" aria-expanded="true" role="status">
-                                            <ul>
-                                                <li class="item">
-                                                    <a href="#" title="Aliquam lobortis">Aliquam lobortis</a>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="#" title="Duis Reprehenderit">Duis Reprehenderit</a>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="#" title="Voluptate">Voluptate</a>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="#" title="Tongue Est">Tongue Est</a>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="#" title="Venison Andouille">Venison Andouille</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="item">
-                                        <a href="#" title="Voluptate">Voluptate</a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="#" title="Tongue Est">Tongue Est</a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="#" title="Venison Andouille">Venison Andouille</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="item  parent group">
-                            <a href="#" class="hasicon" title="FI">
-                                <img src="img/home/fireplace.png" alt="img">FIREPLACE
-                            </a>
-                            <span class="arrow collapsed" data-toggle="collapse" data-target="#fi" aria-expanded="false" role="status">
-                                <i class="zmdi zmdi-minus"></i>
-                                <i class="zmdi zmdi-plus"></i>
-                            </span>
-                           
-                        </li>
-                        <li class="item group-category-img parent group">
-                            <a href="#" class="hasicon" title="TABLE LAMP">
-                                <img src="img/home/table-lamp.png" alt="img">TABLE LAMP</a>
-                            <span class="arrow collapsed" data-toggle="collapse" data-target="#table-lamp" aria-expanded="false" role="status">
-                                <i class="zmdi zmdi-minus"></i>
-                                <i class="zmdi zmdi-plus"></i>
-                            </span>
-                            
-                        </li>
-                      
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- menu mobie right -->
-   
-
-    
 
     <!-- Vendor JS -->
     <script src="libs/jquery/jquery.min.js"></script>
@@ -748,10 +440,6 @@
     <script src="libs/slider-range/js/jquery.slider.js"></script>
     <script src="libs/slick-slider/js/slick.min.js"></script>
 
-    <!-- Template JS -->
-    <script src="js/theme.js"></script>
+
 </body>
-
-
-<!-- user-acount11:10-->
 </html>

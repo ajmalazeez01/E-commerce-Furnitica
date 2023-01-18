@@ -8,10 +8,10 @@ module.exports={
     mailTransporter:nodemailer.createTransport({
         service:'gmail',
         auth:{
-            // eslint-disable-next-line no-undef
             user: 'furnitica01@gmail.com',
-            // eslint-disable-next-line no-undef
+            // USER: process.env.EMAIL,
             pass: 'dtzcymaxtxzjgiop'
+            // pass: process.env.PASSWORD
         },
     }),
     OTP:`${Math.floor(1000+Math.random()*9000)}`,

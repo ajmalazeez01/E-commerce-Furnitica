@@ -14,6 +14,14 @@ router.get('/adminDashboard', adminControllers.amdinDasboard)
 router.get('/user', adminControllers.user)
 router.get('/userblock', adminControllers.userBlock)
 
+//product management
+router.get('/product', adminControllers.product)
+router.get('/productblock', adminControllers.productBlock)
+router.post('/insertproduct', multer.single('image'), adminControllers.insertProduct)
+router.post('/posteditproduct/:name', multer.single('image'), adminControllers.postEditProduct)
+router.get('/editproduct', adminControllers.editProduct)
+router.get('/deleteproduct', adminControllers.deleteproduct)
+
 //category management
 router.get('/category', adminControllers.category)
 router.get('/categoryblock', adminControllers.categoryBlock)
@@ -22,12 +30,16 @@ router.post('/posteditcategory/:name', adminControllers.postEditCategory)
 router.get('/deletecategory', adminControllers.deleteCategory)
 router.post('/insertcategory', multer.single('image'), adminControllers.insertCategory)
 
-//product management
-router.get('/product', adminControllers.product)
-router.get('/productblock', adminControllers.productBlock)
-router.post('/insertproduct', multer.single('image'), adminControllers.insertProduct)
-router.post('/posteditproduct/:name', multer.single('image'), adminControllers.postEditProduct)
-router.get('/editproduct', adminControllers.editProduct)
-router.get('/deleteproduct', adminControllers.deleteproduct)
+//coupon manage
+router.get('/coupon', adminControllers.couponManage)
+router.post('/coupon',adminControllers.insertCoupon)
+router.get('/couponblock', adminControllers.couponBlock)
+
+
+//order manage
+router.get('/ordermanage', adminControllers.orderManage)
+router.post('/ordermanage', adminControllers.orderUpdate)
+router.get('/vieworder', adminControllers.viewOrder)
+
 
 module.exports = router

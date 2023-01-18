@@ -41,6 +41,12 @@
 </head>
 
 <body class="user-acount">
+
+
+
+<body>
+
+
     <header>
         <!-- header left mobie -->
         <div class="header-mobile d-md-none">
@@ -193,272 +199,150 @@
         </div>
     </header>
 
-    <!-- main content -->
-    <div class="main-content">
-        <div class="wrap-banner">
-
-            <!-- breadcrumb -->
-            <nav class="breadcrumb-bg">
-                <div class="container no-index">
-                    <div class="breadcrumb">
-                        <ol>
-                            <li>
-                                <a href="#">
-                                    <span>Home</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span>My Account</span>
-                                </a>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </nav>
-
-<header>
-    <!-- Sidebar -->
-
-    <div class="col-md-9 col-xs-12 check-info" >
-    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-      <div class="position-sticky">
-        <div class="list-group list-group-flush mx-3 mt-4">
-         
-            <p>
-                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">
-                  account details
-                </a>
-                <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">
-                    address
-                  </a>
-                  <a class="btn btn-primary" href="/order">
-                    order management
-                  </a>
-              </p>
-              <div class="collapse" id="collapseExample1">
-               
 
 
-                    <% userName.forEach(function(user) { %>
-        
-        
-                        <div class="card ml-5 border-radius:2rem text-dark ">
-                            
-                            <div class="card-body ">
-                              <h5 class="card-title ">user details</h5>
     
-                              <b><p>Name:  <%=user.name%> </p></b>
-                              <b><p>email:  <%=user.email%></p></b>
-                              <b><p>number:  <%=user.number%></p></b>
-                             
-    
-                  </div>
-               </div>
-    
-             <% }) %>
 
-
-              </div>
-              <div class="collapse" id="collapseExample2">
+      <section class="h-100 gradient-custom">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-10 col-xl-10">
+              <div class="card" style="border-radius: 10px;">
                 
-                    <div class="acount head-acount">
-             
-                        <button type="button"
-                        class="btn btn-primary ml-5"
-                        data-toggle="modal"
-                        data-target="#exampleModal"
-                        data-whatever="@getbootstrap">Add Address </button>
-        
-        
-                        <div
-                      class="modal fade"
-                      id="exampleModal"
-                      tabindex="-1"
-                      role="dialog"
-                      aria-labelledby="exampleModalLabel"
-                      aria-hidden="true"
-                     >
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-body">
-                            <form
-                              action="/profile"
-                              method="post"
-                              
-                            >
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label">
-                                   Name</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="name"
-                                  id="recipient-name"
-                                  required
-                                />
-                             </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >Address line1</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="addressline1"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                  <label for="recipient-name" class="form-label"
-                                    >Address line2</label
-                                  >
-                                  <input
-                                    type="text"
-                                    class="form-control"
-                                    name="addressline2"
-                                    id="recipient-name"
-                                    required
-                                  />
-                                </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >District</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="district"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >State</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="state"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >Country</label
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  name="country"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                <label for="recipient-name" class="form-label"
-                                  >Pin code</label
-                                >
-                                <input
-                                  type="number"
-                                  class="form-control"
-                                  name="pin"
-                                  id="recipient-name"
-                                  required
-                                />
-                              </div>
-                              <div class="form-group">
-                                  <label for="recipient-name" class="form-label"
-                                    >Mobile</label
-                                  >
-                                  <input
-                                    type="number"
-                                    class="form-control"
-                                    name="mobile"
-                                    id="recipient-name"
-                                    required
-                                  />
-                                </div>
-                           
-                              <div class="modal-footer">
-                                <button
-                                  type="button"
-                                  class="btn btn-secondary"
-                                  data-dismiss="modal"
-                                >
-                                  Close
-                                </button>
-                                <button type="submit" class="btn btn-primary">
-                                  Submit
-                                </button>
-                              </div>
-                            </form>
-                          </div>
+                <div class="card-body p-4">
+                 
+                  <% productData.forEach((data)=>{ %> 
+                  <div class="card shadow-0 border mb-4">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <img src="/public/proimg/<%= data.image %> "
+                            class="img-fluid" alt="Phone">
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0"><%= data.name %> </p>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small">Price -<%= data.price %> </p>
+                        </div>
+                        
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small">Qty -<%= data. productQty %> </p>
+                        </div>
+                        <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
+                          <p class="text-muted mb-0 small"><%= data.total %> </p>
                         </div>
                       </div>
+                     
                     </div>
-                       
-                        <% address.forEach(function(address) { %>
-        
-        
-                            <div class="card ml-5 border-radius:2rem text-dark ">
-                                
-                                <div class="card-body ">
-                                  <h5 class="card-title ">Address</h5>
-        
-                                  <b><p>Name:  <%=address.name%> </p></b>
-                                  <b><p>Address line1:  <%=address.addressline1%></p></b>
-                                  <b><p>Address line2:  <%=address.addressline2%></p></b>
-                                  <b><p>District:  <%=address.district%></p></b>
-                                  <b><p>State:  <%=address.state%></p></b>
-                                  <b><p>Country:  <%=address.country%></p></b>
-                                  <b><p>Pin code:  <%=address.pin%></p></b>
-                                  <b><p>Mobile:  <%=address.mobile%></p></b>
-        
-                              <a href="/editaddress?id=<%= address._id %>" class="btn btn-primary">Edit Address</a>
-        
-        
-                        <a href="/deleteaddress?id=<%=address._id%>" class="btn btn-primary">Delete Address</a>
-                     </div>
-                 </div>
-        
-                 <% }) %>
-              </div>
-              </div>  
-              <div class="collapse" id="collapseExample3">
-                <div class="card card-body">
+                  </div>
+                  <% }) %> 
+                     <div class="row d-flex align-items-center">
+                        <div class="col-md-2">
+                          <p class="text-muted mb-0 small">Track Order</p>
+                        </div>
+                        <div class="col-md-10">
+                            <% if(productData[0].orderStatus =='processing') {%> 
+                                <div class="progress" style="height: 6px; border-radius: 16px;">
+                                    <div class="progress-bar" role="progressbar"
 
-
+                                     style="width: 12%; border-radius: 16px; background-color: #51e63a;" aria-valuenow="12"
+                                      aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                  </div>
+                                  <div class="d-flex justify-content-around mb-1">
+                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">Processing</p>
+                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">Packed</p>
+                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">Shipped</p>
+                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for Delivered</p>
+                                  </div>
+                                <% }else if(productData[0].orderStatus=='packed') {%> 
+                                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                                        <div class="progress-bar" role="progressbar"
+                                          style="width: 37%; border-radius: 16px; background-color: #51e63a;" aria-valuenow="37"
+                                          aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                      </div>
+                                      <div class="d-flex justify-content-around mb-1">
+                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Processing</p>
+                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Packed</p>
+                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Shipped</p>
+                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for Delivered</p>
+                                      </div>
+                                    <% }else if(productData[0].orderStatus=='shipped') { %> 
+                                        <div class="progress" style="height: 6px; border-radius: 16px;">
+                                            <div class="progress-bar" role="progressbar"
+                                              style="width: 59%; border-radius: 16px; background-color: #51e63a;" aria-valuenow="59"
+                                              aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                          </div>
+                                          <div class="d-flex justify-content-around mb-1">
+                                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Processing</p>
+                                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Packed</p>
+                                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Shipped</p>
+                                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for Delivered</p>
+                                          </div>
+                                          <% }else if(productData[0].orderStatus=='cancel') { %> 
+                                            <div class="progress" style="height: 6px; border-radius: 16px;">
+                                                <div class="progress-bar" role="progressbar"
+                                                  style="width: 100%; border-radius: 16px; background-color: #c82828;" aria-valuenow="100"
+                                                  aria-valuemin="0" aria-valuemax="100">
+                                                </div>
+                                              </div>
+                                              <div class="d-flex justify-content-around mb-1">
+                                                
+                                            <p class="text-muted mt-1 mb-0 small ms-xl-5">Cancelled</p>
+                                              </div>
+                                                <% }else{ %>
+                                                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: 100%; border-radius: 16px; background-color: #51e63a;" aria-valuenow="37"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-around mb-1">
+                                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Processing</p>
+                                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Packed</p>
+                                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Shipped</p>
+                                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for Delivered</p>
+                                                        </div>
+                                                    <% } %>  
+                     
+                        </div>
+                      </div>  
+                  <div class="d-flex justify-content-between pt-2">
+                    <p class="font-weight-medium mb-0">Order Address</p>
+                    <p class="font-weight-medium mb-0"><span class="font-weight-bold me-4">Total₹ -</span> <%= productData[0].total %> </p>
+                  </div>
+      
+                  <div class="d-flex justify-content-between pt-1">
+                    <p class="text-muted mb-0">
+                        <%= productData[0].address.addressline1 %> <br>
+                        <%= productData[0].address.name %> <br>
+                        <%= productData[0].address.address %> ,
+                        <%= productData[0].address.district %> ,
+                        <%= productData[0].address.state %> ,
+                        <%= productData[0].address.country %>  <br>
+                        <%= productData[0].address.pin%> <br>
+                        <%= productData[0].address.mobile %> 
+                     </p>
+                     <% if(productData.status !='Cancel') {%> 
+                        <a style="height: 40px;display: block;" href="/ " class="btn btn-dark mt-4 px-3">Cancel</a>
+                     <% } %> 
+                    
+                  </div>
                 </div>
+               
               </div>
-          <!-- Collapse 1 -->
-  
-         
-         
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
-    </div>
-    <!-- Sidebar -->
-  
-      </div>
-      <!-- Container wrapper -->
-   
+      </section>
 
-           
-        </div>
 
-        
 
-           
-        </div>
-    </div>
-    <!-- footer -->
-    <footer class="footer-one">
+
+      <footer class="footer-one">
         <div class="inner-footer">
             <div class="container">
                 <div class="footer-top col-lg-12 col-xs-12">
@@ -625,116 +509,9 @@
                 </div>
             </div>
         </div>
-        <div id="tiva-copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="text-center col-lg-12 ">
-                        <span>
-                            <a target="_blank" href="https://www.templateshub.net">Templates Hub</a>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </footer>
 
-    <!-- back top top -->
-    <div class="back-to-top">
-        <a href="#">
-            <i class="fa fa-long-arrow-up"></i>
-        </a>
-    </div>
-
-    <!-- menu mobie left -->
-    <div class="mobile-top-menu d-md-none">
-        <button type="button" class="close" aria-label="Close">
-            <i class="zmdi zmdi-close"></i>
-        </button>
-        <div class="tiva-verticalmenu block" data-count_showmore="17">
-            <div class="box-content block-content">
-                <div class="verticalmenu" role="navigation">
-                    <ul class="menu level1">
-                        <li class="item  parent">
-                            <a href="#" class="hasicon" title="SIDE TABLE">
-                                <img src="img/home/table-lamp.png" alt="img">SIDE TABLE</a>
-                            <span class="arrow collapsed" data-toggle="collapse" data-target="#SIDE-TABLE" aria-expanded="false" role="status">
-                                <i class="zmdi zmdi-minus"></i>
-                                <i class="zmdi zmdi-plus"></i>
-                            </span>
-                            <div class="subCategory collapse" id="SIDE-TABLE" aria-expanded="true" role="status">
-                                <ul>
-                                    <li class="item">
-                                        <a href="#" title="Aliquam lobortis">Aliquam lobortis</a>
-                                    </li>
-                                    <li class="item  parent-submenu">
-                                        <a href="#" title="Duis Reprehenderit">Duis Reprehenderit</a>
-                                        <span class="arrow collapsed" data-toggle="collapse" data-target="#sub-Category" aria-expanded="false" role="status">
-                                            <i class="zmdi zmdi-minus"></i>
-                                            <i class="zmdi zmdi-plus"></i>
-                                        </span>
-                                        <div class="subCategory collapse" id="sub-Category" aria-expanded="true" role="status">
-                                            <ul>
-                                                <li class="item">
-                                                    <a href="#" title="Aliquam lobortis">Aliquam lobortis</a>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="#" title="Duis Reprehenderit">Duis Reprehenderit</a>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="#" title="Voluptate">Voluptate</a>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="#" title="Tongue Est">Tongue Est</a>
-                                                </li>
-                                                <li class="item">
-                                                    <a href="#" title="Venison Andouille">Venison Andouille</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="item">
-                                        <a href="#" title="Voluptate">Voluptate</a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="#" title="Tongue Est">Tongue Est</a>
-                                    </li>
-                                    <li class="item">
-                                        <a href="#" title="Venison Andouille">Venison Andouille</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="item  parent group">
-                            <a href="#" class="hasicon" title="FI">
-                                <img src="img/home/fireplace.png" alt="img">FIREPLACE
-                            </a>
-                            <span class="arrow collapsed" data-toggle="collapse" data-target="#fi" aria-expanded="false" role="status">
-                                <i class="zmdi zmdi-minus"></i>
-                                <i class="zmdi zmdi-plus"></i>
-                            </span>
-                           
-                        </li>
-                        <li class="item group-category-img parent group">
-                            <a href="#" class="hasicon" title="TABLE LAMP">
-                                <img src="img/home/table-lamp.png" alt="img">TABLE LAMP</a>
-                            <span class="arrow collapsed" data-toggle="collapse" data-target="#table-lamp" aria-expanded="false" role="status">
-                                <i class="zmdi zmdi-minus"></i>
-                                <i class="zmdi zmdi-plus"></i>
-                            </span>
-                            
-                        </li>
-                      
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- menu mobie right -->
-   
-
-    
 
     <!-- Vendor JS -->
     <script src="libs/jquery/jquery.min.js"></script>
@@ -748,10 +525,6 @@
     <script src="libs/slider-range/js/jquery.slider.js"></script>
     <script src="libs/slick-slider/js/slick.min.js"></script>
 
-    <!-- Template JS -->
-    <script src="js/theme.js"></script>
+
 </body>
-
-
-<!-- user-acount11:10-->
 </html>

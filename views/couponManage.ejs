@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -96,7 +95,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                             Sales Report
                         </a>
-                        
+                        <!-- <a class="nav-link" href="tables.html">
+                            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                            Coupens
+                        </a> -->
                     </div>
                 </div>
 
@@ -105,86 +107,125 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">User Management</h1>
+                    <h1 class="mt-4">Coupon Manage</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item active"></li>
                     </ol>
 
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Add Coupon
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add coupon</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="/coupon" method="post">
+                <div class="form-group">
+                  <!-- <label for="exampleFormControlFile1">Example file input</label>
+                  <input type="file" class="form-control-file" id="exampleFormControlFile1"> -->
+                  <label for="exampleFormControlInput1">Name</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Name" name="name">
+        <label for="exampleFormControlInput1">Code</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Code" name="code">
+        <label for="exampleFormControlInput1">Discount in %</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Discount(%)" name="discount">
+        <label for="exampleFormControlInput1">Minimum Amount</label>
+        <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Minimum amount" name="minamount">
+        <label for="exampleFormControlInput1">Starting Date</label>
+        <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Starting Date" name="startingdate">
+        <label for="exampleFormControlInput1">Ending Date</label>
+        <input type="date" class="form-control" id="exampleFormControlInput1" placeholder="Expiry Date" name="expirydate">
+                </div>
+              
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+                    
+
+
   <div class="card mb-4">
     <div class="card-header">
         <i class="fas fa-table me-1"></i>
-        User DataTable 
+        Coupon DataTable 
     </div>
     <div class="card-body">
-        
+        <% if(coupons!=null) { %>
             <table id="datatablesSimple">
-              <thead>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Mobile</th>
-                <th>Status</th>
-                <th>Block/Unblock</th>
-              </thead>
+                <thead>
+                    <tr>
+                        <!-- <th>No.</th> -->
+                        <th>Name</th>  
+                        <th>Code</th>  
+                        <th>Discount %</th>  
+                        <th>Starting Date</th>  
+                        <th>Ending Date</th>  
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
                 <tfoot>
-                
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>Status</th>
-                    <th>Block/Unblock</th>
-                
+                    <tr>
+                        <!-- <th>No.</th> -->
+                        <th>Name</th>
+                        <th>Code</th>  
+                        <th>Discount%</th>  
+                        <th>Starting Date</th>  
+                        <th>Ending Date</th>  
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
                 </tfoot>
                 <tbody>
-                  <% userData.forEach((item)=>{ %>
-
+                    <% coupons.forEach((data)=>{ %>
                   <tr>
-                    <td><%=item.name%></td>
-                    <td><%=item.email%></td>
-                    <td><%=item.number%></td>
-
+                    
+                    <td><%=data.name%></td>
+                    <td><%=data.code%></td>
+                    <td><%=data.discount%>%</td>
+                    <td><%=data.startingDate%></td>
+                    <td><%=data.expiryDate%></td>
+        
+                    
                     <td>
-                      <%if(item.status==true){%>
-                      <p class="badge badge-success">Active</p>
-                      <%} else {%>
-                      <p class="badge badge-danger">Inactive</p>
-                      <%}%>
+                        <%if(data.status==true){%> 
+                            <p class="text-success">Active</p>
+                            <%} else {%>
+                                <p class="text-danger">Blocked</p>
+                                <%}%>
+                                
+        
                     </td>
-
                     <td>
-                      <%if(item.status==true){%>
-                      <a
-                        href="/userblock?id=<%=item.id%>"
-                        onclick="return confirm('are you sure change access to <%=item.email%>')"
-                        ><button
-                          type="button"
-                          class="badge badge-success"
-                          style="width: 100px"
-                        >
-                          Block
-                        </button></a
-                      >
-
-                      <%} else {%>
-                      <a
-                        href="/userblock?id=<%=item.id%>"
-                        onclick="return confirm('are you sure change access to <%=item.email%>')"
-                        ><button
-                          type="button"
-                          class="badge badge-danger"
-                          style="width: 100px"
-                        >
-                          Unblock
-                        </button></a
-                      >
-
-                      <%}%>
+                        <%if(data.status==true){%> 
+                          <a href="/couponblock?id=<%=data._id%>" onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="btn btn-success" style="width: 100px;">List</button></a>
+                            <%} else {%>
+                               <a href="/couponblock?id=<%=data._id%> " onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="btn btn-danger" style="width: 100px;">Unlist</button></a> 
+                                
+                                <%}%>
+                                
                     </td>
                   </tr>
                   <%})%>
                 </tbody>
             </table>
-           
+            <%}%>
     </div>
 </div>
 

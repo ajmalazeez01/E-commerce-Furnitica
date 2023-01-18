@@ -1,13 +1,15 @@
 // eslint-disable-next-line no-undef
-const adminCollection = require('../models/adminSchema')
+const adminCollection = require("../models/adminSchema");
 // eslint-disable-next-line no-undef
-const userCollection = require('../models/userSchema')
+const userCollection = require("../models/userSchema");
 // eslint-disable-next-line no-undef
-const productCollection = require('../models/productSchema')
+const productCollection = require("../models/productSchema");
 // eslint-disable-next-line no-undef
-const categoryCollection = require('../models/categorySchema')
+const categoryCollection = require("../models/categorySchema");
 // eslint-disable-next-line no-undef, no-unused-vars
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
+const couponCollection = require("../models/couponSchema");
+const orderCollection = require("../models/oderSchema");
 // admin get method
 const loadLogin = (req, res) => {
   res.render("adminLogin");
@@ -17,7 +19,7 @@ const userLogin = async (req, res) => {
   console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
-  const userData = await adminCollection.findOne({ email:email });
+  const userData = await adminCollection.findOne({ email: email });
   // eslint-disable-next-line eqeqeq
   if (email == userData.email && password == userData.password) {
     res.redirect("/adminDashboard");
@@ -78,7 +80,6 @@ const productBlock = async (req, res) => {
   try {
     const id = req.query.id;
     const productdata = await productCollection.findById({ _id: id });
-    console.log(productdata);
     // eslint-disable-next-line eqeqeq
     if (productdata.status == true) {
       await productCollection.updateOne(
@@ -297,8 +298,149 @@ const deleteCategory = async (req, res) => {
     console.log(error);
   }
 };
-// eslint-disable-next-line no-undef
-module.exports =  {
+
+//coupon manage
+const couponManage = async (req, res) => {
+  try {
+    const coupons = await couponCollection.find();
+    res.render("couponManage", { coupons });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const insertCoupon = (req, res) => {
+  try {
+    console.log(req.body);
+    const code = req.body.code.toUpperCase();
+    const newCoupon = new couponCollection({
+      name: req.body.name,
+      code: code,
+      discount: req.body.discount,
+      minAmount: req.body.minamount,
+      startingDate: req.body.startingdate,
+      expiryDate: req.body.expirydate,
+    });
+    newCoupon.save();
+    res.redirect("/coupon");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const couponBlock = async (req, res) => {
+  try {
+    const id = req.query.id;
+    const productdata = await couponCollection.findById({ _id: id });
+    // eslint-disable-next-line eqeqeq
+    if (productdata.status == true) {
+      await couponCollection.updateOne(
+        { _id: id },
+        { $set: { status: false } }
+      );
+      res.redirect("/coupon");
+    } else {
+      await couponCollection.updateOne({ _id: id }, { $set: { status: true } });
+      res.redirect("/coupon");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const orderManage = async (req, res) => {
+  try {
+    const orderDetails = await orderCollection.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userData",
+        },
+      },
+      { $unwind: "$userData" },
+      {
+        $project: {
+          orderdate: "$orderDate",
+          name: "$userData.name",
+          totalamount: "$totalAmount",
+          paymentmethod: "$paymentMethod",
+          paymentstatus: "$paymentStatus",
+          orderstatus: "$orderStatus",
+          orderId: "$_id",
+        },
+      },
+    ]);
+    console.log(orderDetails);
+    res.render("orderManage", { orderDetails });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const orderUpdate = async (req, res) => {
+  try {
+    let id = req.body.orderid;
+    const status = req.body.orderstatus;
+    await orderCollection.updateOne(
+      { _id: id },
+      { $set: { orderStatus: status } }
+    );
+    res.redirect("/ordermanage");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const viewOrder = async (req, res) => {
+  try {
+    let id = req.query.id;
+    id = mongoose.Types.ObjectId(id);
+    const productData = await orderCollection.aggregate([
+      { $match: { _id: id } },
+      { $unwind: "$orderItems" },
+      {
+        $project: {
+          address: "$address",
+          totalAmount: "$totalAmount",
+          productId: "$orderItems.productId",
+          productQty: "$orderItems.quantity",
+        },
+      },
+      {
+        $lookup: {
+          from: "poducts",
+          localField: "productId",
+          foreignField: "_id",
+          as: "data",
+        },
+      },
+      { $unwind: "$data" },
+      {
+        $project: {
+          address: "$address",
+          totalAmount: "$totalAmount",
+          productQty: "$productQty",
+          image: "$data.image",
+          name: "$data.name",
+          brand: "$data.brand",
+          price: "$data.price",
+        },
+      },
+      {
+        $addFields: {
+          total: { $multiply: ["$productQty", "$price"] },
+        },
+      },
+    ]);
+    res.render("orderview", { productData });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
   loadLogin,
   userLogin,
   amdinDasboard,
@@ -316,4 +458,10 @@ module.exports =  {
   editCategory,
   postEditCategory,
   deleteCategory,
+  couponManage,
+  insertCoupon,
+  couponBlock,
+  orderManage,
+  orderUpdate,
+  viewOrder,
 };

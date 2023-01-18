@@ -35,10 +35,9 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.set('view engine', 'ejs') // view engine setup
 
-app.listen(3002, () => console.log('http://localhost:3002/home'))
+app.listen(3002, () => console.log('http://localhost:3002/'))
 
 const staticPath = path.join(__dirname, 'public') // Static paths
 app.use(express.static(staticPath))
@@ -48,3 +47,8 @@ app.use(userRoute)
 
 const adminRoute = require('./routes/adminRouter') // admin router set
 app.use(adminRoute)
+
+app.use((req, res) => {
+  res.status(404).render('errorPage', {url:req.url});
+});
+
