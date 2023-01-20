@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const adminControllers = require('../controllers/adminController')
 const multer = require('../middleware/multer')
+const session = require("../middleware/admin/session");
 
 //admin login
 router.get('/adminlogin', adminControllers.loadLogin)
@@ -40,6 +41,13 @@ router.get('/couponblock', adminControllers.couponBlock)
 router.get('/ordermanage', adminControllers.orderManage)
 router.post('/ordermanage', adminControllers.orderUpdate)
 router.get('/vieworder', adminControllers.viewOrder)
+
+// sales report
+router.get('/sales',adminControllers.salesPage)
+router.post('/salesdata',adminControllers.post_pdf_Data)
+router.get('/csv_download',adminControllers.csvDownload)
+
+
 
 
 module.exports = router

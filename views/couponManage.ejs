@@ -8,6 +8,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Admin</title>
+    <link rel="shortcut icon" href="/public/images/home/logo-mobie.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/dashboard.css" />
@@ -176,7 +177,7 @@
                         <th>Discount %</th>  
                         <th>Starting Date</th>  
                         <th>Ending Date</th>  
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -188,7 +189,7 @@
                         <th>Discount%</th>  
                         <th>Starting Date</th>  
                         <th>Ending Date</th>  
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th>Action</th>
                     </tr>
                 </tfoot>
@@ -203,7 +204,7 @@
                     <td><%=data.expiryDate%></td>
         
                     
-                    <td>
+                    <!-- <td>
                         <%if(data.status==true){%> 
                             <p class="text-success">Active</p>
                             <%} else {%>
@@ -211,7 +212,7 @@
                                 <%}%>
                                 
         
-                    </td>
+                    </td> -->
                     <td>
                         <%if(data.status==true){%> 
                           <a href="/couponblock?id=<%=data._id%>" onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="btn btn-success" style="width: 100px;">List</button></a>

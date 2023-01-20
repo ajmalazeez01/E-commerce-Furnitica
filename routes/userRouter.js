@@ -18,45 +18,53 @@ router.get("/login", userControllers.login);
 
 //home
 router.get("/", userControllers.userHome);
+//search
+router.post("/search",userControllers.search);
+
 
 //home categoryproduct
 router.get("/productlist", userControllers.productList);
 router.get("/productdetail", userControllers.productDetail);
 
 //cart
-router.get("/cartlist",  cartControllers.cartList);
-router.post("/add_to_cart",  cartControllers.add_to_cart);
-router.patch("/productadd",  cartControllers.productQtyAdd);
-router.patch("/productsub",  cartControllers.productQtySub);
-router.get("/deletecart",  cartControllers.deleteCart);
+router.get("/cartlist",session.userLogin,  cartControllers.cartList);
+router.post("/add_to_cart",session.userLogin,  cartControllers.add_to_cart);
+router.patch("/productadd",session.userLogin,  cartControllers.productQtyAdd);
+router.patch("/productsub",session.userLogin,  cartControllers.productQtySub);
+router.get("/deletecart",session.userLogin,  cartControllers.deleteCart);
 
 //checkout
-router.get("/checkout",  cartControllers.checkout);
-router.post("/checkout",  cartControllers.postCheckOut);
-router.post("/setaddress",  cartControllers.setAddressCheckout);
+router.get("/checkout",session.userLogin,  cartControllers.checkout);
+router.post("/checkout",session.userLogin,  cartControllers.postCheckOut);
+router.post("/setaddress",session.userLogin,  cartControllers.setAddressCheckout);
 
 //wishlist
-router.post("/wishlist",  cartControllers.wishList);
-router.get("/wishlist",  cartControllers.view_wishList);
-router.get("/deletewishlist",  cartControllers.deleteWishlist);
+router.post("/wishlist",session.userLogin,  cartControllers.wishList);
+router.get("/wishlist",session.userLogin,  cartControllers.view_wishList);
+router.get("/deletewishlist",session.userLogin,  cartControllers.deleteWishlist);
 
 //profile
-router.get("/profile",  userControllers.profile);
-router.post("/profile",  userControllers.insertProfile);
+router.get("/profile",userControllers.profile);
+router.post("/profile",userControllers.insertProfile);
 router.get("/editaddress",userControllers.editAddress);
 router.post("/editaddress",userControllers. posteditAddress);
 router.get("/deleteaddress",userControllers.deleteAddress);
 
 //coupon 
-router.post("/couponcheck",cartControllers.couponCheck);
+router.post("/couponcheck",session.userLogin,cartControllers.couponCheck);
 
 //order
 router.get("/order",userControllers.orderPage);
 router.get("/orderdetails",userControllers.viewOrderDetails);
+router.get("/cancelorder",userControllers.cancelOrder);
+
 
 //payment
 router.get("/success", cartControllers.success);
 router.get("/failed", cartControllers.failed);
+
+//contact
+router.get("/contact", userControllers.contact);
 
 //error page
 router.get("/404", userControllers.errorPage);

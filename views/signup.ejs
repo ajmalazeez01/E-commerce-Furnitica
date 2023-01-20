@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>signup</title>
+    <link rel="shortcut icon" href="/public/images/home/logo-mobie.png" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="/public/style.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap"
@@ -30,6 +31,7 @@
                 placeholder="Username"
                 required
               />
+              <p id="usernameError" class="usernameError"></p>
             </div>
           </div>
           <div class="input-div one">
@@ -44,6 +46,7 @@
                 placeholder="Email"
                 required
               />
+              <p id="emailError" class="emailError"></p>
             </div>
           </div>
           <div class="input-div pass">
@@ -58,6 +61,7 @@
                 placeholder="Password"
                 required
               />
+              <p id="passwordError" class="passwordError"></p>
             </div>
           </div>
           <div class="input-div pass">
@@ -86,6 +90,7 @@
                 placeholder="Mobile no"
                 required
               />
+              <p id="phoneError" class="phoneError"></p>
             </div>
           </div>
 
@@ -100,4 +105,71 @@
 
     <script type="text/javascript" src="js/main.js"></script>
   </body>
+
+
+  <script> 
+
+  const usernameError = document.getElementById('userError');
+		     const emailError = document.getElementById('emailError');
+			const phoneError = document.getElementById('phoneError');
+			const passwordError = document.getElementById('passwordError');
+		
+			function validateName(){
+			  var username = document.getElementById('username').value ;
+				 if(username.length == ""){
+				  usernameError.innerHTML='Name is required'
+				username.focus()
+				 return false
+				}
+				if(!username.match(/^[A-Za-z]*\s{1}[A-Za-z]*$/)){
+			usernameError.innerHTML ='please enter valid name'
+			return false;
+				}
+				usernameError.innerHTML = ''
+				return true;
+			}	
+			function validateEmail(){
+		  var email = document.getElementById('email').value;
+		   
+		  if (email.length==0){
+			emailError.innerHTML = 'Email  required'
+			return false;
+		  }
+		  if(!email.match(/^[A-Za-z\._\-[0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)){
+			emailError.innerHTML = 'Email Invalid'
+			return false;
+		  }
+		  emailError.innerHTML = '';
+			return true;
+		}
+		function validatePhone(){
+			var phone =document.getElementById('phone').value;
+			if(phone.length == 0){
+				phoneError.innerHTML =' phone no is required '
+				return false;
+			}
+			if(phone.length !== 10){
+				phoneError.innerHTML ='phone no should be 10 digits'
+				return false
+			}
+			if(!phone.match(/^[0-9]{10}$/)){
+				phoneError.innerHTML = 'phone no is required'
+				return false
+			}
+			phoneError.innerHTML = ''
+			return true;
+		}
+		  function validatePassword(){
+		  var password = document.getElementById('password').value
+		  if(password.length < 8){
+			passwordError.innerHTML = 'password is required [above 8 character]'
+			password.focus()
+			return false;
+		  }
+		  passwordError.innerHTML = '';
+			return true;
+		  }
+    </script>
+
+
 </html>

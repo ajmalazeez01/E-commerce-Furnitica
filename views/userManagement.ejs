@@ -8,7 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Admin</title>
+    <title>Furnitica</title>
+    <link rel="shortcut icon" href="/public/images/home/logo-mobie.png" type="image/x-icon">
+
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/dashboard.css" />
@@ -123,16 +125,16 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Mobile</th>
-                <th>Status</th>
-                <th>Block/Unblock</th>
+                <!-- <th>Status</th> -->
+                <th>BLOCK/UNBLOCK</th>
               </thead>
                 <tfoot>
                 
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
-                    <th>Status</th>
-                    <th>Block/Unblock</th>
+                    <!-- <th>Status</th> -->
+                    <th>BLOCK/UNBLOCK</th>
                 
                 </tfoot>
                 <tbody>
@@ -143,13 +145,13 @@
                     <td><%=item.email%></td>
                     <td><%=item.number%></td>
 
-                    <td>
+                    <!-- <td>
                       <%if(item.status==true){%>
                       <p class="badge badge-success">Active</p>
                       <%} else {%>
                       <p class="badge badge-danger">Inactive</p>
                       <%}%>
-                    </td>
+                    </td> -->
 
                     <td>
                       <%if(item.status==true){%>
@@ -161,7 +163,7 @@
                           class="badge badge-success"
                           style="width: 100px"
                         >
-                          Block
+                          BLOCK
                         </button></a
                       >
 
@@ -174,7 +176,7 @@
                           class="badge badge-danger"
                           style="width: 100px"
                         >
-                          Unblock
+                          UNBLOCK
                         </button></a
                       >
 

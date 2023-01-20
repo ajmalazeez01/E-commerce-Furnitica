@@ -9,6 +9,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Admin</title>
+    <link rel="shortcut icon" href="/public/images/home/logo-mobie.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="/public/dashboard.css" />
@@ -162,17 +163,18 @@
                 <thead>
                     <tr>
                         <th>Image</th>                     
-                        <th>Name</th>
-                         <th>Status</th>
-                          <th>Action</th>
+                        <th>Category</th>
+                         <!-- <th>Status</th> -->
+                          <th>ACTION</th>
+                          
                         </tr>
                 </thead>
                 <tfoot>
                     <tr>
                         <th>Image</th>                     
-                        <th>Name</th>
-                         <th>Status</th>
-                          <th>Action</th>
+                        <th>Category</th>
+                         <!-- <th>Status</th> -->
+                          <th>ACTION</th>
                         </tr>
                 </tfoot>
                 <tbody>
@@ -183,20 +185,20 @@
                      <td><img src="/public/proimg/<%=categorydata.image%>" alt="image"style="width:100px,;" alt="image"></td>                       
                      <td><%=categorydata.name%></td>
                                             
-                     <td><%if(categorydata.status==true){%>
+                     <!-- <td><%if(categorydata.status==true){%>
                         <p class = "badge badge-success">Active</p>
                         <%} else {%>
                         <p class = "badge badge-danger">Inactive</p>
                         <%}%>
-                      </td>
+                      </td> -->
         
                       <td>
                                                 
                       <%if(categorydata.status==true){%>
-                      <a href="/categoryblock?id=<%=categorydata._id%>" onclick="return confirm('are you sure change access to <%=categorydata.name%>')"><button type="button" class="badge badge-success ml-2"style="width:100px;">Block</button></a>
+                      <a href="/categoryblock?id=<%=categorydata._id%>" onclick="return confirm('are you sure change access to <%=categorydata.name%>')"><button type="button" class="badge badge-success ml-2"style="width:100px;">BLOCK</button></a>
                                                
                       <%} else {%>
-                      <a href="/categoryblock?id=<%=categorydata._id%>" onclick="return confirm('are you sure change access to <%=categorydata.name%>')"><button type="button" class="badge badge-danger ml-2"style="width:100px;">Unblock</button></a>
+                      <a href="/categoryblock?id=<%=categorydata._id%>" onclick="return confirm('are you sure change access to <%=categorydata.name%>')"><button type="button" class="badge badge-danger ml-2"style="width:100px;">UNBLOCK</button></a>
                       <%}%>
                                           
                       <a href="/editcategory?id=<%= categorydata._id %>"><button type="button" class="badge badge-primary"style="width:100px;">Edit</button>

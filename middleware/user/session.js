@@ -8,7 +8,7 @@ const userLogin=(req,res,next)=>{
 
 const userLogout=(req,res,next)=>{
     if(req.session.user){
-        res.redirect('/home')
+        res.redirect('/')
     }else{
         next()
     }

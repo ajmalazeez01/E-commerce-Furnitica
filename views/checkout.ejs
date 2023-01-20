@@ -4,217 +4,47 @@
 <!--[if (gte IE 9)|!(IE)]><!-->
 <!--<![endif]-->
 <html lang="en">
-  <!-- product-checkout07:12-->
-  <head>
-    <!-- Basic Page Needs -->
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Furnitica - Minimalist Furniture HTML Template</title>
+<!-- product-checkout07:12-->
 
-    <meta name="keywords" content="Furniture, Decor, Interior" />
-    <meta
-      name="description"
-      content="Furnitica - Minimalist Furniture HTML Template"
-    />
-    <meta name="author" content="tivatheme" />
+<head>
+  <!-- Basic Page Needs -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Furnitica - Minimalist Furniture HTML Template</title>
+  <link rel="shortcut icon" href="/public/images/home/logo-mobie.png" type="image/x-icon">
 
-    <!-- Mobile Meta -->
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
+  <meta name="keywords" content="Furniture, Decor, Interior" />
+  <meta name="description" content="Furnitica - Minimalist Furniture HTML Template" />
+  <meta name="author" content="tivatheme" />
 
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700"
-      rel="stylesheet"
-    />
+  <!-- Mobile Meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-    <!-- libs CSS -->
-    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="libs/nivo-slider/css/nivo-slider.css" />
-    <link rel="stylesheet" href="libs/nivo-slider/css/animate.css" />
-    <link rel="stylesheet" href="libs/nivo-slider/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="libs/font-material/css/material-design-iconic-font.min.css"
-    />
-    <link rel="stylesheet" href="libs/slider-range/css/jslider.css" />
-    <link
-      rel="stylesheet"
-      href="libs/owl-carousel/assets/owl.carousel.min.css"
-    />
-    <link rel="stylesheet" href="libs/slick-slider/css/slick.css" />
-    <link rel="stylesheet" href="libs/slick-slider/css/slick-theme.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700" rel="stylesheet" />
 
-    <!-- Template CSS -->
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="stylesheet" type="text/css" href="css/reponsive.css" />
-  </head>
+  <!-- libs CSS -->
+  <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="libs/nivo-slider/css/nivo-slider.css" />
+  <link rel="stylesheet" href="libs/nivo-slider/css/animate.css" />
+  <link rel="stylesheet" href="libs/nivo-slider/css/style.css" />
+  <link rel="stylesheet" href="libs/font-material/css/material-design-iconic-font.min.css" />
+  <link rel="stylesheet" href="libs/slider-range/css/jslider.css" />
+  <link rel="stylesheet" href="libs/owl-carousel/assets/owl.carousel.min.css" />
+  <link rel="stylesheet" href="libs/slick-slider/css/slick.css" />
+  <link rel="stylesheet" href="libs/slick-slider/css/slick-theme.css" />
 
-  <body class="product-checkout checkout-cart">
-    <header>
-      <div class="header-mobile d-md-none">
-        <div
-          class="mobile hidden-md-up text-xs-center d-flex align-items-center justify-content-around"
-        >
-          <div id="mobile_mainmenu" class="item-mobile-top">
-            <i class="fa fa-bars" aria-hidden="true"></i>
-          </div>
+  <!-- Template CSS -->
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <link rel="stylesheet" type="text/css" href="css/reponsive.css" />
+</head>
 
-          <div class="mobile-logo">
-            <a href="index-2.html">
-              <img
-                class="logo-mobile img-fluid"
-                src="public/images/home/logo-mobie.png"
-                alt="Prestashop_Furnitica"
-              />
-            </a>
-          </div>
+<body class="product-checkout checkout-cart">
 
-          <div class="mobile-menutop" data-target="#mobile-pagemenu">
-            <i class="zmdi zmdi-more"></i>
-          </div>
-        </div>
 
-        <div id="mobile_search" class="d-flex">
-          <div id="mobile_search_content">
-            <form method="get" action="#">
-              <input type="text" name="s" value="" placeholder="Search" />
-              <button type="submit">
-                <i class="fa fa-search"></i>
-              </button>
-            </form>
-          </div>
-          <div class="desktop_cart">
-            <div class="blockcart block-cart cart-preview tiva-toggle">
-              <div class="header-cart tiva-toggle-btn">
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-              </div>
-              <div class="dropdown-content">
-                <div class="cart-content">
-                  <table>
-                    <tbody>
-                      
+  <%- include('../middleware/layout/header.ejs') %>
 
-                      <tr>
-                        <td colspan="3" class="d-flex justify-content-center">
-                          <div class="cart-button">
-                            <a href="/cartlist" title="View Cart"
-                              >View Cart</a
-                            >
-                            <a href="/checkout" title="Checkout"
-                              >Checkout</a
-                            >
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="header-top d-xs-none">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-2 col-md-2 d-flex align-items-center">
-              <div id="logo">
-                <a href="index-2.html">
-                  <img
-                    src="public/images/home/logo.png"
-                    alt="logo"
-                    class="img-fluid"
-                  />
-                </a>
-              </div>
-            </div>
-
-            <div
-              class="col-sm-5 col-md-5 align-items-center justify-content-center navbar-expand-md main-menu"
-            >
-              <div class="menu navbar collapse navbar-collapse">
-                <ul class="menu-top navbar-nav">
-                  <li>
-                    <a href="#" class="parent">Home</a>
-                    <div class="dropdown-menu"></div>
-                  </li>
-
-                  <li class="nav-link">
-                    <a href="#" class="parent">Shop</a>
-                    <div class="dropdown-menu drop-tab"></div>
-                  </li>
-                  <li>
-                    <a href="contact.html" class="parent">Contact US</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div
-              class="col-sm-5 col-md-5 d-flex align-items-center justify-content-end"
-              id="search_widget"
-            >
-              <form method="get" action="#">
-                <span
-                  role="status"
-                  aria-live="polite"
-                  class="ui-helper-hidden-accessible"
-                ></span>
-                <input
-                  type="text"
-                  name="s"
-                  value=""
-                  placeholder="Search"
-                  class="ui-autocomplete-input"
-                  autocomplete="off"
-                />
-                <button type="submit">
-                  <i class="fa fa-search"></i>
-                </button>
-              </form>
-
-              <div id="block_myaccount_infos" class="hidden-sm-down dropdown">
-                <div class="myaccount-title">
-                  <a href="#acount" data-toggle="collapse" class="acount">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                    <span>Account</span>
-                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                  </a>
-                </div>
-
-                <div id="acount" class="collapse">
-                  <div class="account-list-content">
-                    <div>
-                      <a
-                        class="login"
-                        href="/profile"
-                        rel="nofollow"
-                        title="Log in to your customer account"
-                      >
-                        <i class="fa fa-cog"></i>
-                        <span>My Account</span>
-                      </a>
-                    </div>
-
-                    <div class="link_wishlist">
-                      <a href="/wishlist" title="My Wishlists">
-                        <i class="fa fa-heart"></i>
-                        <span>My Wishlists</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
 
     <!-- main content -->
     <div id="checkout" class="main-content">
@@ -243,10 +73,7 @@
         <div id="wrapper-site">
           <div class="container">
             <div class="row">
-              <div
-                id="content-wrapper"
-                class="col-xs-12 col-sm-12 col-md-12 col-lg-12 onecol"
-              >
+              <div id="content-wrapper" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 onecol">
                 <div id="main">
                   <div class="cart-grid row">
                     <div class="col-md-9 check-info">
@@ -255,568 +82,312 @@
                           <span class="step-number">1</span>PERSONAL INFORMATION
                         </h3>
                       </div><br>
-                      
-                       
-                        <div class="tab-content">
-                          <div
-                            class="tab-pane fade in active show"
-                            id="checkout-guest-form"
-                            role="tabpanel"
-                           >
-                            <form
-                              action="/checkout"
-                              id="customer-form"
-                              class="js-customer-form"
-                              method="post"
-                             >
-                              <div>
-                                <input
-                                  type="hidden"
-                                  name="id_customer"
-                                  value=""
-                                 />
-                                <h6><b>Choose Address</b></h6>
-                                
-                                 
-
-                                  <select id="cars" name="address" style="height: 32px;"  onchange="setaddress(this.value)">
-                                    <option o value="">Choose</option>
-                                    <% address.forEach((address)=>{ %>
-                                  <option  value="<%=address.id%>">,<%=address.name%>,<%=address.addressline1%>,<%=address.addressline2%>,<%=address.district%>,<%=address.state%>,<%=address.country%>,PIN:<%=address.pin%>,Mob:<%=address.mobile%></option>
-                               <% }) %>
-                                </select><br><br>
 
 
-                                
-                                <h8>Name *</h8>
-                                <div class="form-group row">
-                                  <input
-                                    class="form-control"
-                                    id="adres_name"
-                                    name="name"
-                                    type="text"
-                                    placeholder=" name"
-                                    required
-                                  />
-                                </div>
-                                <h8>Address *</h8>
-                                <div class="form-group row">
-                                  <input
-                                    class="form-control"
-                                    id="adres_line1"
-                                    name="addressline1"
-                                    type="text"
-                                    placeholder=" House number and street name"
-                                    required
-                                  />
+                      <div class="tab-content">
+                        <div class="tab-pane fade in active show" id="checkout-guest-form" role="tabpanel">
+                          <form action="/checkout" id="customer-form" class="js-customer-form" method="post">
+                            <div>
+                              <input type="hidden" name="id_customer" value="" />
+                              <h6><b>Choose Address</b></h6>
 
 
-                                </div>
-                                
-                                <div class="form-group row">
-                                  <input
-                                    class="form-control"
-                                    id="adres_line2"
-                                    name="addressline2"
-                                    type="text"
-                                    placeholder="Appartments,suite,unit etc"
-                                    required
-                                  />
-                                </div>
 
-                                <h8>District *</h8>
-                                <div class="form-group row">
-                                  <input
-                                    class="form-control"
-                                    id="adres_district" 
-                                    name="district"
-                                    type="text"
-                                    placeholder=""
-                                    required
-                                  />
-                                </div>
-                                <h8>Country *</h8>
-                                <div class="form-group row">
-                                  <input
-                                    class="form-control"
-                                    id="adres_country"
-                                    name="country"
-                                    type="text"
-                                    placeholder=""
-                                    required
-                                  />
-                                </div>
-                                <h8>Mobile *</h8>
-                                <div class="form-group row">
-                                  <input
-                                    class="form-control"
-                                    id="adres_mobile" 
-                                    name="mobile"
-                                    type="number"
-                                    placeholder=""
-                                    required
-                                  />
-                                </div>
-                                <h8>State *</h8>
-                                <div class="form-group row">
-                                  <input
-                                    class="form-control"
-                                    id="adres_state"
-                                    name="state"
-                                    type="text"
-                                    placeholder=""
-                                    required
-                                  />
-                                </div>
-                                <h8>Postcode *</h8>
-                                <div class="form-group row">
-                                  <input
-                                    class="form-control"
-                                    id="adres_pin"
-                                    name="postcode"
-                                    type="number"
-                                    placeholder=""
-                                    required
-                                  />
-                                </div>
-                                
+                              <select id="cars" name="address" style="height: 32px;" onchange="setaddress(this.value)">
+                                <option o value="">Choose</option>
+                                <% address.forEach((address)=>{ %>
+                                  <option value="<%=address.id%>">,<%=address.name%>,<%=address.addressline1%>,
+                                        <%=address.addressline2%>,<%=address.district%>,<%=address.state%>,
+                                              <%=address.country%>,PIN:<%=address.pin%>,Mob:<%=address.mobile%>
+                                  </option>
+                                  <% }) %>
+                              </select><br><br>
+
+
+
+                              <h8>Name *</h8>
+                              <div class="form-group row">
+                                <input class="form-control" id="adres_name" name="name" type="text" placeholder=" name"
+                                  required />
                               </div>
-                              
-                          </div>
-                         
+                              <h8>Address *</h8>
+                              <div class="form-group row">
+                                <input class="form-control" id="adres_line1" name="addressline1" type="text"
+                                  placeholder=" House number and street name" required />
+
+
+                              </div>
+
+                              <div class="form-group row">
+                                <input class="form-control" id="adres_line2" name="addressline2" type="text"
+                                  placeholder="Appartments,suite,unit etc" required />
+                              </div>
+
+                              <h8>District *</h8>
+                              <div class="form-group row">
+                                <input class="form-control" id="adres_district" name="district" type="text"
+                                  placeholder="" required />
+                              </div>
+                              <h8>Country *</h8>
+                              <div class="form-group row">
+                                <input class="form-control" id="adres_country" name="country" type="text" placeholder=""
+                                  required />
+                              </div>
+                              <h8>Mobile *</h8>
+                              <div class="form-group row">
+                                <input class="form-control" id="adres_mobile" name="mobile" type="number" placeholder=""
+                                  required />
+                              </div>
+                              <h8>State *</h8>
+                              <div class="form-group row">
+                                <input class="form-control" id="adres_state" name="state" type="text" placeholder=""
+                                  required />
+                              </div>
+                              <h8>Postcode *</h8>
+                              <div class="form-group row">
+                                <input class="form-control" id="adres_pin" name="postcode" type="number" placeholder=""
+                                  required />
+                              </div>
+
+                            </div>
+
                         </div>
 
-                        <div class="sample" style="background-color: #83c7eb" >
+                      </div>
+
+                      <div class="sample" style="background-color: #83c7eb">
 
 
-                          <di v class="cart-detailed-totals">
-                            <div class="cart-summary-products">
-                              <p id="message"></p>
-                              <input type="text" class="form-control" name="coupon" id="couponCode"  placeholder="Enter coupon">
-                              <input type="text" id="couponId" value="" name="couponid"  hidden>
-                              <button class="continue btn btn-primary pull-xs-right" id="coupon_button" >apply coupon</button>
+                        <di v class="cart-detailed-totals">
+                          <div class="cart-summary-products">
+                            <p id="message"></p>
+                            <input type="text" class="form-control" name="coupon" id="couponCode"
+                              placeholder="Enter coupon">
+                            <input type="text" id="couponId" value="" name="couponid" hidden>
+                            <button class="continue btn btn-primary pull-xs-right" id="coupon_button">apply
+                              coupon</button>
                           </div>
 
-                              <div class="cart-summary-products">
-                                  <div class="summary-label ml-3"><h5>Your order</h5></div><hr>
-                              </div>
-                              <div class="cart-summary-line" id="cart-subtotal-products">
-                                  <span class="label js-subtotal">
-                                      <b>product</b>
-                                  </span>
-                                  <span class="value"><b>price</b></span>
-                              </div>
-                              <br>
-                              <div class="cart-summary-line" id="cart-subtotal-shipping">
-                                  <span class="label">
-                                   <b>Sub total</b>
-                                  </span>
-                                  <span class="value" >$<span id="subtotal"><%=subtotal%></span></span>
-                                  <div>
-                                      <small class="value"></small>
-                                  </div>
-                              </div><br><hr>
-                              <div class="cart-summary-line cart-total">
-                                  <span class="label"><b>Shipping</b></span>
-                                  <span class="value">free</span>
-                              </div><br>
-      
-                              <span class="label"><b>coupon applied</b></span> <span class="value"><p id="coupon_code"></p></span>
-                              <br><hr>
-                             
-
-                              <div class="cart-summary-line" id="cart-subtotal-shipping">
-                                <span class="label">
-                                 <b>SUB TOTAL</b>
-                                </span>
-                                <span class="value" id="total">$<%=subtotal%></span>
-                                <input type="text" id="subtotal_amount" value="" name="subtotal" hidden>
-                                <input type="text" id="total_amount" value="" name="total" hidden>
-                                <div>
-                                    <small class="value"></small>
-                                </div>
-                            </div><hr>
-      
-                            <input type="radio" id="option1" name="payment_mode" value="COD">COD 
-                            <input type="radio" value="pay" name="payment_mode"> Online Payment
-                          <% if(subtotal == 0){ %>
-                              <button disabled
-                           
-                            class="continue btn btn-primary pull-xs-right"
-                          >
-                            proceed to payment
-                          </button>
-
-                          <%} else {%>
-
-                          <button type="submit"
-                            href="/payment"
-                            class="continue btn btn-primary pull-xs-right"
-                          >
-                            proceed to payment
-                          </button>
-
-                          <% } %>
-      
-                        </form>
-      
-      
+                          <div class="cart-summary-products">
+                            <div class="summary-label ml-3">
+                              <h5>Your order</h5>
+                            </div>
+                            <hr>
                           </div>
-                         
+                          <div class="cart-summary-line" id="cart-subtotal-products">
+                            <span class="label js-subtotal">
+                              <b>product</b>
+                            </span>
+                            <span class="value"><b>price</b></span>
+                          </div>
+                          <br>
+                          <div class="cart-summary-line" id="cart-subtotal-shipping">
+                            <span class="label">
+                              <b>Sub total</b>
+                            </span>
+                            <span class="value">$<span id="subtotal">
+                                <%=subtotal%>
+                              </span></span>
+                            <div>
+                              <small class="value"></small>
+                            </div>
+                          </div><br>
+                          <hr>
+                          <div class="cart-summary-line cart-total">
+                            <span class="label"><b>Shipping</b></span>
+                            <span class="value">free</span>
+                          </div><br>
+
+                          <span class="label"><b>coupon applied</b></span> <span class="value">
+                            <p id="coupon_code"></p>
+                          </span>
+                          <br>
+                          <hr>
+
+
+                          <div class="cart-summary-line" id="cart-subtotal-shipping">
+                            <span class="label">
+                              <b>SUB TOTAL</b>
+                            </span>
+                            <span class="value" id="total">$<%=subtotal%></span>
+                            <input type="text" id="subtotal_amount" value="" name="subtotal" hidden>
+                            <input type="text" id="total_amount" value="" name="total" hidden>
+                            <div>
+                              <small class="value"></small>
+                            </div>
+                          </div>
+                          <hr>
+
+                          <input type="radio" id="option1" name="payment_mode" value="COD">COD
+                          <input type="radio" value="pay" name="payment_mode"> Online Payment
+                          <% if(subtotal==0){ %>
+                            <button disabled class="continue btn btn-primary pull-xs-right">
+                              proceed to payment
+                            </button>
+
+                            <%} else {%>
+
+                              <button type="submit" href="/payment" class="continue btn btn-primary pull-xs-right">
+                                proceed to payment
+                              </button>
+
+                              <% } %>
+
+                                </form>
+
+
                       </div>
 
                     </div>
-                   
-                  
+
                   </div>
+
+
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </div>
 
     <!-- footer -->
-    <footer class="footer-one">
-      <div class="inner-footer">
-        <div class="container">
-          <div class="footer-top col-lg-12 col-xs-12">
-            <div class="row">
-              <div class="nov-html col-lg-4 col-sm-12 col-xs-12">
-                <div class="block">
-                  <div class="block-content">
-                    <p class="logo-footer">
-                      <img src="public/images/home/logo.png" alt="img" />
-                    </p>
-                    <p class="content-logo">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim
-                    </p>
-                  </div>
-                </div>
-                <div class="block">
-                  <div class="block-content">
-                    <ul>
-                      <li>
-                        <a href="#">About Us</a>
-                      </li>
-                      <li>
-                        <a href="#">Reasons to shop</a>
-                      </li>
-                      <li>
-                        <a href="#">What our customers say</a>
-                      </li>
-                      <li>
-                        <a href="#">Meet the teaml</a>
-                      </li>
-                      <li>
-                        <a href="#">Contact our buyers</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="block">
-                  <div class="block-content">
-                    <p class="img-payment">
-                      <img
-                        class="img-fluid"
-                        src="public/images/home/payment-footer.png"
-                        alt="img"
-                      />
-                    </p>
-                  </div>
-                </div>
+
+    <%- include('../middleware/layout/footer.ejs') %>
+
+
+
+      <!-- back top top -->
+      <div class="back-to-top">
+        <a href="#">
+          <i class="fa fa-long-arrow-up"></i>
+        </a>
+      </div>
+
+
+
+      <!-- menu mobie right -->
+      <div id="mobile-pagemenu" class="mobile-boxpage d-flex hidden-md-up active d-md-none">
+        <div class="content-boxpage col">
+          <div class="box-header d-flex justify-content-between align-items-center">
+            <div class="title-box">Menu</div>
+            <div class="close-box">Close</div>
+          </div>
+          <div class="box-content">
+            <nav>
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div id="megamenu" class="nov-megamenu clearfix">
+                <ul class="menu level1">
+                  <li class="item home-page has-sub">
+                    <span class="arrow collapsed" data-toggle="collapse" data-target="#home1" aria-expanded="true"
+                      role="status">
+                      <i class="zmdi zmdi-minus"></i>
+                      <i class="zmdi zmdi-plus"></i>
+                    </span>
+                    <a href="index-2.html" title="Home">
+                      <i class="fa fa-home" aria-hidden="true"></i>Home</a>
+
+                  </li>
+
+                </ul>
               </div>
-              <div class="nov-html col-lg-4 col-sm-6">
-                <div class="block m-top">
-                  <div class="title-block">Contact Us</div>
-                  <div class="block-content">
-                    <div class="contact-us">
-                      <div class="title-content">
-                        <i class="fa fa-home" aria-hidden="true"></i>
-                        <span>Address :</span>
-                      </div>
-                      <div class="content-contact address-contact">
-                        <p>
-                          123 Suspendis matti, Visaosang Building VST District
-                          NY Accums, North American
-                        </p>
-                      </div>
-                    </div>
-                    <div class="contact-us">
-                      <div class="title-content">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                        <span>Email :</span>
-                      </div>
-                      <div class="content-contact mail-contact">
-                        <p>support@domain.com</p>
-                      </div>
-                    </div>
-                    <div class="contact-us">
-                      <div class="title-content">
-                        <i class="fa fa-phone" aria-hidden="true"></i>
-                        <span>Hotline :</span>
-                      </div>
-                      <div class="content-contact phone-contact">
-                        <p>+0012-345-67890</p>
-                      </div>
-                    </div>
-                    <div class="contact-us">
-                      <div class="title-content">
-                        <i class="fa fa-clock-o" aria-hidden="true"></i>
-                        <span>Opening Hours :</span>
-                      </div>
-                      <div class="content-contact hours-contact">
-                        <p>Monday - Sunday / 08.00AM- 19.00</p>
-                        <span>(Except Holidays)</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tiva-modules col-lg-4 col-md-6">
-                <div class="block m-top">
-                  <div class="block-content">
-                    <div class="title-block">Newsletter</div>
-                    <div class="sub-title">
-                      Sign up to our newsletter to get the latest articles,
-                      lookbooks voucher codes direct to your inbox
-                    </div>
-                    <div class="block-newsletter">
-                      <form action="#" method="post">
-                        <div class="input-group">
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="email"
-                            value=""
-                            placeholder="Enter Your Email"
-                          />
-                          <span class="input-group-btn">
-                            <button
-                              class="effect-btn btn btn-secondary"
-                              name="submitNewsletter"
-                              type="submit"
-                            >
-                              <span>subscribe</span>
-                            </button>
-                          </span>
-                        </div>
-                        <input type="hidden" name="action" value="0" />
-                      </form>
-                    </div>
-                  </div>
-                </div>
-                <div class="block m-top1">
-                  <div class="block-content">
-                    <div class="social-content">
-                      <div class="title-block">Follow us on</div>
-                      <div id="social-block">
-                        <div class="social">
-                          <ul class="list-inline mb-0 justify-content-end">
-                            <li class="list-inline-item mb-0">
-                              <a href="#" target="_blank">
-                                <i class="fa fa-facebook"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item mb-0">
-                              <a href="#" target="_blank">
-                                <i class="fa fa-twitter"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item mb-0">
-                              <a href="#" target="_blank">
-                                <i class="fa fa-google"></i>
-                              </a>
-                            </li>
-                            <li class="list-inline-item mb-0">
-                              <a href="#" target="_blank">
-                                <i class="fa fa-instagram"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="block m-top1">
-                  <div class="block-content">
-                    <div class="payment-content">
-                      <div class="title-block">Payment accept</div>
-                      <div class="payment-image">
-                        <img
-                          class="img-fluid"
-                          src="public/images/home/payment.png"
-                          alt="img"
-                        />
-                      </div>
-                    </div>
-                    <!-- Popup newsletter -->
-                  </div>
-                </div>
-              </div>
-            </div>
+            </nav>
           </div>
         </div>
       </div>
-      <div id="tiva-copyright">
-        <div class="container">
-          <div class="row">
-            <div class="text-center col-lg-12">
-              <span>
-                <a target="_blank" href="https://www.templateshub.net"
-                  >Templates Hub</a
-                >
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
 
-    <!-- back top top -->
-    <div class="back-to-top">
-      <a href="#">
-        <i class="fa fa-long-arrow-up"></i>
-      </a>
-    </div>
+      <!-- Vendor JS -->
+      <script src="libs/jquery/jquery.min.js"></script>
+      <script src="libs/popper/popper.min.js"></script>
+      <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+      <script src="libs/nivo-slider/js/jquery.nivo.slider.js"></script>
+      <script src="libs/owl-carousel/owl.carousel.min.js"></script>
+      <script src="libs/slider-range/js/tmpl.js"></script>
+      <script src="libs/slider-range/js/jquery.dependClass-0.1.js"></script>
+      <script src="libs/slider-range/js/draggable-0.1.js"></script>
+      <script src="libs/slider-range/js/jquery.slider.js"></script>
+      <script src="libs/slick-slider/js/slick.min.js"></script>
 
-   
+      <!-- Template JS-->
+      <script src="js/theme.js"></script>
 
-    <!-- menu mobie right -->
-    <div
-      id="mobile-pagemenu"
-      class="mobile-boxpage d-flex hidden-md-up active d-md-none"
-    >
-      <div class="content-boxpage col">
-        <div
-          class="box-header d-flex justify-content-between align-items-center"
-        >
-          <div class="title-box">Menu</div>
-          <div class="close-box">Close</div>
-        </div>
-        <div class="box-content">
-          <nav>
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div id="megamenu" class="nov-megamenu clearfix">
-              <ul class="menu level1">
-                <li class="item home-page has-sub">
-                  <span
-                    class="arrow collapsed"
-                    data-toggle="collapse"
-                    data-target="#home1"
-                    aria-expanded="true"
-                    role="status"
-                  >
-                    <i class="zmdi zmdi-minus"></i>
-                    <i class="zmdi zmdi-plus"></i>
-                  </span>
-                  <a href="index-2.html" title="Home">
-                    <i class="fa fa-home" aria-hidden="true"></i>Home</a
-                  >
-                 
-                </li>
-            
-              </ul>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </div>
+      <script>
+        function setaddress(id) {
+          $.ajax({
+            url: '/setaddress',
+            method: 'post',
+            data: {
+              addresId: id
+            },
+            success: (response) => {
+              $("#adres_name").val(response.data[0].name);
+              $("#adres_line1").val(response.data[0].addressline1);
+              $("#adres_line2").val(response.data[0].addressline2);
+              $("#adres_district").val(response.data[0].district);
+              $("#adres_state").val(response.data[0].state);
+              $("#adres_country").val(response.data[0].country);
+              $("#adres_pin").val(response.data[0].pin);
+              $("#adres_mobile").val(response.data[0].mobile);
 
-    <!-- Vendor JS -->
-    <script src="libs/jquery/jquery.min.js"></script>
-    <script src="libs/popper/popper.min.js"></script>
-    <script src="libs/bootstrap/js/bootstrap.min.js"></script>
-    <script src="libs/nivo-slider/js/jquery.nivo.slider.js"></script>
-    <script src="libs/owl-carousel/owl.carousel.min.js"></script>
-    <script src="libs/slider-range/js/tmpl.js"></script>
-    <script src="libs/slider-range/js/jquery.dependClass-0.1.js"></script>
-    <script src="libs/slider-range/js/draggable-0.1.js"></script>
-    <script src="libs/slider-range/js/jquery.slider.js"></script>
-    <script src="libs/slick-slider/js/slick.min.js"></script>
-
-    <!-- Template JS-->
-    <script src="js/theme.js"></script>
-
-    <script>
-      function setaddress(id){
-    $.ajax({
-        url:'/setaddress',
-        method:'post',
-        data : {
-            addresId : id
-        },
-        success:(response)=>{
-            $("#adres_name").val(response.data[0].name);
-            $("#adres_line1").val(response.data[0].addressline1);
-            $("#adres_line2").val(response.data[0].addressline2);
-            $("#adres_district").val(response.data[0].district);
-            $("#adres_state").val(response.data[0].state);
-            $("#adres_country").val(response.data[0].country);
-            $("#adres_pin").val(response.data[0].pin);
-            $("#adres_mobile").val(response.data[0].mobile);
-            
             }
 
-    })
-}
-
-
-
-$("#coupon_button").click(function(event) {
-    // prevent the form from being submitted
-    event.preventDefault();
-  
-    // get the value of the input field
-    var inputValue = $("#couponCode").val();
-  
-    // create an AJAX request
-    $.ajax({
-      type: "post",
-      url: "/couponCheck",
-      data: { input: inputValue,total:$('#subtotal').html() },
-      success: function(response) {
-        if(response.couponApplied){
-        $('#message').html('Coupon Applied').css('color', 'green');
-        let discount=response.couponApplied.discount
-        let code=response.couponApplied.code
-        let couponId=response.couponApplied._id
-        let subtotal =$('#subtotal').html()
-        discount=parseInt(discount)
-        subtotal=parseInt(subtotal)
-        let discountedPrice=(discount*subtotal)/100
-        subtotal=subtotal-discountedPrice
-        $('#total').html(subtotal)
-        $('#coupon_code').html(code)
-        $('#couponId').val(couponId)
-        $('#total_amount').val(subtotal)
+          })
         }
-        if(response.notExist){
-            $('#message').html('Coupon Not Found!!').css('color', 'red');
+
+
+
+        $("#coupon_button").click(function (event) {
+          // prevent the form from being submitted
+          event.preventDefault();
+
+          // get the value of the input field
+          var inputValue = $("#couponCode").val();
+
+          // create an AJAX request
+          $.ajax({
+            type: "post",
+            url: "/couponCheck",
+            data: { input: inputValue, total: $('#subtotal').html() },
+            success: function (response) {
+              if (response.couponApplied) {
+                $('#message').html('Coupon Applied').css('color', 'green');
+                let discount = response.couponApplied.discount
+                let code = response.couponApplied.code
+                let couponId = response.couponApplied._id
+                let subtotal = $('#subtotal').html()
+                discount = parseInt(discount)
+                subtotal = parseInt(subtotal)
+                let discountedPrice = (discount * subtotal) / 100
+                subtotal = subtotal - discountedPrice
+                $('#total').html(subtotal)
+                $('#coupon_code').html(code)
+                $('#couponId').val(couponId)
+                $('#total_amount').val(subtotal)
+              }
+              if (response.notExist) {
+                $('#message').html('Coupon Not Found!!').css('color', 'red');
+              }
+              if (response.expired) {
+                $('#message').html('Coupon Expired!!').css('color', 'red');
+              }
+              if (response.userUsed) {
+                $('#message').html('Coupon Already Used!!').css('color', 'red');
+              }
+              if (response.minAmount) {
+                let minAmount = response.minAmount
+                $('#message').html('Minimum ' + minAmount + ' required!!').css('color', 'red');
+              }
             }
-        if(response.expired){
-           $('#message').html('Coupon Expired!!').css('color', 'red');  
-            }
-        if(response.userUsed){
-            $('#message').html('Coupon Already Used!!').css('color', 'red');  
-        }
-        if(response.minAmount){
-            let minAmount=response.minAmount
-            $('#message').html('Minimum '+minAmount+' required!!').css('color', 'red');  
-        }  
-      }
-    });
-  });
-  
+          });
+        });
 
 
 
-    </script>
-  </body>
 
-  <!-- product-checkout07:13-->
+      </script>
+</body>
+
+<!-- product-checkout07:13-->
+
 </html>

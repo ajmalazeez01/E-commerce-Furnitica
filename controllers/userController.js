@@ -1,18 +1,12 @@
-// eslint-disable-next-line no-undef
 const userCollection = require("../models/userSchema");
-// eslint-disable-next-line no-undef
 const productCollection = require("../models/productSchema");
-// eslint-disable-next-line no-undef
 const categoryCollection = require("../models/categorySchema");
-// eslint-disable-next-line no-undef
 const mongoose = require("mongoose");
-// eslint-disable-next-line no-undef, no-unused-vars
 const nodemailer = require("../utils/otp");
 const orderCollection = require("../models/oderSchema");
 
 const loadSignup = (req, res) => {
   res.render("signup");
-  // eslint-disable-next-line semi
 };
 
 let userData;
@@ -24,7 +18,6 @@ const insertUser = async (req, res) => {
     const password = userData.password;
     const cpassword = userData.cpassword;
     const user = await userCollection.findOne({ email: email });
-    // eslint-disable-next-line eqeqeq
     if (email == user.email && password == user.password) {
       if (password !== cpassword) {
         res.render("signup", { warning: "incorrect password" });
@@ -36,13 +29,10 @@ const insertUser = async (req, res) => {
       from: "ajmalazeez776@gmail.com",
       to: req.body.email,
       subject: "Furnitica REGISTRATION",
-      // eslint-disable-next-line no-undef
       html: `<p>Your OTP for registering in furnitica is ${nodemailer.OTP}</p>`,
     };
     console.log(nodemailer.OTP);
 
-    // eslint-disable-next-line no-undef
-    // eslint-disable-next-line no-undef
     nodemailer.mailTransporter.sendMail(mailDetails, (err) => {
       if (err) {
         console.log(err, "error");
@@ -62,9 +52,7 @@ const otp = (
 };
 
 const otpvalidation = async (req, res) => {
-  // eslint-disable-next-line no-undef
   userotp = req.body.otp;
-  // eslint-disable-next-line no-undef
   if (nodemailer.OTP == userotp) {
     const user = new userCollection({
       email: userData.email,
@@ -72,7 +60,6 @@ const otpvalidation = async (req, res) => {
       password: userData.password,
       number: userData.number,
     });
-    // eslint-disable-next-line no-unused-vars
     const value = await user.save();
     res.redirect("/login");
   } else {
@@ -90,20 +77,20 @@ const userLogin = async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
-    const userData = await userCollection.findOne({ email: email });
+    const userData = await userCollection.findOne({  email ,password });
     if (userData) {
       if (userData.status == true) {
         if (userData.password == password) {
           req.session.user = userData._id;
           res.redirect("/");
         } else {
-          res.redirect("/login?wrong=email or pasword is inccorect");
+          res.redirect("/login?wrong=password is inccorect");
         }
       } else {
-        res.redirect("/login?wrong=email or pasword is inccorect2");
+        res.redirect("/login?wrong=user is blocked");
       }
     } else {
-      res.redirect("/login?wrong= pasword is inccorect");
+      res.redirect("/login?wrong=username and pasword is inccorect");
     }
   } catch (error) {
     console.log(error);
@@ -123,6 +110,31 @@ const userHome = async (req, res) => {
     });
 
     res.render("userHome", { product, category, userName });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const search = async (req, res) => {
+  try {
+    const user = await userCollection.findOne({ _id: req.session.user });
+    const categories = await categoryCollection.find({ status: true });
+    const key = req.body.search;
+    console.log(key);
+    const products = await productCollection.find({
+      $or: [{ name: new RegExp(key, "i") }],
+    });
+    if (products.length) {
+      res.render("userHome", { user, categories, brands, products });
+    } else {
+      res.render("userHome", {
+        user,
+        categories,
+        brands,
+        products,
+        message: "Ooops ...! No Match",
+      });
+    }
   } catch (error) {
     console.log(error);
   }
@@ -374,6 +386,28 @@ const viewOrderDetails = async (req, res) => {
   }
 };
 
+const cancelOrder = async (req, res) => {
+  try {
+    const id = req.query.id;
+    await orderCollection.updateOne(
+      { _id: id },
+      { $set: { orderStatus: "cancelled" } }
+    );
+    res.redirect("/orderdetails");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+const contact = (req, res) => {
+  try {
+    res.render("contact");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const errorPage = (req, res) => {
   try {
     res.render("errorPage");
@@ -390,6 +424,7 @@ module.exports = {
   login,
   userLogin,
   userHome,
+  search,
   productList,
   productDetail,
   profile,
@@ -399,5 +434,7 @@ module.exports = {
   deleteAddress,
   orderPage,
   viewOrderDetails,
+  cancelOrder,
+  contact,
   errorPage,
 };
