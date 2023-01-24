@@ -11,7 +11,8 @@
     "mongoose": "^6.8.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.8.0",
-    "paypal-rest-sdk": "^1.8.1"
+    "paypal-rest-sdk": "^1.8.1",
+    "sharp": "^0.31.3"
   },
   "name": "week---project",
   "version": "1.0.0",

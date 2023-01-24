@@ -1,13 +1,15 @@
-const path = require('path')
-const express = require('express')
-const app = express()
-const session = require('express-session')
+const path = require("path");
+const express = require("express");
+const app = express();
+const session = require("express-session");
+require('dotenv').config()
 
-app.use(express.urlencoded({ extended: true })) // json require
-const mongoose = require('mongoose') // mongooose require
-mongoose.set('strictQuery', true)
+app.use(express.urlencoded({ extended: true })); // json require
+const mongoose = require("mongoose"); // mongooose require
+mongoose.set("strictQuery", true);
+
 mongoose.connect(
-  'mongodb://127.0.0.1:27017/project',
+  'mongodb+srv://ajmalazeez:Ajmal786@cluster0.ofcsppw.mongodb.net/furnitica?retryWrites=true&w=majority',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -22,6 +24,19 @@ mongoose.connect(
 )
 
 
+//For not storing Cache
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
+// For parsing the url to json,string or array format
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Port specified
+const port = process.env.PORT;
+
 app.use(
   session({
     resave: false,
@@ -35,20 +50,26 @@ app.use((req, res, next) => {
   next();
 });
 
-app.set('view engine', 'ejs') // view engine setup
+// view engine setup
+app.set("view engine", "ejs");
 
-app.listen(3002, () => console.log('http://localhost:3002/'))
+const staticPath = path.join(__dirname, "public"); // Static paths
+app.use(express.static(staticPath));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
-const staticPath = path.join(__dirname, 'public') // Static paths
-app.use(express.static(staticPath))
-app.use('/public', express.static(path.join(__dirname, 'public')))
-const userRoute = require('./routes/userRouter') // userrouter set
-app.use(userRoute)
+// user router set
+const userRoute = require("./routes/userRouter");
+app.use(userRoute);
 
-const adminRoute = require('./routes/adminRouter') // admin router set
-app.use(adminRoute)
+// admin router set
+const adminRoute = require("./routes/adminRouter");
+app.use(adminRoute);
 
 app.use((req, res) => {
-  res.status(404).render('errorPage', {url:req.url});
+  res.status(404).render("errorPage", { url: req.url });
 });
 
+// For post listening
+app.listen(port, () =>
+  console.log(`http://localhost:${port}`)
+);

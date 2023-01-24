@@ -43,7 +43,7 @@
 <body class="product-cart checkout-cart blog">
 
 
-  <%- include('../middleware/layout/header.ejs') %>
+  <%- include('../views/layout/header.ejs') %>
 
 
     <%if(cartData !='' ){%>
@@ -72,7 +72,7 @@
                             <%=cartdata.name%>
                           </h6>
                         </td>
-                        <td class="price">$<span>
+                        <td class="price">₹<span>
                             <%=cartdata.price%>
                           </span></td>
                         <td class="qty">
@@ -80,16 +80,16 @@
                             <span class="qty-minus" onclick="subQty('<%=cartdata.id%>','<%=i%>')"><i class="fa fa-minus"
                                 aria-hidden="true"></i></span>
                             <span id="qty_<%=i%>">
-                              <b>
+                            
                                 <%=cartdata.qty%>
-                              </b>
+                              
                             </span>
                             <span class="qty-plus" onclick="addQty('<%=cartdata.id%>','<%=i%>')"><i class="fa fa-plus"
                                 aria-hidden="true"></i></span>
                           </div>
 
                         </td>
-                        <td class="total_price"><span> $<%=cartdata.total%></span></td>
+                        <td class="total_price">₹<span><%=cartdata.total%></span></td>
                         <td class="update-checkout w-50 text-right">
                           <a href="/deletecart?id=<%=cartdata.id%>">CLEAR</a>
 
@@ -112,7 +112,7 @@
           </div>
 
 
-          <div class="row">
+          <div class="row d-flex justify-content-end">
 
 
             <div class="col-12 col-lg-4">
@@ -168,7 +168,7 @@
           <!-- footer -->
 
 
-          <%- include('../middleware/layout/footer.ejs') %>
+          <%- include('../views/layout/footer.ejs') %>
 
 
 
@@ -363,6 +363,7 @@
             <script src="libs/slick-slider/js/slick.min.js"></script>
 
             <!-- Template JS -->
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
               function addQty(proId, position) {
                 $.ajax({

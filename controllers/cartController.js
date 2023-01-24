@@ -130,28 +130,21 @@ const add_to_cart = async (req, res) => {
   }
 };
 
+
 const productQtyAdd = async (req, res) => {
   try {
-    const data = req.body;
-    // console.log(data);
-    const proId = data.Id;
-
-    const qty = parseInt(data.qty);
-    const productData = await productCollection.findOne({ _id: proId });
-    // console.log(productData);
-    if (productData.stock > 0) {
-      if (qty < 10) {
-        const price = productData.price;
-        await cartCollection.updateOne(
-          { userId: req.session.user, "cartItem.productId": proId },
-          { $inc: { "cartItem.$.qty": 1 } }
-        );
-        res.json({ price });
-      } else {
-        res.json({ limit: true });
-      }
-    } else {
-      res.json({ outStock: true });
+    const data=req.body
+    const proId=data.Id
+    const qty=parseInt(data.qty)
+    const productData=await productCollection.findOne({_id:proId})
+    if (productData.stock>qty ){
+          const price=productData.price
+          await cartCollection.updateOne(
+               { userId: req.session.user, "cartItem.productId": proId },
+               { $inc: { "cartItem.$.qty": 1 } })
+              res.json({price})
+    }else{
+      res.json({outStock:true})
     }
   } catch (error) {
     console.log(error);
@@ -160,28 +153,29 @@ const productQtyAdd = async (req, res) => {
 
 const productQtySub = async (req, res) => {
   try {
-    const data = req.body;
-    const proId = data.Id;
-    const qty = parseInt(data.qty);
-    const productData = await productCollection.findOne({ _id: proId });
-    if (productData.stock > 0) {
-      if (qty > 1) {
-        const price = productData.price;
-        await cartCollection.updateOne(
-          { userId: req.session.user, "cartItem.productId": proId },
-          { $inc: { "cartItem.$.qty": -1 } }
-        );
-        res.json({ price });
-      } else {
-        res.json({ limit: true });
-      }
-    } else {
-      res.json({ outStock: true });
+    const data=req.body
+    const proId=data.Id
+    const qty=parseInt(data.qty)
+    console.log(data.qty);
+    const productData=await productCollection.findOne({_id:proId})
+    if (productData.stock>0 ){
+         if( qty > 1){
+          const price=productData.price
+          await cartCollection.updateOne(
+               { userId: req.session.user, "cartItem.productId": proId },
+               { $inc: { "cartItem.$.qty": -1 } })
+              res.json({price})
+         }else{
+          res.json({limit:true})
+         }
+    }else{
+      res.json({outStock:true})
     }
   } catch (error) {
     console.log(error);
   }
 };
+
 
 const deleteCart = async (req, res) => {
   try {
@@ -397,77 +391,74 @@ const setAddressCheckout = async (req, res) => {
   }
 };
 
-
-
-
 const postCheckOut = async (req, res) => {
   try {
-    if (req.body.payment_mode === 'COD') {
+    if (req.body.payment_mode === "COD") {
       const productData = await cartCollection.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
-        { $unwind: '$cartItem' },
+        { $unwind: "$cartItem" },
         {
           $project: {
             _id: 0,
-            productId: '$cartItem.productId',
-            quantity: '$cartItem.qty'
-          }
+            productId: "$cartItem.productId",
+            quantity: "$cartItem.qty",
+          },
         },
         {
           $lookup: {
-            from: 'poducts',
-            localField: 'productId',
-            foreignField: '_id',
-            as: 'productDetails'
-          }
+            from: "poducts",
+            localField: "productId",
+            foreignField: "_id",
+            as: "productDetails",
+          },
         },
-        { $unwind: '$productDetails' },
+        { $unwind: "$productDetails" },
         {
           $project: {
             _id: 0,
-            productId: '$productId',
-            quantity: '$quantity',
-            price: '$productDetails.price'
-          }
-        }
-      ])
+            productId: "$productId",
+            quantity: "$quantity",
+            price: "$productDetails.price",
+          },
+        },
+      ]);
 
       const cartItems = await cartCollection.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
-        { $unwind: '$cartItem' },
+        { $unwind: "$cartItem" },
         {
           $project: {
-            productId: '$cartItem.productId',
-            qty: '$cartItem.qty'
-          }
+            productId: "$cartItem.productId",
+            qty: "$cartItem.qty",
+          },
         },
         {
           $lookup: {
-            from: 'poducts',
-            localField: 'productId',
-            foreignField: '_id',
-            as: 'productDetails'
-          }
+            from: "poducts",
+            localField: "productId",
+            foreignField: "_id",
+            as: "productDetails",
+          },
         },
-        { $unwind: '$productDetails' },
+        { $unwind: "$productDetails" },
         {
           $project: {
-            price: '$productDetails.price',
-            qty: '$qty'
-          }
+            price: "$productDetails.price",
+            qty: "$qty",
+          },
         },
         {
           $addFields: {
-            total: { $multiply: ['$qty', '$price'] }
-          }
-        }
-      ])
+            total: { $multiply: ["$qty", "$price"] },
+          },
+        },
+      ]);
       const subtotal = cartItems.reduce((acc, curr) => {
-        acc = acc + curr.total
-        return acc
-      }, 0)
+        acc = acc + curr.total;
+        return acc;
+      }, 0);
 
-      if (req.body.couponid === '') {
+      if (req.body.couponid === "") {
         const orderDetails = new orderCollection({
           userId: req.session.user,
           name: req.body.name,
@@ -478,22 +469,30 @@ const postCheckOut = async (req, res) => {
             district: req.body.district,
             state: req.body.state,
             country: req.body.country,
-            pin: req.body.pin
+            pin: req.body.pin,
           },
           orderItems: productData,
           subTotal: subtotal,
           totalAmount: subtotal,
-          paymentMethod: 'COD'
-        })
-        await orderDetails.save()
-        await cartCollection.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
-        const productDetails = productData
+          paymentMethod: "COD",
+        });
+        await orderDetails.save();
+        await cartCollection.findOneAndDelete({
+          userId: mongoose.Types.ObjectId(req.session.user),
+        });
+        const productDetails = productData;
         for (let i = 0; i < productDetails.length; i++) {
-          await productCollection.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
+          await productCollection.updateOne(
+            { _id: productDetails[i].productId },
+            { $inc: { stock: -productDetails[i].quantity } }
+          );
         }
-        res.redirect('/success')
+        res.redirect("/success");
       } else {
-        await couponCollection.updateOne({ _id: req.body.couponid }, { $push: { users: { userId: req.session.user } } })
+        await couponCollection.updateOne(
+          { _id: req.body.couponid },
+          { $push: { users: { userId: req.session.user } } }
+        );
         const orderDetails = new orderCollection({
           userId: req.session.user,
           name: req.body.name,
@@ -504,89 +503,94 @@ const postCheckOut = async (req, res) => {
             district: req.body.district,
             state: req.body.state,
             country: req.body.country,
-            pin: req.body.pin
+            pin: req.body.pin,
           },
           orderItems: productData,
           couponUsed: req.body.couponid,
           subTotal: subtotal,
           totalAmount: req.body.total,
-          paymentMethod: 'COD'
-        })
-        await orderDetails.save()
-        await cartCollection.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
-        const productDetails = productData
+          paymentMethod: "COD",
+        });
+        await orderDetails.save();
+        await cartCollection.findOneAndDelete({
+          userId: mongoose.Types.ObjectId(req.session.user),
+        });
+        const productDetails = productData;
         for (let i = 0; i < productDetails.length; i++) {
-          await productCollection.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
+          await productCollection.updateOne(
+            { _id: productDetails[i].productId },
+            { $inc: { stock: -productDetails[i].quantity } }
+          );
         }
-        res.redirect('/success')
+        res.redirect("/success");
       }
     }
-    if (req.body.payment_mode === 'pay') {
+    if (req.body.payment_mode === "pay") {
       const productData = await cartCollection.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
-        { $unwind: '$cartItem' },
+        { $unwind: "$cartItem" },
         {
           $project: {
             _id: 0,
-            productId: '$cartItem.productId',
-            quantity: '$cartItem.qty'
-          }
+            productId: "$cartItem.productId",
+            quantity: "$cartItem.qty",
+          },
         },
         {
           $lookup: {
-            from: 'poducts',
-            localField: 'productId',
-            foreignField: '_id',
-            as: 'productDetails'
-          }
+            from: "poducts",
+            localField: "productId",
+            foreignField: "_id",
+            as: "productDetails",
+          },
         },
-        { $unwind: '$productDetails' },
+        { $unwind: "$productDetails" },
         {
           $project: {
             _id: 0,
-            productId: '$productId',
-            quantity: '$quantity',
-            price: '$productDetails.price'
-          }
-        }
-      ])
+            productId: "$productId",
+            quantity: "$quantity",
+            price: "$productDetails.price",
+          },
+        },
+      ]);
 
       const cartItems = await cartCollection.aggregate([
         { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
-        { $unwind: '$cartItem' },
+        { $unwind: "$cartItem" },
         {
           $project: {
-            productId: '$cartItem.productId',
-            qty: '$cartItem.qty'
-          }
+            productId: "$cartItem.productId",
+            qty: "$cartItem.qty",
+          },
         },
         {
           $lookup: {
-            from: 'poducts',
-            localField: 'productId',
-            foreignField: '_id',
-            as: 'productDetails'
-          }
+            from: "poducts",
+            localField: "productId",
+            foreignField: "_id",
+            as: "productDetails",
+          },
         },
-        { $unwind: '$productDetails' },
+        { $unwind: "$productDetails" },
         {
           $project: {
-            price: '$productDetails.price',
-            qty: '$qty'
-          }
+            price: "$productDetails.price",
+            qty: "$qty",
+          },
         },
         {
           $addFields: {
-            total: { $multiply: ['$qty', '$price'] }
-          }
-        }
-      ])
+            total: { $multiply: ["$qty", "$price"] },
+          },
+        },
+      ]);
       const subtotal = cartItems.reduce((acc, curr) => {
-        acc = acc + curr.total
-        return acc
-      }, 0)
+        acc = acc + curr.total;
+        return acc;
+      }, 0);
 
-      if (req.body.couponid === '') {
+      if (req.body.couponid === "") {
         const orderDetails = new orderCollection({
           userId: req.session.user,
           name: req.body.name,
@@ -597,59 +601,74 @@ const postCheckOut = async (req, res) => {
             district: req.body.district,
             state: req.body.state,
             country: req.body.country,
-            pin: req.body.pin
+            pin: req.body.pin,
           },
           orderItems: productData,
           subTotal: subtotal,
           totalAmount: subtotal,
-          paymentMethod: 'online Payment'
-        })
-        await orderDetails.save()
-        await cartCollection.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
-        const productDetails = productData
+          paymentMethod: "online Payment",
+        });
+        await orderDetails.save();
+        await cartCollection.findOneAndDelete({
+          userId: mongoose.Types.ObjectId(req.session.user),
+        });
+        const productDetails = productData;
         for (let i = 0; i < productDetails.length; i++) {
-          await productCollection.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
+          await productCollection.updateOne(
+            { _id: productDetails[i].productId },
+            { $inc: { stock: -productDetails[i].quantity } }
+          );
         }
-        const total = parseInt(subtotal)
+        const total = parseInt(subtotal);
         const create_payment_json = {
-          intent: 'sale',
+          intent: "sale",
           payer: {
-            payment_method: 'paypal'
+            payment_method: "paypal",
           },
           redirect_urls: {
-            return_url: 'http://localhost:3002/success',
-            cancel_url: 'http://localhost:3002/failed'
+            return_url: "http://localhost:3002/success",
+            cancel_url: "http://localhost:3002/failed",
           },
-          transactions: [{
-            item_list: {
-              items: [{
-                name: 'item',
-                sku: 'item',
-                price: total,
-                currency: 'USD',
-                quantity: 1
-              }]
+          transactions: [
+            {
+              item_list: {
+                items: [
+                  {
+                    name: "item",
+                    sku: "item",
+                    price: total,
+                    currency: "USD",
+                    quantity: 1,
+                  },
+                ],
+              },
+              amount: {
+                currency: "USD",
+                total,
+              },
+              description: "This is the payment description.",
             },
-            amount: {
-              currency: 'USD',
-              total
-            },
-            description: 'This is the payment description.'
-          }]
-        }
-        paypal.payment.create(create_payment_json, async function (error, payment) {
-          if (error) {
-            throw error
-          } else {
-            for (let i = 0; i < payment.links.length; i++) {
-              if (payment.links[i].rel === 'approval_url') {
-                res.redirect(payment.links[i].href)
+          ],
+        };
+        paypal.payment.create(
+          create_payment_json,
+          async function (error, payment) {
+            if (error) {
+              throw error;
+            } else {
+              for (let i = 0; i < payment.links.length; i++) {
+                if (payment.links[i].rel === "approval_url") {
+                  res.redirect(payment.links[i].href);
+                }
               }
             }
           }
-        })
+        );
       } else {
-        await couponCollection.updateOne({ _id: req.body.couponid }, { $push: { users: { userId: req.session.user } } })
+        await couponCollection.updateOne(
+          { _id: req.body.couponid },
+          { $push: { users: { userId: req.session.user } } }
+        );
         const orderDetails = new orderCollection({
           userId: req.session.user,
           name: req.body.name,
@@ -660,75 +679,85 @@ const postCheckOut = async (req, res) => {
             district: req.body.district,
             state: req.body.state,
             country: req.body.country,
-            pin: req.body.pin
+            pin: req.body.pin,
           },
           orderItems: productData,
           couponUsed: req.body.couponid,
           subTotal: subtotal,
           totalAmount: req.body.total,
-          paymentMethod: 'online Payment'
-        })
-        await orderDetails.save()
-        await cartCollection.findOneAndDelete({ userId: mongoose.Types.ObjectId(req.session.user) })
-        const productDetails = productData
+          paymentMethod: "online Payment",
+        });
+        await orderDetails.save();
+        await cartCollection.findOneAndDelete({
+          userId: mongoose.Types.ObjectId(req.session.user),
+        });
+        const productDetails = productData;
         for (let i = 0; i < productDetails.length; i++) {
-          await productCollection.updateOne({ _id: productDetails[i].productId }, { $inc: { stock: -(productDetails[i].quantity) } })
+          await productCollection.updateOne(
+            { _id: productDetails[i].productId },
+            { $inc: { stock: -productDetails[i].quantity } }
+          );
         }
-        const total = parseInt(subtotal)
+        const total = parseInt(subtotal);
         const create_payment_json = {
-          intent: 'sale',
+          intent: "sale",
           payer: {
-            payment_method: 'paypal'
+            payment_method: "paypal",
           },
           redirect_urls: {
-            return_url: 'http://localhost:3002/success',
-            cancel_url: 'http://localhost:3002/failed'
+            return_url: "http://localhost:3002/success",
+            cancel_url: "http://localhost:3002/failed",
           },
-          transactions: [{
-            item_list: {
-              items: [{
-                name: 'item',
-                sku: 'item',
-                price: total,
-                currency: 'USD',
-                quantity: 1
-              }]
+          transactions: [
+            {
+              item_list: {
+                items: [
+                  {
+                    name: "item",
+                    sku: "item",
+                    price: total,
+                    currency: "USD",
+                    quantity: 1,
+                  },
+                ],
+              },
+              amount: {
+                currency: "USD",
+                total,
+              },
+              description: "This is the payment description.",
             },
-            amount: {
-              currency: 'USD',
-              total
-            },
-            description: 'This is the payment description.'
-          }]
-        }
-        paypal.payment.create(create_payment_json, async function (error, payment) {
-          if (error) {
-            throw error
-          } else {
-            for (let i = 0; i < payment.links.length; i++) {
-              if (payment.links[i].rel === 'approval_url') {
-                res.redirect(payment.links[i].href)
+          ],
+        };
+        paypal.payment.create(
+          create_payment_json,
+          async function (error, payment) {
+            if (error) {
+              throw error;
+            } else {
+              for (let i = 0; i < payment.links.length; i++) {
+                if (payment.links[i].rel === "approval_url") {
+                  res.redirect(payment.links[i].href);
+                }
               }
             }
           }
-        })
+        );
       }
     }
   } catch (error) {
-    console.log(error)
-    res.redirect('/404')
+    console.log(error);
+    res.redirect("/404");
   }
-}
+};
 
 paypal.configure({
-  mode: 'sandbox', // sandbox or live
+  mode: "sandbox", // sandbox or live
   client_id:
-    'AZlCOOPiXuoptUcu4w-DzOdbucMs9x7eMqyVBtGXGY3B3AC7ID66RggAGl6K9EdRZLLlhWsaT6i8TsQF',
+    "AZlCOOPiXuoptUcu4w-DzOdbucMs9x7eMqyVBtGXGY3B3AC7ID66RggAGl6K9EdRZLLlhWsaT6i8TsQF",
   client_secret:
-    'EHzygZ-5LLHB-34MTSY4s-I96Rf6MJafMUifpWXWWs5sx2x7B4YmZ07ScniIAq9AyLeGc__vB5iWBLa-'
-})
-
-
+    "EHzygZ-5LLHB-34MTSY4s-I96Rf6MJafMUifpWXWWs5sx2x7B4YmZ07ScniIAq9AyLeGc__vB5iWBLa-",
+});
 
 const couponCheck = async (req, res) => {
   try {
@@ -800,9 +829,3 @@ module.exports = {
   success,
   failed,
 };
-
-
-//AZlCOOPiXuoptUcu4w-DzOdbucMs9x7eMqyVBtGXGY3B3AC7ID66RggAGl6K9EdRZLLlhWsaT6i8TsQF
-//EHzygZ-5LLHB-34MTSY4s-I96Rf6MJafMUifpWXWWs5sx2x7B4YmZ07ScniIAq9AyLeGc__vB5iWBLa-
-// return_url: "http://localhost:3002/success",
-//cancel_url: "http://localhost:3002/failed",

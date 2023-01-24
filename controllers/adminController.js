@@ -5,42 +5,81 @@ const categoryCollection = require("../models/categorySchema");
 const mongoose = require("mongoose");
 const couponCollection = require("../models/couponSchema");
 const orderCollection = require("../models/oderSchema");
-const moment = require('moment')
-const excelJS=require('exceljs')
-
+const bannerCollection = require("../models/bannerSchema");
+const moment = require("moment");
+const excelJS = require("exceljs");
 
 // admin get method
 const loadLogin = (req, res) => {
-  res.render("adminLogin");
-};
-
-const userLogin = async (req, res) => {
-  console.log(req.body);
-  const email = req.body.email;
-  const password = req.body.password;
-  const userData = await adminCollection.findOne({ email: email });
-  if (email == userData.email && password == userData.password) {
+  if (req.session.admin) {
     res.redirect("/adminDashboard");
   } else {
-    res.redirect("/adminlogin");
+    res.render("adminLogin");
+  }
+};
+
+const adminLogin = async (req, res) => {
+  let { email, password } = req.body;
+  const adminData = await adminCollection.findOne({ email: email });
+  if (email == adminData.email && password == adminData.password) {
+    req.session.admin = adminData._id;
+    res.redirect("/adminDashboard");
+  } else {
+    res.render("adminLogin");
   }
 };
 
 // get  method
-const amdinDasboard = (req, res) => {
-  res.render("dashboard");
+// const amdinDasboard = async (req, res) => {
+//   const adminEmail = await adminCollection.find({ _id: req.session.admin });
+//   const admin = await adminCollection.findOne({ _id: req.session.admin });
+//   res.render("dashboard", { admin, adminEmail });
+// };
+
+const adminDashboard = async (req, res) => {
+  try {
+    const users = await userCollection.find().count();
+    const productCount = await productCollection.find().count();
+    const totalOrder = await orderCollection.find();
+    const totalRevenue = totalOrder.reduce((acc, curr) => {
+      acc = acc + curr.totalAmount;
+      return acc;
+    }, 0);
+    const cancelOrder = await orderCollection
+      .find({ orderStatus: "cancelled" })
+      .count();
+    const delivered = await orderCollection
+      .find({ orderStatus: "delivered" })
+      .count();
+    const processing = await orderCollection
+      .find({ orderStatus: "processing" })
+      .count();
+    const shipped = await orderCollection
+      .find({ orderStatus: "shipped" })
+      .count();
+    res.render("dashboard", {
+      users,
+      productCount,
+      cancelOrder,
+      totalRevenue,
+      delivered,
+      shipped,
+      processing,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-// user management find the user in the admin side
+// user management
 const user = async (req, res) => {
   try {
+    await adminCollection.findOne({ _id: req.session.admin });
     const userData = await userCollection.find();
-
     res.render("userManagement", { userData });
   } catch (error) {
     console.log(error);
   }
-  res.render("userManagement");
 };
 
 // user management
@@ -62,17 +101,43 @@ const userBlock = async (req, res) => {
   }
 };
 
-// product management find the datain the admin side
+// product management
 const product = async (req, res) => {
   try {
+    const data = req.query.wrong;
     const productData = await productCollection.find({});
-
-    res.render("productManagement", { productData });
+    res.render("productManagement", { productData, data });
   } catch (error) {
     console.log(error);
   }
-  res.render("productManagement");
 };
+
+// add product
+const insertProduct = async (req, res) => {
+  try {
+    const product1 = req.body.name.toUpperCase();
+    const Exist = await productCollection.findOne({ name: product1 });
+    // console.log(Exist);
+    if (Exist.name == product1) {
+      res.redirect("/product?wrong=product already exist");
+    } else {
+      const product = new productCollection({
+        name: req.body.name,
+        category: req.body.category,
+        brand: req.body.brand,
+        description: req.body.description,
+        image: req.file.filename,
+        price: req.body.price,
+        stock: req.body.stock,
+      });
+      product.save();
+      res.redirect("/product");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // produtc management block and unbloxk
 const productBlock = async (req, res) => {
   try {
@@ -96,25 +161,7 @@ const productBlock = async (req, res) => {
     console.log(error);
   }
 };
-// add product
-const insertProduct = (req, res) => {
-  try {
-    // eslint-disable-next-line new-cap
-    const product = new productCollection({
-      name: req.body.name,
-      category: req.body.category,
-      brand: req.body.brand,
-      description: req.body.description,
-      image: req.file.filename,
-      price: req.body.price,
-      stock: req.body.stock,
-    });
-    product.save();
-    res.redirect("/product");
-  } catch (error) {
-    console.log(error);
-  }
-};
+
 //edit get method
 const editProduct = async (req, res) => {
   try {
@@ -188,14 +235,13 @@ const deleteproduct = async (req, res) => {
 // category management find the datain the admin side
 const category = async (req, res) => {
   try {
+    const data = req.query.wrong;
     const categoryData = await categoryCollection.find({});
-    console.log(categoryData);
-
-    res.render("categoryManagement", { categoryData });
+    // console.log(categoryData);
+    res.render("categoryManagement", { categoryData, data });
   } catch (error) {
     console.log(error);
   }
-  res.render("categoryManagement");
 };
 
 // category management block and unbloxk
@@ -203,7 +249,6 @@ const categoryBlock = async (req, res) => {
   try {
     const id = req.query.id;
     const categoryData = await categoryCollection.findById({ _id: id });
-    // eslint-disable-next-line eqeqeq
     if (categoryData.status == true) {
       await categoryCollection.updateOne(
         { _id: id },
@@ -224,13 +269,19 @@ const categoryBlock = async (req, res) => {
 // add category
 const insertCategory = async (req, res) => {
   try {
-    console.log(req.body.name);
-    const name = req.body.name;
+    const name = req.body.name.toUpperCase();
     const image = req.file.filename;
-    const category = new categoryCollection({ name, image });
-    console.log(category);
-    await category.save();
-    res.redirect("/category");
+    console.log(name);
+
+    const categoryExist = await categoryCollection.findOne({ name: name });
+    console.log(categoryExist.name);
+    if (categoryExist.name === name) {
+      res.redirect("/category?wrong=category already exist");
+    } else {
+      const category = new categoryCollection({ name, image });
+      await category.save();
+      res.redirect("/category");
+    }
   } catch (error) {
     console.log(error);
   }
@@ -300,27 +351,35 @@ const deleteCategory = async (req, res) => {
 //coupon manage
 const couponManage = async (req, res) => {
   try {
+    const data = req.query.wrong;
+    // console.log(data);
     const coupons = await couponCollection.find();
-    res.render("couponManage", { coupons });
+    res.render("couponManage", { coupons, data });
   } catch (error) {
     console.log(error);
   }
 };
 
-const insertCoupon = (req, res) => {
+const insertCoupon = async (req, res) => {
   try {
     console.log(req.body);
     const code = req.body.code.toUpperCase();
-    const newCoupon = new couponCollection({
-      name: req.body.name,
-      code: code,
-      discount: req.body.discount,
-      minAmount: req.body.minamount,
-      startingDate: req.body.startingdate,
-      expiryDate: req.body.expirydate,
-    });
-    newCoupon.save();
-    res.redirect("/coupon");
+    couponCode = await couponCollection.findOne({ code: code });
+    if (couponCode.code == code) {
+      // console.log('scjk');
+      res.redirect("/coupon?wrong=coupon already exist");
+    } else {
+      const newCoupon = new couponCollection({
+        name: req.body.name,
+        code: code,
+        discount: req.body.discount,
+        minAmount: req.body.minamount,
+        startingDate: req.body.startingdate,
+        expiryDate: req.body.expirydate,
+      });
+      newCoupon.save();
+      res.redirect("/coupon");
+    }
   } catch (error) {
     console.log(error);
   }
@@ -438,100 +497,146 @@ const viewOrder = async (req, res) => {
   }
 };
 
-
-const salesPage=async (req,res)=>{
-  try{
-  const orderDetails=await orderCollection.find({orderStatus:'delivered'}) 
-  // console.log(orderDetails);
-   res.render('salesReport',{orderDetails})
-  }catch(error){
-      console.log(error)
+const salesPage = async (req, res) => {
+  try {
+    const orderDetails = await orderCollection.find({
+      orderStatus: "delivered",
+    });
+    // console.log(orderDetails);
+    res.render("salesReport", { orderDetails });
+  } catch (error) {
+    console.log(error);
   }
-}
+};
 
-
-const post_pdf_Data=async (req,res)=>{
-  try{
-  //  console.log(req.body)
-   let salesDate= req.body
-   let startDate= new Date (salesDate.from)
-   let endDate= new Date (salesDate.to)
-   let dateFrom = moment(salesDate.from).format("DD/MM/YYYY");
-   let dateto = moment(salesDate.to).format("DD/MM/YYYY");
-  //  console.log(dateFrom+"dd"+dateto)
-  const orderData= await orderCollection.find(
-      { $and: [ {   orderDate: {$gte: startDate, $lte: endDate}  }, { orderStatus:"delivered"} ] })
-  //  console.log(orderData);
-   const total = orderData.reduce( (acc, curr)=> {
+const post_pdf_Data = async (req, res) => {
+  try {
+    //  console.log(req.body)
+    let salesDate = req.body;
+    let startDate = new Date(salesDate.from);
+    let endDate = new Date(salesDate.to);
+    let dateFrom = moment(salesDate.from).format("DD/MM/YYYY");
+    let dateto = moment(salesDate.to).format("DD/MM/YYYY");
+    //  console.log(dateFrom+"dd"+dateto)
+    const orderData = await orderCollection.find({
+      $and: [
+        { orderDate: { $gte: startDate, $lte: endDate } },
+        { orderStatus: "delivered" },
+      ],
+    });
+    //  console.log(orderData);
+    const total = orderData.reduce((acc, curr) => {
       acc = acc + curr.totalAmount;
       return acc;
     }, 0);
-   
-    req.session.order=orderData
-    res.render('pdfDownload',{orderData,total})
 
-  //   console.log(orderData);
-  }catch(error){
-      console.log(error);
+    req.session.order = orderData;
+    res.render("pdfDownload", { orderData, total });
+
+    //   console.log(orderData);
+  } catch (error) {
+    console.log(error);
   }
-}
+};
 
-
-const csvDownload=async(req,res)=>{
-  try{
-      const total=req.query.total
-      const saledata=req.session.order
-      const workbook = new excelJS.Workbook();
-      const  worksheet = workbook.addWorksheet("Sales Roport")
-      worksheet.columns=[
-          {header:"s no.", key:"s_no"},
-        {header:"Order ID", key:"_id",width:30},
-        {header:"Date", key:"Date",width:15},
-        {header:"Order Status", key:"orderStatus",width:15},
-        {header:"Payment Method", key:"paymentMethod",width:15},
-        {header:"Total Amount", key:"totalAmount"},
-        {header:"Grand Total", key:"total"},
-       
-      ];
-      let counter =1;
-      let length=saledata.length
-      saledata.forEach((sale,i)=>{
-          let dateFrom = moment(sale.orderDate).format("DD/MM/YYYY");
-        sale.Date=dateFrom
+const csvDownload = async (req, res) => {
+  try {
+    const total = req.query.total;
+    const saledata = req.session.order;
+    const workbook = new excelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sales Roport");
+    worksheet.columns = [
+      { header: "s no.", key: "s_no" },
+      { header: "Order ID", key: "_id", width: 30 },
+      { header: "Date", key: "Date", width: 15 },
+      { header: "Order Status", key: "orderStatus", width: 15 },
+      { header: "Payment Method", key: "paymentMethod", width: 15 },
+      { header: "Total Amount", key: "totalAmount" },
+      { header: "Grand Total", key: "total" },
+    ];
+    let counter = 1;
+    let length = saledata.length;
+    saledata.forEach((sale, i) => {
+      let dateFrom = moment(sale.orderDate).format("DD/MM/YYYY");
+      sale.Date = dateFrom;
       sale.s_no = counter;
-      if(i==length-1){
-             
-          sale.total=total
+      if (i == length - 1) {
+        sale.total = total;
       }
       worksheet.addRow(sale);
       counter++;
-     
-      })
-      
-      
-      worksheet.getRow(1).eachCell((cell)=>{
-        cell.font={bold:true};
-      });
-      
-      res.setHeader(
-        'Content-Type',
-        'application/vnd.openxmlformats-officedocument.spreadsheatml.sheet'
-      );
-      
-      res.setHeader('Content-Disposition',`attachment; filename=sales_Report.xlsx`);
-      
-      return workbook.xlsx.write(res).then(()=>{
-        res.status(200);
-      });
-  }catch(error){
-      console.log(error);
+    });
+
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true };
+    });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheatml.sheet"
+    );
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=sales_Report.xlsx`
+    );
+
+    return workbook.xlsx.write(res).then(() => {
+      res.status(200);
+    });
+  } catch (error) {
+    console.log(error);
   }
-}
+};
+
+const bannerManage = async (req, res) => {
+  try {
+    bannerDetails = await bannerCollection.find();
+    res.render("bannerManage", { bannerDetails });
+    // console.log(bannerDetails);
+  } catch (error) {
+    console.log(error);
+    // res.redirect('/500')
+  }
+};
+
+const addBanner = async (req, res) => {
+  try {
+    let banner = new bannerCollection({
+      image: req.file.filename,
+      name: req.body.name,
+    });
+    await banner.save();
+    res.redirect("/banner");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const bannerBlock = async (req, res) => {
+  try {
+    const id = req.query.id;
+    // console.log(id);
+    const bannerData = await bannerCollection.findById({ _id: id });
+    if (bannerData.status == true) {
+      await bannerCollection.updateOne(
+        { _id: id },
+        { $set: { status: false } }
+      );
+      res.redirect("/banner");
+    } else {
+      await bannerCollection.updateOne({ _id: id }, { $set: { status: true } });
+      res.redirect("/banner");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   loadLogin,
-  userLogin,
-  amdinDasboard,
+  adminLogin,
+  adminDashboard,
   user,
   userBlock,
   product,
@@ -555,4 +660,7 @@ module.exports = {
   salesPage,
   post_pdf_Data,
   csvDownload,
+  bannerManage,
+  addBanner,
+  bannerBlock,
 };

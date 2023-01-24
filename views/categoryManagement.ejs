@@ -43,7 +43,7 @@
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
                 </ul>
             </li>
         </ul>
@@ -116,6 +116,9 @@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Add Category
   </button>
+  <div class="text d-flex justify-content-end" style="color: red;">
+    <b><h4><%= locals.data %></h4></b>
+ </div>
   
   <!-- Modal -->
   <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >

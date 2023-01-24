@@ -6,11 +6,15 @@ const userLogin=(req,res,next)=>{
     }
 }
 
-const userLogout=(req,res,next)=>{
-    if(req.session.user){
+const userLogout = (req,res)=>{
+    try {
+        req.session.destroy();
+        console.log('sign out');
         res.redirect('/')
-    }else{
-        next()
+        res.end()
+        
+    } catch (error) {
+        console.log(error);
     }
 }
 

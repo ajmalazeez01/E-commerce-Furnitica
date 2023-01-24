@@ -4,7 +4,7 @@ const categoryCollection = require("../models/categorySchema");
 const mongoose = require("mongoose");
 const nodemailer = require("../utils/otp");
 const orderCollection = require("../models/oderSchema");
-
+const bannerCollection = require("../models/bannerSchema");
 const loadSignup = (req, res) => {
   res.render("signup");
 };
@@ -22,7 +22,7 @@ const insertUser = async (req, res) => {
       if (password !== cpassword) {
         res.render("signup", { warning: "incorrect password" });
       }
-      res.render("signup", { error: "you have already in member" });
+      res.render("signup", { error: "you already have a member" });
     }
   } catch (error) {
     const mailDetails = {
@@ -44,10 +44,7 @@ const insertUser = async (req, res) => {
   }
 };
 
-const otp = (
-  req,
-  res // get method
-) => {
+const otp = (req, res) => {
   res.render("otp");
 };
 
@@ -60,7 +57,7 @@ const otpvalidation = async (req, res) => {
       password: userData.password,
       number: userData.number,
     });
-    const value = await user.save();
+    await user.save();
     res.redirect("/login");
   } else {
     res.render("otp", { wrong: "otp is incorrect" });
@@ -77,7 +74,7 @@ const userLogin = async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
-    const userData = await userCollection.findOne({  email ,password });
+    const userData = await userCollection.findOne({ email });
     if (userData) {
       if (userData.status == true) {
         if (userData.password == password) {
@@ -101,6 +98,7 @@ const userHome = async (req, res) => {
   try {
     const id = mongoose.Types.ObjectId(req.session.user);
     const userName = await userCollection.findOne({ _id: id });
+    var bannerDetails = await bannerCollection.find({});
     const product = await productCollection.find({
       // product: req.query.id, status : true
     });
@@ -109,7 +107,7 @@ const userHome = async (req, res) => {
       status: true,
     });
 
-    res.render("userHome", { product, category, userName });
+    res.render("userHome", { product, category, userName, bannerDetails });
   } catch (error) {
     console.log(error);
   }
@@ -120,7 +118,7 @@ const search = async (req, res) => {
     const user = await userCollection.findOne({ _id: req.session.user });
     const categories = await categoryCollection.find({ status: true });
     const key = req.body.search;
-    console.log(key);
+    // console.log(key);
     const products = await productCollection.find({
       $or: [{ name: new RegExp(key, "i") }],
     });
@@ -179,9 +177,6 @@ const profile = async (req, res) => {
           _id: "$address._id",
           status: "$address.status",
         },
-      },
-      {
-        $sort: { status: -1 },
       },
     ]);
     const wrong = req.query.wrong;
@@ -379,7 +374,7 @@ const viewOrderDetails = async (req, res) => {
         },
       },
     ]);
-
+    console.log(productData);
     res.render("orderDetail", { productData, brands, categories, user });
   } catch (error) {
     console.log(error);
@@ -389,9 +384,12 @@ const viewOrderDetails = async (req, res) => {
 const cancelOrder = async (req, res) => {
   try {
     const id = req.query.id;
+    console.log(id);
+    const order = await orderCollection.find({ userId: req.session.user });
+    console.log(order);
     await orderCollection.updateOne(
       { _id: id },
-      { $set: { orderStatus: "cancelled" } }
+      { $set: { orderStatus: "cancel" } }
     );
     res.redirect("/orderdetails");
   } catch (error) {
@@ -399,10 +397,17 @@ const cancelOrder = async (req, res) => {
   }
 };
 
-
 const contact = (req, res) => {
   try {
     res.render("contact");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const about = (req, res) => {
+  try {
+    res.render("about");
   } catch (error) {
     console.log(error);
   }
@@ -425,6 +430,8 @@ module.exports = {
   userLogin,
   userHome,
   search,
+  contact,
+  about,
   productList,
   productDetail,
   profile,
@@ -435,6 +442,5 @@ module.exports = {
   orderPage,
   viewOrderDetails,
   cancelOrder,
-  contact,
   errorPage,
 };

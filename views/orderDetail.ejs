@@ -48,7 +48,7 @@
 <body>
 
 
-    <%- include('../middleware/layout/header.ejs') %>
+    <%- include('../views/layout/header.ejs') %>
 
       <section class="h-100 gradient-custom">
         <div class="container py-5 h-100">
@@ -166,16 +166,18 @@
                     <p class="text-muted mb-0">
                         <%= productData[0].address.addressline1 %> <br>
                         <%= productData[0].address.name %> <br>
-                        <%= productData[0].address.address %> ,
-                        <%= productData[0].address.district %> ,
-                        <%= productData[0].address.state %> ,
+                        <%= productData[0].address.address %> 
+                        <%= productData[0].address.district %> 
+                        <%= productData[0].address.state %> 
                         <%= productData[0].address.country %>  <br>
-                        <%= productData[0].address.pin%> <br>
+                        <%= productData[0].address.pin %> <br>
                         <%= productData[0].address.mobile %> 
                      </p>
-                     <% if(productData.status !='Cancel') {%> 
-                        <a style="height: 40px;display: block;" href="" class="btn btn-dark mt-4 px-3">Cancel</a>
-                     <% } %> 
+                     <% if(productData[0].orderStatus !='cancel') {%> 
+                        <a style="height: 40px;display: block;" href="/cancelorder?id=<%=productData[0]._id%>" class="btn btn-dark mt-4 px-3" >Cancel</a>
+                     <% }else  %> 
+
+
                     
                   </div>
                 </div>
@@ -187,7 +189,7 @@
       </section>
 
 
-      <%- include('../middleware/layout/footer.ejs') %>
+      <%- include('../views/layout/footer.ejs') %>
 
 
 

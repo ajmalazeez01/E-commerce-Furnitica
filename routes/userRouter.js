@@ -18,13 +18,16 @@ router.get("/login", userControllers.login);
 
 //home
 router.get("/", userControllers.userHome);
+router.get('/logout',session.userLogout)
 //search
 router.post("/search",userControllers.search);
+router.get("/contact", userControllers.contact);
+router.get("/about", userControllers.about);
 
 
 //home categoryproduct
 router.get("/productlist", userControllers.productList);
-router.get("/productdetail", userControllers.productDetail);
+router.get("/productdetail",session.userLogin, userControllers.productDetail);
 
 //cart
 router.get("/cartlist",session.userLogin,  cartControllers.cartList);
@@ -44,31 +47,32 @@ router.get("/wishlist",session.userLogin,  cartControllers.view_wishList);
 router.get("/deletewishlist",session.userLogin,  cartControllers.deleteWishlist);
 
 //profile
-router.get("/profile",userControllers.profile);
-router.post("/profile",userControllers.insertProfile);
-router.get("/editaddress",userControllers.editAddress);
-router.post("/editaddress",userControllers. posteditAddress);
-router.get("/deleteaddress",userControllers.deleteAddress);
+router.get("/profile",session.userLogin,userControllers.profile);
+router.post("/profile",session.userLogin,userControllers.insertProfile);
+router.get("/editaddress",session.userLogin,userControllers.editAddress);
+router.post("/editaddress",session.userLogin,userControllers. posteditAddress);
+router.get("/deleteaddress",session.userLogin,userControllers.deleteAddress);
 
 //coupon 
 router.post("/couponcheck",session.userLogin,cartControllers.couponCheck);
 
 //order
-router.get("/order",userControllers.orderPage);
-router.get("/orderdetails",userControllers.viewOrderDetails);
-router.get("/cancelorder",userControllers.cancelOrder);
+router.get("/order",session.userLogin,userControllers.orderPage);
+router.get("/orderdetails",session.userLogin,userControllers.viewOrderDetails);
+router.get("/cancelorder",session.userLogin,userControllers.cancelOrder);
 
 
 //payment
 router.get("/success", cartControllers.success);
 router.get("/failed", cartControllers.failed);
 
-//contact
-router.get("/contact", userControllers.contact);
 
 //error page
 router.get("/404", userControllers.errorPage);
 
+
+
+
+
 module.exports = router;
 
-//session.userLogin,

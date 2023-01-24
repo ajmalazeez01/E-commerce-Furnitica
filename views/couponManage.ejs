@@ -45,7 +45,7 @@
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
                 </ul>
             </li>
         </ul>
@@ -118,6 +118,9 @@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Add Coupon
   </button>
+  <div class="text d-flex justify-content-end" style="color: red;">
+   <b><h4><%= locals.data %></h4></b>
+</div>
   
   <!-- Modal -->
   <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
@@ -127,6 +130,7 @@
           <h5 class="modal-title" id="staticBackdropLabel">Add coupon</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+      
         <div class="modal-body">
             <form action="/coupon" method="post">
                 <div class="form-group">
@@ -215,9 +219,9 @@
                     </td> -->
                     <td>
                         <%if(data.status==true){%> 
-                          <a href="/couponblock?id=<%=data._id%>" onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="btn btn-success" style="width: 100px;">List</button></a>
+                          <a href="/couponblock?id=<%=data._id%>" onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="badge badge-success" style="width: 100px;">List</button></a>
                             <%} else {%>
-                               <a href="/couponblock?id=<%=data._id%> " onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="btn btn-danger" style="width: 100px;">Unlist</button></a> 
+                               <a href="/couponblock?id=<%=data._id%> " onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="badge badge-danger" style="width: 100px;">Unlist</button></a> 
                                 
                                 <%}%>
                                 

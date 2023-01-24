@@ -46405,13 +46405,9 @@ body#product-detail {
   width: 91rem;
 } */
 .sample {
-  width: 23rem;
-  margin-left: 55rem;
-  margin-top: -45rem;
-  height: 48rem;
-  padding-left: 2rem;
-  padding-top: 3rem;
-  border-radius: 3rem;
+  padding-left: 3rem;
+  border-radius: 2rem;
+  padding-top: 2rem;
 }
 .cart-detailed-totals {
   color: #000;

@@ -10,8 +10,7 @@
   <!-- Basic Page Needs -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Furnitica - Minimalist Furniture HTML Template</title>
-  <link rel="shortcut icon" href="/public/images/home/logo-mobie.png" type="image/x-icon">
+  <title>Furnitica - Minimalist Furniture</title>
 
   <meta name="keywords" content="Furniture, Decor, Interior" />
   <meta name="description" content="Furnitica - Minimalist Furniture HTML Template" />
@@ -43,7 +42,7 @@
 <body class="product-checkout checkout-cart">
 
 
-  <%- include('../middleware/layout/header.ejs') %>
+  <%- include('../views/layout/header.ejs') %>
 
 
     <!-- main content -->
@@ -84,7 +83,7 @@
                       </div><br>
 
 
-                      <div class="tab-content">
+                      <div class="row">
                         <div class="tab-pane fade in active show" id="checkout-guest-form" role="tabpanel">
                           <form action="/checkout" id="customer-form" class="js-customer-form" method="post">
                             <div>
@@ -153,91 +152,95 @@
 
                         </div>
 
-                      </div>
-
-                      <div class="sample" style="background-color: #83c7eb">
 
 
-                        <di v class="cart-detailed-totals">
-                          <div class="cart-summary-products">
-                            <p id="message"></p>
-                            <input type="text" class="form-control" name="coupon" id="couponCode"
-                              placeholder="Enter coupon">
-                            <input type="text" id="couponId" value="" name="couponid" hidden>
-                            <button class="continue btn btn-primary pull-xs-right" id="coupon_button">apply
-                              coupon</button>
-                          </div>
 
-                          <div class="cart-summary-products">
-                            <div class="summary-label ml-3">
-                              <h5>Your order</h5>
+                        <div class="sample ml-4 " style="background-color:#F4F2F8">
+
+
+                          <di v class="cart-detailed-totals">
+                            <div class="cart-summary-products">
+                              <p id="message"></p>
+                              <input type="text" class="form-control " style="width:15rem" name="coupon" id="couponCode"
+                                placeholder="Enter coupon">
+                              <input type="text" id="couponId" value="" name="couponid" hidden>
+                              <button class="continue btn btn-primary pull-xs-right" id="coupon_button">apply
+                                coupon</button>
+                                
+                            </div>
+  
+                            <div class="cart-summary-products">
+                              <div class="summary-label ml-3">
+                                <h5>Your order</h5>
+                              </div>
+                              <hr>
+                            </div>
+                            <div class="cart-summary-line" id="cart-subtotal-products">
+                              <span class="label js-subtotal">
+                                <b>product</b>
+                              </span>
+                              <span class="value"><b>price</b></span>
+                            </div>
+                            <br>
+                            <div class="cart-summary-line" id="cart-subtotal-shipping">
+                              <span class="label">
+                                <b>Sub total</b>
+                              </span>
+                              <span class="value">$<span id="subtotal">
+                                  <%=subtotal%>
+                                </span></span>
+                              <div>
+                                <small class="value"></small>
+                              </div>
+                            </div><br>
+                            <div class="cart-summary-line cart-total">
+                              <span class="label"><b>Shipping</b></span>
+                              <span class="value">free</span>
+                            </div><br>
+  
+                            <span class="label"><b>coupon applied</b></span> <span class="value">
+                              <p id="coupon_code"></p>
+                            </span>
+                      
+                          
+  
+  
+                            <div class="cart-summary-line" id="cart-subtotal-shipping">
+                              <span class="label">
+                                <b>SUB TOTAL</b>
+                              </span>
+                              <span class="value" id="total">$<%=subtotal%></span>
+                              <input type="text" id="subtotal_amount" value="" name="subtotal" hidden>
+                              <input type="text" id="total_amount" value="" name="total" hidden>
+                              <div>
+                                <small class="value"></small>
+                              </div>
                             </div>
                             <hr>
-                          </div>
-                          <div class="cart-summary-line" id="cart-subtotal-products">
-                            <span class="label js-subtotal">
-                              <b>product</b>
-                            </span>
-                            <span class="value"><b>price</b></span>
-                          </div>
-                          <br>
-                          <div class="cart-summary-line" id="cart-subtotal-shipping">
-                            <span class="label">
-                              <b>Sub total</b>
-                            </span>
-                            <span class="value">$<span id="subtotal">
-                                <%=subtotal%>
-                              </span></span>
-                            <div>
-                              <small class="value"></small>
-                            </div>
-                          </div><br>
-                          <hr>
-                          <div class="cart-summary-line cart-total">
-                            <span class="label"><b>Shipping</b></span>
-                            <span class="value">free</span>
-                          </div><br>
-
-                          <span class="label"><b>coupon applied</b></span> <span class="value">
-                            <p id="coupon_code"></p>
-                          </span>
-                          <br>
-                          <hr>
-
-
-                          <div class="cart-summary-line" id="cart-subtotal-shipping">
-                            <span class="label">
-                              <b>SUB TOTAL</b>
-                            </span>
-                            <span class="value" id="total">$<%=subtotal%></span>
-                            <input type="text" id="subtotal_amount" value="" name="subtotal" hidden>
-                            <input type="text" id="total_amount" value="" name="total" hidden>
-                            <div>
-                              <small class="value"></small>
-                            </div>
-                          </div>
-                          <hr>
-
-                          <input type="radio" id="option1" name="payment_mode" value="COD">COD
-                          <input type="radio" value="pay" name="payment_mode"> Online Payment
-                          <% if(subtotal==0){ %>
-                            <button disabled class="continue btn btn-primary pull-xs-right">
-                              proceed to payment
-                            </button>
-
-                            <%} else {%>
-
-                              <button type="submit" href="/payment" class="continue btn btn-primary pull-xs-right">
+                            <input type="radio" id="option1" name="payment_mode" value="COD">COD
+                            <input type="radio" value="pay" name="payment_mode"> Online Payment
+                            <% if(subtotal==0){ %>
+                          
+                              <button disabled class="continue btn btn-primary pull-xs-right">
                                 proceed to payment
                               </button>
-
-                              <% } %>
-
-                                </form>
-
-
+  
+                              <%} else {%>
+  
+                                <button type="submit" href="/payment" class="continue btn btn-primary pull-xs-right">
+                                  proceed to payment
+                                </button>
+  
+                                <% } %>
+  
+                                  </form>
+  
+  
+                        </div>
+  
                       </div>
 
+                      
                     </div>
 
                   </div>
@@ -254,7 +257,7 @@
 
     <!-- footer -->
 
-    <%- include('../middleware/layout/footer.ejs') %>
+    <%- include('../views/layout/footer.ejs') %>
 
 
 

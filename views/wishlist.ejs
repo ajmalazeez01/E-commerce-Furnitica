@@ -42,7 +42,7 @@
 <body class="product-cart checkout-cart blog">
 
 
-  <%- include('../middleware/layout/header.ejs') %>
+  <%- include('../views/layout/header.ejs') %>
 
 
 
@@ -119,134 +119,7 @@
       </div>
     </div>
 
-
-
-
-    <!-- main content
-    <div class="main-content" id="cart">
-    
-      <div id="wrapper-site">
-        
-        <nav class="breadcrumb-bg">
-          <div class="container no-index">
-            <div class="breadcrumb">
-              <ol>
-                <li>
-                  <a href="/home">
-                    <span>Home</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span>Wishlist</span>
-                  </a>
-                </li>
-              </ol>
-            </div>
-          </div>
-        </nav>
-        <div class="container">
-          <div class="row">
-            <div
-              id="content-wrapper"
-              class="col-xs-12 col-sm-12 col-md-12 col-lg-12 onecol"
-            >
-              <section id="main">
-                <div class="cart-grid row">
-                  <div class="col-md-9 col-xs-12 check-info">
-                    <h1 class="title-page">Wishlist</h1>
-                    <div class="cart-container">
-                      <div class="cart-overview js-cart">
-                        <ul class="cart-items">
-                          <thead>
-                            <tr>
-                              <h4><th>Product</th></h4>
-                              <hr />
-                            </tr>
-                          </thead>
-
-                          <% wishList.forEach((wishList) =>{ %>
-
-                          <li class="cart-item " style="background-color: #EEEEEE;">
-                            <div
-                              class="product-line-grid row justify-content-between"
-                            >
-                          
-                              <div class="product-line-grid-left col-md-2">
-                                <span class="product-image media-middle">
-                                  <a href=" ">
-                                    <img
-                                      class="img-fluid"
-                                      src="/public/proimg/<%=wishList.image%>"
-                                      alt="wishlist image"
-                                    />
-                                  </a>
-                                </span>
-                              </div>
-                              <div class="product-line-grid-body col-md-6">
-                                <div class="product-line-info">
-                                  <a
-                                    class="label"
-                                    href="product-detail.html"
-                                    data-id_customization="0"
-                                  ></a>
-                                </div>
-                              
-                                <div
-                                  class="product-line-info product-price text-dark"
-                                > 
-
-                                <%=wishList.name%>
-                                  <span class="value"
-                                    
-                                    ><h6>$<%=wishList.price%></h6></span
-                                  >
-                                </div>
-                                <button
-                                  class="btn btn-secondary text-light"
-                                  onclick="add_to_cart('<%=wishList.id%>')"
-                                >
-                                  add to cart
-                                </button>
-                              </div>
-
-                              <div
-                                class="col-md-2 col text-xs-right align-self-end"
-                              >
-                                <div class="cart-line-product-actions">
-                                  <a
-                                    class="remove-from-cart"
-                                    rel="nofollow"
-                                    href="/deletewishlist?id=<%=wishList.id%>"
-                                    data-link-action="delete-from-cart"
-                                    data-id-product="1"
-                                  >
-                                    <i
-                                      class="fa fa-trash-o"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-
-                          <%})%>
-                        </ul>
-                      </div>
-                    </div>
-                   
-                  </div>
-                </div>
-              </section>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-   -->
-    <%- include('../middleware/layout/footer.ejs') %>
+    <%- include('../views/layout/footer.ejs') %>
 
       <!-- back top top -->
       <div class="back-to-top">
