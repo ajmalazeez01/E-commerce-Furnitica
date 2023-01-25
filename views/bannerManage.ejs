@@ -158,7 +158,7 @@
     </div>
     <div class="card-body">
        <% if(bannerDetails!=null){ %>
-        <table id="datatablesSimple">
+        <table id="dataTable" style="width: 100%;">
             <thead>
                 <tr>
                     <th>No.</th>
@@ -167,14 +167,7 @@
                     <th>BLOCK/UNBLOCK</th>
                 </tr>
             </thead>
-            <tfoot>
-                <tr>
-                    <th>No.</th>
-                    <th>image</th>
-                    <th>Name</th>                     
-                    <th>BLOCK/UNBLOCK</th>
-                </tr>
-            </tfoot>
+            
             <tbody>
                 <% bannerDetails.forEach((data,i)=>{ %>
               <tr>

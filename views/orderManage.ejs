@@ -121,7 +121,7 @@
             </div>
             <div class="card-body">
                 <% if(orderDetails!=null) { %>
-                <table id="datatablesSimple">
+                <table  id="dataTable" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>Order Date</th>
@@ -135,19 +135,7 @@
                         
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Order Date</th>
-                            <th>Name</th>                  
-                            <th>Total Amount</th>
-                            <th>Payment Method</th>
-                        
-                            
-                            <th>Order Status</th>
-                            <th>View Order</th>
-                        
-                        </tr>
-                    </tfoot>
+                   
                     <tbody>
                         
                         <% orderDetails.forEach((data)=>{ %>
