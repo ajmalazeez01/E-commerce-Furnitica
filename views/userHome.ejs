@@ -293,11 +293,11 @@
                                                         data-ride="carousel">
                                   
                                                         <div class="carousel-inner">
-                                                            <% if(bannerDetails=null){ %>
+                                                            <% if(bannerDetails!=null){ %>
                                                                 <% bannerDetails.forEach(function(bannerDetails) { %>
                                                                     <div class="carousel-item active">
                                                                         <img class="d-block w-100"
-                                                                            src="/public/proimg/<%= bannerDetails[0].image %>"
+                                                                            src="/public/proimg/<%= bannerDetails.image %>"
                                                                             alt="First slide">
                                                                     </div>
                                                                 <% }) %>

@@ -107,8 +107,9 @@ const userHome = async (req, res) => {
       category: req.query.category,
       status: true,
     });
-
+    console.log(bannerDetails);
     res.render("userHome", { product, category, userName, bannerDetails ,cartCount });
+
   } catch (error) {
     console.log(error);
   }
