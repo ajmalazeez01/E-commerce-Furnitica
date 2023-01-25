@@ -29,13 +29,6 @@ const adminLogin = async (req, res) => {
   }
 };
 
-// get  method
-// const amdinDasboard = async (req, res) => {
-//   const adminEmail = await adminCollection.find({ _id: req.session.admin });
-//   const admin = await adminCollection.findOne({ _id: req.session.admin });
-//   res.render("dashboard", { admin, adminEmail });
-// };
-
 const adminDashboard = async (req, res) => {
   try {
     const users = await userCollection.find().count();

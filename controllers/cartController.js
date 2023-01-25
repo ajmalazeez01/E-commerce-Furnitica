@@ -8,15 +8,14 @@ const userCollection = require("../models/userSchema");
 const couponCollection = require("../models/couponSchema");
 const paypal = require("paypal-rest-sdk");
 
+let cartCount;
 //get method
 const cartList = async (req, res) => {
   try {
     const user = await userCollection.findOne({ _id: req.session.user });
     const brands = await productCollection.distinct("brand");
     const categories = await categoryCollection.find({ status: true });
-    let cartLength = await cartCollection.find();
-    let length = cartLength.length;
-    // console.log(length);
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
     const cartData = await cartCollection.aggregate([
       { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
 
@@ -55,6 +54,7 @@ const cartList = async (req, res) => {
         },
       },
     ]);
+    
     const subtotal = cartData.reduce(function (acc, curr) {
       acc = acc + curr.total;
       return acc;
@@ -65,7 +65,7 @@ const cartList = async (req, res) => {
       cartData,
       user,
       subtotal,
-      length,
+      cartCount
     });
   } catch (error) {
     console.log(error);

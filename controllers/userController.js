@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const nodemailer = require("../utils/otp");
 const orderCollection = require("../models/oderSchema");
 const bannerCollection = require("../models/bannerSchema");
+const cartCollection = require("../models/cartSchema");
+
 const loadSignup = (req, res) => {
   res.render("signup");
 };
@@ -99,15 +101,15 @@ const userHome = async (req, res) => {
     const id = mongoose.Types.ObjectId(req.session.user);
     const userName = await userCollection.findOne({ _id: id });
     var bannerDetails = await bannerCollection.find({});
-    const product = await productCollection.find({
-      // product: req.query.id, status : true
-    });
+    const product = await productCollection.find({});
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+    // console.log(cartCount.cartItem.length);
     const category = await categoryCollection.find({
       category: req.query.category,
       status: true,
     });
 
-    res.render("userHome", { product, category, userName, bannerDetails });
+    res.render("userHome", { product, category, userName, bannerDetails ,cartCount });
   } catch (error) {
     console.log(error);
   }
@@ -139,6 +141,8 @@ const search = async (req, res) => {
 };
 
 const productList = async (req, res) => {
+  // const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+  // console.log(cartCount);
   const product = await productCollection.find({
     category: req.query.category,
     status: true,
@@ -147,6 +151,8 @@ const productList = async (req, res) => {
 };
 
 const productDetail = async (req, res) => {
+  // const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+  // console.log(cartCount);
   const product = await productCollection.findById({ _id: req.query.id });
   res.render("productDetail", { product });
 };
