@@ -26,12 +26,14 @@
             <div class="div">
               <input
                 type="text"
+                id="username"
                 name="name"
+                onkeyup="validateName()"
                 class="input"
                 placeholder="Username"
                 required
               />
-              <p id="usernameError" class="usernameError"></p>
+              <p style="color: brown;" id="userError" class="userError"></p>
             </div>
           </div>
           <div class="input-div one">
@@ -41,13 +43,16 @@
             <div class="div">
               <input
                 type="text"
+                id="email"
                 name="email"
                 class="input"
+                onkeyup="validateEmail()"
                 placeholder="Email"
                 required
               />
-              <p id="emailError" class="emailError"></p>
+              <p style="color: brown;"id="emailError" class="emailError"></p>
             </div>
+            
           </div>
           <div class="input-div pass">
             <div class="i">
@@ -56,15 +61,18 @@
             <div class="div">
               <input
                 type="password"
+                id="password"
                 name="password"
                 class="input"
                 placeholder="Password"
+                onkeyup="validatePassword()"
                 required
               />
-              <p id="passwordError" class="passwordError"></p>
+              <p style="color: brown;" id="passwordError" class="passwordError"></p>
             </div>
+          
           </div>
-          <div class="input-div pass">
+          <!-- <div class="input-div pass">
             <div class="i">
               <i class="fas fa-lock"></i>
             </div>
@@ -72,12 +80,13 @@
               <input
                 type="password"
                 name="cpassword"
+                id="cpassword"
                 class="input"
                 placeholder="Confirm password"
                 required
               />
             </div>
-          </div>
+          </div> -->
           <div class="input-div pass">
             <div class="i">
               <i class="fas fa-lock"></i>
@@ -85,13 +94,16 @@
             <div class="div">
               <input
                 type="number"
+                id="phone"
                 name="number"
                 class="input"
+                onkeyup="validatePhone()"
                 placeholder="Mobile no"
                 required
               />
-              <p id="phoneError" class="phoneError"></p>
+              <p style="color: brown;" id="phoneError" class="phoneError"></p>
             </div>
+        
           </div>
 
           <p><%=locals.error%></p>
@@ -109,8 +121,8 @@
 
   <script> 
 
-  const usernameError = document.getElementById('userError');
-		     const emailError = document.getElementById('emailError');
+       const usernameError = document.getElementById('userError');
+		   const emailError = document.getElementById('emailError');
 			const phoneError = document.getElementById('phoneError');
 			const passwordError = document.getElementById('passwordError');
 		
@@ -118,7 +130,7 @@
 			  var username = document.getElementById('username').value ;
 				 if(username.length == ""){
 				  usernameError.innerHTML='Name is required'
-				username.focus()
+				
 				 return false
 				}
 				if(!username.match(/^[A-Za-z]*\s{1}[A-Za-z]*$/)){
@@ -169,6 +181,7 @@
 		  passwordError.innerHTML = '';
 			return true;
 		  }
+    
     </script>
 
 
