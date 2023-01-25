@@ -97,9 +97,8 @@ const userBlock = async (req, res) => {
 // product management
 const product = async (req, res) => {
   try {
-    const data = req.query.wrong;
     const productData = await productCollection.find({});
-    res.render("productManagement", { productData, data });
+    res.render("productManagement", { productData });
   } catch (error) {
     console.log(error);
   }
@@ -108,12 +107,7 @@ const product = async (req, res) => {
 // add product
 const insertProduct = async (req, res) => {
   try {
-    const product1 = req.body.name.toUpperCase();
-    const Exist = await productCollection.findOne({ name: product1 });
-    // console.log(Exist);
-    if (Exist.name == product1) {
-      res.redirect("/product?wrong=product already exist");
-    } else {
+    {
       const product = new productCollection({
         name: req.body.name,
         category: req.body.category,

@@ -103,7 +103,6 @@ const userHome = async (req, res) => {
     var bannerDetails = await bannerCollection.find({});
     const product = await productCollection.find({});
     const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
-    // console.log(cartCount.cartItem.length);
     const category = await categoryCollection.find({
       category: req.query.category,
       status: true,
@@ -119,15 +118,16 @@ const search = async (req, res) => {
   try {
     const user = await userCollection.findOne({ _id: req.session.user });
     const categories = await categoryCollection.find({ status: true });
+    const brands = await productCollection.find({ status: true });
     const key = req.body.search;
-    // console.log(key);
+    console.log(key)
     const products = await productCollection.find({
       $or: [{ name: new RegExp(key, "i") }],
     });
     if (products.length) {
-      res.render("userHome", { user, categories, brands, products });
+      res.render("productList", { user, categories, brands, products });
     } else {
-      res.render("userHome", {
+      res.render("productList", {
         user,
         categories,
         brands,
@@ -141,20 +141,18 @@ const search = async (req, res) => {
 };
 
 const productList = async (req, res) => {
-  // const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
-  // console.log(cartCount);
+  const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
   const product = await productCollection.find({
     category: req.query.category,
     status: true,
   });
-  res.render("productList", { product });
+  res.render("productList", { product ,cartCount });
 };
 
 const productDetail = async (req, res) => {
-  // const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
-  // console.log(cartCount);
+  const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
   const product = await productCollection.findById({ _id: req.query.id });
-  res.render("productDetail", { product });
+  res.render("productDetail", { product ,cartCount});
 };
 
 //insert profile
@@ -167,6 +165,7 @@ const profile = async (req, res) => {
     const categories = await categoryCollection.find({ status: true });
     const user = await userCollection.findOne({ _id: req.session.user });
     const userName = await userCollection.find({ _id: req.session.user });
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
     const address = await userCollection.aggregate([
       { $match: { _id: mongoose.Types.ObjectId(req.session.user) } },
       { $unwind: "$address" },
@@ -196,6 +195,7 @@ const profile = async (req, res) => {
       userDetails,
       wrong,
       success,
+      cartCount
     });
   } catch (error) {
     console.log(error);
@@ -328,7 +328,8 @@ const orderPage = async (req, res) => {
     const categories = await categoryCollection.find({ status: true });
     const user = await userCollection.findOne({ _id: req.session.user });
     const order = await orderCollection.find({ userId: req.session.user });
-    res.render("orderPage", { order, brands, categories, user });
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+    res.render("orderPage", { order, brands, categories, user,cartCount });
   } catch (error) {
     console.log(error);
   }
@@ -341,6 +342,7 @@ const viewOrderDetails = async (req, res) => {
     const brands = await productCollection.distinct("brand");
     const categories = await categoryCollection.find({ status: true });
     const user = await userCollection.findOne({ _id: req.session.user });
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
     const productData = await orderCollection.aggregate([
       { $match: { _id: id } },
       { $unwind: "$orderItems" },
@@ -381,7 +383,7 @@ const viewOrderDetails = async (req, res) => {
       },
     ]);
     console.log(productData);
-    res.render("orderDetail", { productData, brands, categories, user });
+    res.render("orderDetail", { productData, brands, categories, user ,cartCount });
   } catch (error) {
     console.log(error);
   }
@@ -392,7 +394,6 @@ const cancelOrder = async (req, res) => {
     const id = req.query.id;
     console.log(id);
     const order = await orderCollection.find({ userId: req.session.user });
-    console.log(order);
     await orderCollection.updateOne(
       { _id: id },
       { $set: { orderStatus: "cancel" } }
@@ -403,17 +404,19 @@ const cancelOrder = async (req, res) => {
   }
 };
 
-const contact = (req, res) => {
+const contact = async (req, res) => {
   try {
-    res.render("contact");
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+    res.render("contact",{cartCount});
   } catch (error) {
     console.log(error);
   }
 };
 
-const about = (req, res) => {
+const about = async(req, res) => {
   try {
-    res.render("about");
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+    res.render("about" ,{cartCount});
   } catch (error) {
     console.log(error);
   }

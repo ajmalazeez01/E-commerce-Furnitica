@@ -70,22 +70,7 @@
                     </div>
                     <div class="desktop_cart">
                         <div class="blockcart block-cart cart-preview tiva-toggle">
-                            <!-- <div class="header-cart tiva-toggle-btn">
-                                <span class="cart-products-count">1</span>
-                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                            </div> -->
-
-
-                            <div class="header-cart tiva-toggle-btn">
-                                <% if(cartCount!==null ){ %>
-                                <span  class="cart-products-count"><%=(cartCount.cartData)%></span>
-                                <%  }else{ %>
-                                  <span>0</span> 
-                                  <% } %>
-                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                              </div>
-
-
+                           
                             <div class="dropdown-content">
                                 <div class="cart-content">
                                     <table>
@@ -206,10 +191,16 @@
 
                                 <div class="desktop_cart align-items-center d-flex ml-4">
 
+
                                     <div class="header-cart tiva-toggle-btn">
-                                        <span class="cart-products-count">1</span>
+                                        <% if(cartCount!==null ){ %>
+                                        <span  class="cart-products-count"><%=(cartCount.cartItem.length)%></span>
+                                        <%  }else{ %>
+                                          <span>0</span> 
+                                          <% } %>
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                    </div>
+                                      </div>
+
                                     <div class="dropdown-content">
                                         <div class="cart-content">
                                             <table>

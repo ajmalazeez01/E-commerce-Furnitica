@@ -196,6 +196,7 @@ const view_wishList = async (req, res) => {
     const user = await userCollection.findOne({ _id: req.session.user });
     // const brands = await productCollection.distinct("brand");
     const categories = await categoryCollection.find({ status: true });
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
     const wishList = await wishlistCollection.aggregate([
       { $match: { userId: user._id } },
       { $unwind: "$wishList" },
@@ -229,7 +230,7 @@ const view_wishList = async (req, res) => {
         },
       },
     ]);
-    res.render("wishlist", { user, categories, wishList });
+    res.render("wishlist", { user, categories, wishList,cartCount });
   } catch (error) {
     console.log(error);
   }
@@ -291,7 +292,7 @@ const deleteWishlist = async (req, res) => {
 //checkOut
 const checkout = async (req, res) => {
   try {
-    //  let subtotal = req.query.subtotal;
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
     let cartItems = await cartCollection.aggregate([
       { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
       { $unwind: "$cartItem" },
@@ -358,6 +359,7 @@ const checkout = async (req, res) => {
       address,
       cartItems,
       subtotal,
+      cartCount
     });
   } catch (error) {
     console.log(error);
