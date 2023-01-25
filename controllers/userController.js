@@ -119,20 +119,25 @@ const search = async (req, res) => {
     const user = await userCollection.findOne({ _id: req.session.user });
     const categories = await categoryCollection.find({ status: true });
     const brands = await productCollection.find({ status: true });
+    await productCollection.findOne({ _id: req.session.user });
+    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+    // const product = await productCollection.find({
+    //   category: req.query.category,
+    //   status: true,
+    // });
     const key = req.body.search;
-    console.log(key)
-    const products = await productCollection.find({
-      $or: [{ name: new RegExp(key, "i") }],
-    });
-    if (products.length) {
-      res.render("productList", { user, categories, brands, products });
+    const product = await productCollection.find({
+      $or: [{ name: new RegExp(key, "i") }] });
+    if (product.length) {
+      res.render("productList", { user, categories, brands, product , cartCount });
     } else {
       res.render("productList", {
         user,
         categories,
         brands,
-        products,
+        product,
         message: "Ooops ...! No Match",
+        cartCount,
       });
     }
   } catch (error) {
@@ -382,7 +387,6 @@ const viewOrderDetails = async (req, res) => {
         },
       },
     ]);
-    console.log(productData);
     res.render("orderDetail", { productData, brands, categories, user ,cartCount });
   } catch (error) {
     console.log(error);
@@ -392,13 +396,12 @@ const viewOrderDetails = async (req, res) => {
 const cancelOrder = async (req, res) => {
   try {
     const id = req.query.id;
-    console.log(id);
     const order = await orderCollection.find({ userId: req.session.user });
     await orderCollection.updateOne(
       { _id: id },
       { $set: { orderStatus: "cancel" } }
     );
-    res.redirect("/orderdetails");
+    res.redirect("/orderdetails?id="+id);
   } catch (error) {
     console.log(error);
   }

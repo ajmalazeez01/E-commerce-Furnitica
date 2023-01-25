@@ -169,7 +169,6 @@ const editProduct = async (req, res) => {
 const postEditProduct = async (req, res) => {
   try {
     const name = req.params.name;
-    console.log(name);
     if (typeof req.file === "undefined") {
       const product = await productCollection.updateOne(
         { name: name },
@@ -185,7 +184,6 @@ const postEditProduct = async (req, res) => {
           },
         }
       );
-      console.log(product);
       res.redirect("/product");
     } else {
       const product = await productCollection.updateOne(
@@ -203,7 +201,6 @@ const postEditProduct = async (req, res) => {
           },
         }
       );
-      console.log(product);
     }
   } catch (error) {
     console.log(error);
@@ -258,10 +255,7 @@ const insertCategory = async (req, res) => {
   try {
     const name = req.body.name.toUpperCase();
     const image = req.file.filename;
-    console.log(name);
-
     const categoryExist = await categoryCollection.findOne({ name: name });
-    console.log(categoryExist.name);
     if (categoryExist.name === name) {
       res.redirect("/category?wrong=category already exist");
     } else {
@@ -280,7 +274,6 @@ const editCategory = async (req, res) => {
     const id = req.query.id;
     const categoryData = await categoryCollection.findById({ _id: id });
     const categoryDatas = await categoryCollection.find({});
-    console.log(categoryData);
     if (categoryData) {
       res.render("categoryEdit", { categoryData: categoryData, categoryDatas });
     } else {
@@ -295,7 +288,6 @@ const editCategory = async (req, res) => {
 const postEditCategory = async (req, res) => {
   try {
     const name = req.params.name;
-    console.log(name);
     if (typeof req.file === "undefined") {
       const category = await categoryCollection.updateOne(
         { name: name },
@@ -306,7 +298,6 @@ const postEditCategory = async (req, res) => {
           },
         }
       );
-      console.log(category);
       res.redirect("/category");
     } else {
       const category = await categoryCollection.updateOne(
@@ -319,7 +310,6 @@ const postEditCategory = async (req, res) => {
           },
         }
       );
-      console.log(category);
     }
   } catch (error) {
     console.log(error);
@@ -349,11 +339,10 @@ const couponManage = async (req, res) => {
 
 const insertCoupon = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const code = req.body.code.toUpperCase();
     couponCode = await couponCollection.findOne({ code: code });
     if (couponCode.code == code) {
-      // console.log('scjk');
       res.redirect("/coupon?wrong=coupon already exist");
     } else {
       const newCoupon = new couponCollection({
@@ -416,7 +405,6 @@ const orderManage = async (req, res) => {
         },
       },
     ]);
-    console.log(orderDetails);
     res.render("orderManage", { orderDetails });
   } catch (error) {
     console.log(error);
@@ -489,7 +477,6 @@ const salesPage = async (req, res) => {
     const orderDetails = await orderCollection.find({
       orderStatus: "delivered",
     });
-    // console.log(orderDetails);
     res.render("salesReport", { orderDetails });
   } catch (error) {
     console.log(error);
@@ -498,20 +485,17 @@ const salesPage = async (req, res) => {
 
 const post_pdf_Data = async (req, res) => {
   try {
-    //  console.log(req.body)
     let salesDate = req.body;
     let startDate = new Date(salesDate.from);
     let endDate = new Date(salesDate.to);
     let dateFrom = moment(salesDate.from).format("DD/MM/YYYY");
     let dateto = moment(salesDate.to).format("DD/MM/YYYY");
-    //  console.log(dateFrom+"dd"+dateto)
     const orderData = await orderCollection.find({
       $and: [
         { orderDate: { $gte: startDate, $lte: endDate } },
         { orderStatus: "delivered" },
       ],
     });
-    //  console.log(orderData);
     const total = orderData.reduce((acc, curr) => {
       acc = acc + curr.totalAmount;
       return acc;
@@ -520,7 +504,6 @@ const post_pdf_Data = async (req, res) => {
     req.session.order = orderData;
     res.render("pdfDownload", { orderData, total });
 
-    //   console.log(orderData);
   } catch (error) {
     console.log(error);
   }
@@ -580,10 +563,8 @@ const bannerManage = async (req, res) => {
   try {
     bannerDetails = await bannerCollection.find();
     res.render("bannerManage", { bannerDetails });
-    // console.log(bannerDetails);
   } catch (error) {
     console.log(error);
-    // res.redirect('/500')
   }
 };
 
@@ -603,7 +584,6 @@ const addBanner = async (req, res) => {
 const bannerBlock = async (req, res) => {
   try {
     const id = req.query.id;
-    // console.log(id);
     const bannerData = await bannerCollection.findById({ _id: id });
     if (bannerData.status == true) {
       await bannerCollection.updateOne(

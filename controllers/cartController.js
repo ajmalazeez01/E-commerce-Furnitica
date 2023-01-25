@@ -326,7 +326,6 @@ const checkout = async (req, res) => {
         },
       },
     ]);
-    // console.log(cartItems)
 
     const subtotal = cartItems.reduce((acc, curr) => {
       acc = acc + curr.total;
@@ -764,7 +763,7 @@ paypal.configure({
 const couponCheck = async (req, res) => {
   try {
     const code = req.body.input;
-    console.log(code);
+    // console.log(code);
     let total = req.body.total;
     couponCollection.findOne({ code: code }).then((couponExist) => {
       if (couponExist) {
@@ -780,10 +779,8 @@ const couponCheck = async (req, res) => {
             .findOne({ code: code }, { users: { $elemMatch: { userId: id } } })
             .then((exist) => {
               if (exist.users.length === 0) {
-                console.log(total);
                 console.log(couponExist.minAmount);
                 if (total >= couponExist.minAmount) {
-                  console.log(total);
                   res.json({ couponApplied: couponExist });
                 } else {
                   let minAmount = couponExist.minAmount;
