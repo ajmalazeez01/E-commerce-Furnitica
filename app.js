@@ -9,7 +9,7 @@ const mongoose = require("mongoose"); // mongooose require
 mongoose.set("strictQuery", true);
 
 mongoose.connect(
-  'mongodb+srv://ajmalazeez:Ajmal786@cluster0.ofcsppw.mongodb.net/furnitica?retryWrites=true&w=majority',
+  process.env.MONGODB,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true

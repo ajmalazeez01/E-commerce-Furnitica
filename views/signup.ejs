@@ -72,7 +72,7 @@
             </div>
           
           </div>
-          <!-- <div class="input-div pass">
+          <div class="input-div pass">
             <div class="i">
               <i class="fas fa-lock"></i>
             </div>
@@ -83,10 +83,11 @@
                 id="cpassword"
                 class="input"
                 placeholder="Confirm password"
+                onkeyup="validateCPassword()"
                 required
               />
             </div>
-          </div> -->
+          </div>
           <div class="input-div pass">
             <div class="i">
               <i class="fas fa-lock"></i>
@@ -125,6 +126,7 @@
 		   const emailError = document.getElementById('emailError');
 			const phoneError = document.getElementById('phoneError');
 			const passwordError = document.getElementById('passwordError');
+      const CpasswordError = document.getElementById('CpasswordError');
 		
 			function validateName(){
 			  var username = document.getElementById('username').value ;
@@ -181,6 +183,17 @@
 		  passwordError.innerHTML = '';
 			return true;
 		  }
+
+    // function validateCPassword(){
+		//   var cpassword = document.getElementById('cpassword').value
+		//   if(cpassword.length < 8){
+		// 	CpasswordError.innerHTML = 'password is required [above 8 character]'
+		// 	cpassword.focus()
+		// 	return false;
+		//   }
+		//   CpasswordError.innerHTML = '';
+		// 	return true;
+		//   }
     
     </script>
 
