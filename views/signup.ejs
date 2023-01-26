@@ -33,9 +33,9 @@
                 placeholder="Username"
                 required
               />
-              <p style="color: brown;" id="userError" class="userError"></p>
             </div>
           </div>
+          <p style="color: brown;" id="userError" class="userError"></p>
           <div class="input-div one">
             <div class="i">
               <i class="fas fa-user"></i>
@@ -50,10 +50,10 @@
                 placeholder="Email"
                 required
               />
-              <p style="color: brown;"id="emailError" class="emailError"></p>
             </div>
-            
           </div>
+          <p style="color: brown;"id="emailError" class="emailError"></p>
+
           <div class="input-div pass">
             <div class="i">
               <i class="fas fa-lock"></i>
@@ -68,10 +68,10 @@
                 onkeyup="validatePassword()"
                 required
               />
-              <p style="color: brown;" id="passwordError" class="passwordError"></p>
             </div>
-          
           </div>
+          <p style="color: brown;" id="passwordError" class="passwordError"></p>
+
           <div class="input-div pass">
             <div class="i">
               <i class="fas fa-lock"></i>
@@ -88,6 +88,8 @@
               />
             </div>
           </div>
+          <p style="color: brown;" id="CpasswordError" class="CpasswordError"></p>
+
           <div class="input-div pass">
             <div class="i">
               <i class="fas fa-lock"></i>
@@ -102,10 +104,10 @@
                 placeholder="Mobile no"
                 required
               />
-              <p style="color: brown;" id="phoneError" class="phoneError"></p>
             </div>
-        
           </div>
+          <p style="color: brown;" id="phoneError" class="phoneError"></p>
+
 
           <p><%=locals.error%></p>
           <p><%=locals.warning%></p>
@@ -184,16 +186,16 @@
 			return true;
 		  }
 
-    // function validateCPassword(){
-		//   var cpassword = document.getElementById('cpassword').value
-		//   if(cpassword.length < 8){
-		// 	CpasswordError.innerHTML = 'password is required [above 8 character]'
-		// 	cpassword.focus()
-		// 	return false;
-		//   }
-		//   CpasswordError.innerHTML = '';
-		// 	return true;
-		//   }
+    function validateCPassword(){
+		  var cpassword = document.getElementById('cpassword').value
+		  if(cpassword.length < 8){
+			CpasswordError.innerHTML = 'password is required [above 8 character]'
+			cpassword.focus()
+			return false;
+		  }
+		  CpasswordError.innerHTML = '';
+			return true;
+		  }
     
     </script>
 
