@@ -19,7 +19,7 @@
               <h4 class="text-uppercase text-center ">Edit category</h4>
 
               
-              <form method="post" action="/posteditcategory/<%=categoryData?.name%>" enctype="multipart/form-data">
+              <form method="post" action="/posteditcategory?id=<%=categoryData._id%>" enctype="multipart/form-data">
                     <div class="form-outline mb-2">
                         <label class="form-label" for="form3Example1cg">Image</label>
                       <input type="file"  name="image" value="/public/proimg/<%=categoryData.image%>" class="form-control form-control" />
@@ -27,22 +27,23 @@
                  
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Category</label>
+                    <input type="text"  name="name" value="<%=categoryData.name %>" class="form-control form-control" />
 
-                    <select name="name" id="new" value="<%=categoryData.name %>" class="form-select" aria-label="Default select example">
+                    <!-- <select name="name" id="new" value="<%=categoryData.name %>" class="form-select" aria-label="Default select example">
                       <% categoryDatas.forEach((categorydata)=>{ %>
                         <option value="" ><%=categorydata.name%></option>
                <%})%>          
-            </select>
+            </select> -->
                                 
-                    </select>
+                    
                 </div>
                 <div class="d-flex justify-content-center">
                   <button type="submit"
                     class="btn btn-outline-info btn-block gradient-custom-4 text-body">Update</button>
                 </div>
-                <button type="submit"
+                <!-- <button 
                 class="btn btn-outline-info btn-block gradient-custom-4 text-body">
-            <a href="/category">back</a></button>
+            <a href="/category">back</a></button> -->
 
               </form>
 

@@ -97,18 +97,21 @@ const userBlock = async (req, res) => {
 // product management
 const product = async (req, res) => {
   try {
+    const data = req.query.wrong;
     const productData = await productCollection.find({});
-    res.render("productManagement", { productData });
+    res.render("productManagement", { productData, data });
   } catch (error) {
     console.log(error);
   }
 };
 
-// add product
+//insert product
 const insertProduct = async (req, res) => {
   try {
-    {
-      const product = new productCollection({
+    const name = req.body.name;
+    let product = await productCollection.findOne({ name: name });
+    if (product == undefined) {
+      let newproduct = new productCollection({
         name: req.body.name,
         category: req.body.category,
         brand: req.body.brand,
@@ -117,8 +120,10 @@ const insertProduct = async (req, res) => {
         price: req.body.price,
         stock: req.body.stock,
       });
-      product.save();
+      await newproduct.save();
       res.redirect("/product");
+    } else {
+      res.redirect("/product?wrong=product already exist");
     }
   } catch (error) {
     console.log(error);
@@ -126,28 +131,28 @@ const insertProduct = async (req, res) => {
 };
 
 // produtc management block and unbloxk
-const productBlock = async (req, res) => {
-  try {
-    const id = req.query.id;
-    const productdata = await productCollection.findById({ _id: id });
-    // eslint-disable-next-line eqeqeq
-    if (productdata.status == true) {
-      await productCollection.updateOne(
-        { _id: id },
-        { $set: { status: false } }
-      );
-      res.redirect("/product");
-    } else {
-      await productCollection.updateOne(
-        { _id: id },
-        { $set: { status: true } }
-      );
-      res.redirect("/product");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+// const productBlock = async (req, res) => {
+//   try {
+//     const id = req.query.id;
+//     const productdata = await productCollection.findById({ _id: id });
+//     // eslint-disable-next-line eqeqeq
+//     if (productdata.status == true) {
+//       await productCollection.updateOne(
+//         { _id: id },
+//         { $set: { status: false } }
+//       );
+//       res.redirect("/product");
+//     } else {
+//       await productCollection.updateOne(
+//         { _id: id },
+//         { $set: { status: true } }
+//       );
+//       res.redirect("/product");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 //edit get method
 const editProduct = async (req, res) => {
@@ -165,30 +170,12 @@ const editProduct = async (req, res) => {
   }
 };
 
-//edit post method
 const postEditProduct = async (req, res) => {
   try {
-    const name = req.params.name;
-    if (typeof req.file === "undefined") {
-      const product = await productCollection.updateOne(
-        { name: name },
-
-        {
-          $set: {
-            name: req.body.name,
-            category: req.body.category,
-            description: req.body.description,
-            brand: req.body.brand,
-            stock: req.body.stock,
-            price: req.body.price,
-          },
-        }
-      );
-      res.redirect("/product");
-    } else {
-      const product = await productCollection.updateOne(
-        { name: name },
-
+    const id = req.query.id;
+    if (req.file) {
+      await productCollection.findByIdAndUpdate(
+        { _id: id },
         {
           $set: {
             name: req.body.name,
@@ -201,11 +188,64 @@ const postEditProduct = async (req, res) => {
           },
         }
       );
+
+      res.redirect("/product");
+    } else {
+      console.log("else");
+      await productCollection.findByIdAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            name: req.body.name,
+            category: req.body.category,
+            description: req.body.description,
+            brand: req.body.brand,
+            stock: req.body.stock,
+            price: req.body.price,
+          },
+        }
+      );
+      res.redirect("/product");
     }
   } catch (error) {
     console.log(error);
   }
 };
+
+// const postEditProduct=async(req,res)=>{
+//   try {
+//     let id=req.query.id
+//     // if(typeof(req.file.filename==='undefined')){
+//       console.log("hi");
+//       console.log(id);
+//       await productCollection.findByIdAndUpdate({_id:id},
+//         {$set:{
+//           name: req.body.name,
+//            category: req.body.category,
+//              description: req.body.description,
+//             brand: req.body.brand,
+//             stock: req.body.stock,
+//             price: req.body.price,
+//         }});
+//         res.redirect('/product')
+//       console.log('else');
+//       await productCollection.findByIdAndUpdate({_id:id},
+//         {$set:{
+//           name: req.body.name,
+//                   category: req.body.category,
+//                   description: req.body.description,
+//                   brand: req.body.brand,
+//                   stock: req.body.stock,
+//                   price: req.body.price,
+//                   image: req.file.filename,
+//         }})
+//         res.redirect('/product')
+//       }
+//     // }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 const deleteproduct = async (req, res) => {
   try {
@@ -232,7 +272,7 @@ const category = async (req, res) => {
 const categoryBlock = async (req, res) => {
   try {
     const id = req.query.id;
-    const categoryData = await categoryCollection.findById({ _id: id });
+    let categoryData = await categoryCollection.findById({ _id: id });
     if (categoryData.status == true) {
       await categoryCollection.updateOne(
         { _id: id },
@@ -250,13 +290,15 @@ const categoryBlock = async (req, res) => {
     console.log(error);
   }
 };
+
 // add category
 const insertCategory = async (req, res) => {
   try {
     const name = req.body.name.toUpperCase();
     const image = req.file.filename;
     const categoryExist = await categoryCollection.findOne({ name: name });
-    if (categoryExist.name === name) {
+    console.log(categoryExist);
+    if (categoryExist) {
       res.redirect("/category?wrong=category already exist");
     } else {
       const category = new categoryCollection({ name, image });
@@ -284,25 +326,28 @@ const editCategory = async (req, res) => {
   }
 };
 
-//edit post method
+// const postEditCategory = async (req, res) => {
+//   try {
+//     const id = req.body.id;
+//     await categoryCollection.findByIdAndUpdate(
+//       { _id: id },
+//       { $set: { name: req.body.name.toUpperCase() } }
+//     );
+//     res.redirect("/category");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 const postEditCategory = async (req, res) => {
   try {
-    const name = req.params.name;
-    if (typeof req.file === "undefined") {
-      const category = await categoryCollection.updateOne(
-        { name: name },
-
-        {
-          $set: {
-            name: req.body.name,
-          },
-        }
-      );
-      res.redirect("/category");
-    } else {
-      const category = await categoryCollection.updateOne(
-        { name: name },
-
+    const id = req.query.id;
+    console.log(id);
+    console.log(req.body);
+    if (req.file) {
+      console.log("if");
+      await categoryCollection.findByIdAndUpdate(
+        { _id: id },
         {
           $set: {
             name: req.body.name,
@@ -310,11 +355,56 @@ const postEditCategory = async (req, res) => {
           },
         }
       );
+
+      res.redirect("/category");
+    } else {
+      console.log("else");
+      await categoryCollection.findByIdAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            name: req.body.name,
+          },
+        }
+      );
+      res.redirect("/category");
     }
   } catch (error) {
     console.log(error);
   }
 };
+
+//edit post method
+// const postEditCategory = async (req, res) => {
+//   try {
+//     const name = req.params.name;
+//     if (typeof req.file === "undefined") {
+//       const category = await categoryCollection.updateOne(
+//         { name: name },
+
+//         {
+//           $set: {
+//             name: req.body.name,
+//           },
+//         }
+//       );
+//       res.redirect("/category");
+//     } else {
+//       const category = await categoryCollection.updateOne(
+//         { name: name },
+
+//         {
+//           $set: {
+//             name: req.body.name,
+//             image: req.file.filename,
+//           },
+//         }
+//       );
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const deleteCategory = async (req, res) => {
   try {
@@ -329,7 +419,6 @@ const deleteCategory = async (req, res) => {
 const couponManage = async (req, res) => {
   try {
     const data = req.query.wrong;
-    // console.log(data);
     const coupons = await couponCollection.find();
     res.render("couponManage", { coupons, data });
   } catch (error) {
@@ -339,12 +428,9 @@ const couponManage = async (req, res) => {
 
 const insertCoupon = async (req, res) => {
   try {
-    // console.log(req.body);
     const code = req.body.code.toUpperCase();
-    couponCode = await couponCollection.findOne({ code: code });
-    if (couponCode.code == code) {
-      res.redirect("/coupon?wrong=coupon already exist");
-    } else {
+    let couponCode = await couponCollection.findOne({ code: code });
+    if (couponCode == undefined) {
       const newCoupon = new couponCollection({
         name: req.body.name,
         code: code,
@@ -355,6 +441,8 @@ const insertCoupon = async (req, res) => {
       });
       newCoupon.save();
       res.redirect("/coupon");
+    } else {
+      res.redirect("/coupon?wrong=coupon already exist");
     }
   } catch (error) {
     console.log(error);
@@ -474,10 +562,11 @@ const viewOrder = async (req, res) => {
 
 const salesPage = async (req, res) => {
   try {
+    const data = req.query.wrong;
     const orderDetails = await orderCollection.find({
       orderStatus: "delivered",
     });
-    res.render("salesReport", { orderDetails });
+    res.render("salesReport", { orderDetails, data });
   } catch (error) {
     console.log(error);
   }
@@ -487,23 +576,28 @@ const post_pdf_Data = async (req, res) => {
   try {
     let salesDate = req.body;
     let startDate = new Date(salesDate.from);
+
     let endDate = new Date(salesDate.to);
-    let dateFrom = moment(salesDate.from).format("DD/MM/YYYY");
-    let dateto = moment(salesDate.to).format("DD/MM/YYYY");
-    const orderData = await orderCollection.find({
-      $and: [
-        { orderDate: { $gte: startDate, $lte: endDate } },
-        { orderStatus: "delivered" },
-      ],
-    });
-    const total = orderData.reduce((acc, curr) => {
-      acc = acc + curr.totalAmount;
-      return acc;
-    }, 0);
+    if (endDate >= startDate) {
+      let dateFrom = moment(salesDate.from).format("DD/MM/YYYY");
+      let dateto = moment(salesDate.to).format("DD/MM/YYYY");
 
-    req.session.order = orderData;
-    res.render("pdfDownload", { orderData, total });
+      const orderData = await orderCollection.find({
+        $and: [
+          { orderDate: { $gte: startDate, $lte: endDate } },
+          { orderStatus: "delivered" },
+        ],
+      });
+      const total = orderData.reduce((acc, curr) => {
+        acc = acc + curr.totalAmount;
+        return acc;
+      }, 0);
 
+      req.session.order = orderData;
+      res.render("pdfDownload", { orderData, total });
+    } else {
+      res.redirect("/sales?wrong=invalid date");
+    }
   } catch (error) {
     console.log(error);
   }
@@ -561,8 +655,9 @@ const csvDownload = async (req, res) => {
 
 const bannerManage = async (req, res) => {
   try {
-    bannerDetails = await bannerCollection.find();
-    res.render("bannerManage", { bannerDetails });
+    const data = req.query.wrong;
+    const bannerDetails = await bannerCollection.find();
+    res.render("bannerManage", { bannerDetails, data });
   } catch (error) {
     console.log(error);
   }
@@ -570,12 +665,18 @@ const bannerManage = async (req, res) => {
 
 const addBanner = async (req, res) => {
   try {
-    let banner = new bannerCollection({
-      image: req.file.filename,
-      name: req.body.name,
-    });
-    await banner.save();
-    res.redirect("/banner");
+    const name = req.body.name;
+    let banner = await bannerCollection.findOne({ name: name });
+    if (banner == undefined) {
+      let newbanner = new bannerCollection({
+        image: req.file.filename,
+        name: req.body.name,
+      });
+      await newbanner.save();
+      res.redirect("/banner");
+    } else {
+      res.redirect("/banner?wrong=banner already exist");
+    }
   } catch (error) {
     console.log(error);
   }
@@ -608,7 +709,7 @@ module.exports = {
   userBlock,
   product,
   insertProduct,
-  productBlock,
+  // productBlock,
   editProduct,
   postEditProduct,
   deleteproduct,

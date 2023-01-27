@@ -149,7 +149,7 @@
                       <%if(item.status==true){%>
                       <a
                         href="/userblock?id=<%=item.id%>"
-                        onclick="return confirm('are you sure change access to <%=item.email%>')"
+                        data-bs-toggle="modal" data-bs-target="#<%=item.name%>" 
                         ><button
                           type="button"
                           class="badge badge-success"
@@ -162,7 +162,7 @@
                       <%} else {%>
                       <a
                         href="/userblock?id=<%=item.id%>"
-                        onclick="return confirm('are you sure change access to <%=item.email%>')"
+                        data-bs-toggle="modal" data-bs-target="#<%=item.name%>"     
                         ><button
                           type="button"
                           class="badge badge-danger"
@@ -171,6 +171,43 @@
                           UNBLOCK
                         </button></a
                       >
+
+
+
+
+
+
+                               <!-- ------------------------------------------------------ -->
+    <div class="modal" id="<%=item.name%>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Action</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+          
+            <div class="modal-body">
+                    <p>Are you Sure You want to change <%=item.email%></p>
+                  </div>
+                  <div class="modal-footer">
+                    <%if(item.status==true){%>
+                        <a href="/userblock?id=<%=item._id%>" type="button" class="btn btn-primary">Save changes</a>
+    
+                        <%} else {%>
+                                   <a href="/userblock?id=<%=item._id%>" type="button" class="btn btn-primary">Save changes</a>
+    
+                            <%}%>
+    
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+          </div>
+        </div>
+      </div>
+    
+    <!-- ----------------------------------------------- -->
+
+
+    
 
                       <%}%>
                     </td>

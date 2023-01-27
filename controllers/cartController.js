@@ -15,7 +15,9 @@ const cartList = async (req, res) => {
     const user = await userCollection.findOne({ _id: req.session.user });
     const brands = await productCollection.distinct("brand");
     const categories = await categoryCollection.find({ status: true });
-    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+    const cartCount = await cartCollection.findOne({
+      userId: mongoose.Types.ObjectId(req.session.user),
+    });
     const cartData = await cartCollection.aggregate([
       { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
 
@@ -54,7 +56,7 @@ const cartList = async (req, res) => {
         },
       },
     ]);
-    
+
     const subtotal = cartData.reduce(function (acc, curr) {
       acc = acc + curr.total;
       return acc;
@@ -65,7 +67,7 @@ const cartList = async (req, res) => {
       cartData,
       user,
       subtotal,
-      cartCount
+      cartCount,
     });
   } catch (error) {
     console.log(error);
@@ -130,21 +132,21 @@ const add_to_cart = async (req, res) => {
   }
 };
 
-
 const productQtyAdd = async (req, res) => {
   try {
-    const data=req.body
-    const proId=data.Id
-    const qty=parseInt(data.qty)
-    const productData=await productCollection.findOne({_id:proId})
-    if (productData.stock>qty ){
-          const price=productData.price
-          await cartCollection.updateOne(
-               { userId: req.session.user, "cartItem.productId": proId },
-               { $inc: { "cartItem.$.qty": 1 } })
-              res.json({price})
-    }else{
-      res.json({outStock:true})
+    const data = req.body;
+    const proId = data.Id;
+    const qty = parseInt(data.qty);
+    const productData = await productCollection.findOne({ _id: proId });
+    if (productData.stock > qty) {
+      const price = productData.price;
+      await cartCollection.updateOne(
+        { userId: req.session.user, "cartItem.productId": proId },
+        { $inc: { "cartItem.$.qty": 1 } }
+      );
+      res.json({ price });
+    } else {
+      res.json({ outStock: true });
     }
   } catch (error) {
     console.log(error);
@@ -153,29 +155,29 @@ const productQtyAdd = async (req, res) => {
 
 const productQtySub = async (req, res) => {
   try {
-    const data=req.body
-    const proId=data.Id
-    const qty=parseInt(data.qty)
+    const data = req.body;
+    const proId = data.Id;
+    const qty = parseInt(data.qty);
     console.log(data.qty);
-    const productData=await productCollection.findOne({_id:proId})
-    if (productData.stock>0 ){
-         if( qty > 1){
-          const price=productData.price
-          await cartCollection.updateOne(
-               { userId: req.session.user, "cartItem.productId": proId },
-               { $inc: { "cartItem.$.qty": -1 } })
-              res.json({price})
-         }else{
-          res.json({limit:true})
-         }
-    }else{
-      res.json({outStock:true})
+    const productData = await productCollection.findOne({ _id: proId });
+    if (productData.stock > 0) {
+      if (qty > 1) {
+        const price = productData.price;
+        await cartCollection.updateOne(
+          { userId: req.session.user, "cartItem.productId": proId },
+          { $inc: { "cartItem.$.qty": -1 } }
+        );
+        res.json({ price });
+      } else {
+        res.json({ limit: true });
+      }
+    } else {
+      res.json({ outStock: true });
     }
   } catch (error) {
     console.log(error);
   }
 };
-
 
 const deleteCart = async (req, res) => {
   try {
@@ -196,7 +198,9 @@ const view_wishList = async (req, res) => {
     const user = await userCollection.findOne({ _id: req.session.user });
     // const brands = await productCollection.distinct("brand");
     const categories = await categoryCollection.find({ status: true });
-    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+    const cartCount = await cartCollection.findOne({
+      userId: mongoose.Types.ObjectId(req.session.user),
+    });
     const wishList = await wishlistCollection.aggregate([
       { $match: { userId: user._id } },
       { $unwind: "$wishList" },
@@ -230,7 +234,7 @@ const view_wishList = async (req, res) => {
         },
       },
     ]);
-    res.render("wishlist", { user, categories, wishList,cartCount });
+    res.render("wishlist", { user, categories, wishList, cartCount });
   } catch (error) {
     console.log(error);
   }
@@ -292,7 +296,9 @@ const deleteWishlist = async (req, res) => {
 //checkOut
 const checkout = async (req, res) => {
   try {
-    const cartCount=await cartCollection.findOne({userId: mongoose.Types.ObjectId(req.session.user)})
+    const cartCount = await cartCollection.findOne({
+      userId: mongoose.Types.ObjectId(req.session.user),
+    });
     let cartItems = await cartCollection.aggregate([
       { $match: { userId: mongoose.Types.ObjectId(req.session.user) } },
       { $unwind: "$cartItem" },
@@ -358,7 +364,7 @@ const checkout = async (req, res) => {
       address,
       cartItems,
       subtotal,
-      cartCount
+      cartCount,
     });
   } catch (error) {
     console.log(error);

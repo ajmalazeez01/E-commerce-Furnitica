@@ -19,9 +19,9 @@ router.get('/userblock',session.adminLogin, adminControllers.userBlock)
 
 //product management
 router.get('/product',session.adminLogin, adminControllers.product)
-router.get('/productblock',session.adminLogin,adminControllers.productBlock)
+// router.get('/productblock',session.adminLogin,adminControllers.productBlock)
 router.post('/insertproduct',session.adminLogin, multer.single('image'), adminControllers.insertProduct)
-router.post('/posteditproduct/:name',session.adminLogin, multer.single('image'), adminControllers.postEditProduct)
+router.post('/posteditproduct',session.adminLogin, multer.single('image'), adminControllers.postEditProduct)
 router.get('/editproduct',session.adminLogin, adminControllers.editProduct)
 router.get('/deleteproduct',session.adminLogin, adminControllers.deleteproduct)
 
@@ -29,7 +29,7 @@ router.get('/deleteproduct',session.adminLogin, adminControllers.deleteproduct)
 router.get('/category',session.adminLogin, adminControllers.category)
 router.get('/categoryblock',session.adminLogin, adminControllers.categoryBlock)
 router.get('/editcategory',session.adminLogin, adminControllers.editCategory)
-router.post('/posteditcategory/:name',session.adminLogin, adminControllers.postEditCategory)
+router.post('/posteditcategory',session.adminLogin,multer.single('image'), adminControllers.postEditCategory)
 router.get('/deletecategory',session.adminLogin, adminControllers.deleteCategory)
 router.post('/insertcategory',session.adminLogin, multer.single('image'), adminControllers.insertCategory)
 

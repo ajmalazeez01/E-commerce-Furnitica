@@ -116,6 +116,11 @@
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     Add Banner
   </button>
+
+  <div class="text d-flex justify-content-end" style="color: red;">
+    <b><h4><%= locals.data %></h4></b>
+ </div>
+  
   
   <!-- Modal -->
   <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="padding-top: 125px;">
@@ -191,11 +196,52 @@
 
                 <td>
                     <% if(data.status==true){ %>
-                      <a href="/bannerblock?id=<%=data._id%>" onclick="return confirm('Are you sure, change access to banner ')"><button type="button"  class="badge badge-success" style="width: 100px;">Block</button></a>
+                      <a href="/bannerblock?id=<%=data._id%>"  data-bs-toggle="modal" data-bs-target="#<%=data.name%>"  ><button type="button"  class="badge badge-success" style="width: 100px;">Block</button></a>
                       <% } else { %>
-                           <a href="/bannerblock?id=<%=data._id%> " onclick="return confirm('Are you sure, change access to banner ')"><button type="button"  class="badge badge-danger" style="width: 100px;">Unblock</button></a> 
+                           <a href="/bannerblock?id=<%=data._id%> "  data-bs-toggle="modal" data-bs-target="#<%=data.name%>"    ><button type="button"  class="badge badge-danger" style="width: 100px;">Unblock</button></a> 
                            <% } %>  
                         
+
+
+
+
+
+          <!-- ------------------------------------------------------ -->
+  <div class="modal fade " id="<%=data.name%>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      
+        <div class="modal-body">
+                <p>Are you Sure You want to change <%=data.name%></p>
+              </div>
+              <div class="modal-footer">
+                <%if(data.status==true){%>
+                          <a href="/bannerblock?id=<%=data._id%>" type="button" class="btn btn-primary">Save changes</a>
+
+                    <%} else {%>
+                               <a href="/bannerblock?id=<%=data._id%> " type="button" class="btn btn-primary">Save changes</a>
+
+                        <%}%>
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+      </div>
+    </div>
+  </div>
+
+<!-- ----------------------------------------------- -->
+
+
+
+
+
+
+
+
                    
                 </td>
               </tr>
@@ -205,6 +251,14 @@
       <% } %>
     </div>
 </div>
+
+
+
+
+
+
+
+
 
                 </div>
             </main>

@@ -172,7 +172,7 @@
     </div>
     <div class="card-body">
         <% if(coupons!=null) { %>
-            <table id="dataTable" style="width: 100%;">
+            <table  class="table table-hover cell-border fw-light nowrap" id="dataTable" style="width: 100%;">
                 <thead>
                     <tr>
                         <!-- <th>No.</th> -->
@@ -198,12 +198,50 @@
                   
                     <td>
                         <%if(data.status==true){%> 
-                          <a href="/couponblock?id=<%=data._id%>" onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="badge badge-success" style="width: 100px;">List</button></a>
+                          <!-- <a href="/couponblock?id=<%=data._id%>"> -->
+                            <button type="button" class="badge badge-success" data-bs-toggle="modal" data-bs-target="#<%=data.name%>" style="width: 100px;">List</button>
+                        <!-- </a> -->
                             <%} else {%>
-                               <a href="/couponblock?id=<%=data._id%> " onclick="return confirm('Are you sure, change access to category <%=data.name%>')"><button type="button" class="badge badge-danger" style="width: 100px;">Unlist</button></a> 
+                               <!-- <a href="/couponblock?id=<%=data._id%> "> -->
+                                <button type="button" class="badge badge-danger" data-bs-toggle="modal" data-bs-target="#<%=data.name%>" style="width: 100px;">Unlist</button>
+                            <!-- </a>  -->
                                 
                                 <%}%>
-                                
+                                <!-- ------------------------------------------------ -->
+
+
+<!-- Button trigger modal -->          
+
+
+  <!-- Modal -->
+  <div class="modal fade " id="<%=data.name%>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      
+        <div class="modal-body">
+                <p>Are you Sure You want to change <%=data.name%></p>
+              </div>
+              <div class="modal-footer">
+                <%if(data.status==true){%> 
+                          <a href="/couponblock?id=<%=data._id%>" type="button" class="btn btn-primary">Save changes</a>
+
+                    <%} else {%>
+                               <a href="/couponblock?id=<%=data._id%> " type="button" class="btn btn-primary">Save changes</a>
+
+                        <%}%>
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+      </div>
+    </div>
+  </div>
+
+<!-- ----------------------------------------------- -->
+
                     </td>
                   </tr>
                   <%})%>
@@ -212,7 +250,6 @@
             <%}%>
     </div>
 </div>
-
                 </div>
             </main>
             <footer class="py-4 bg-light mt-auto">

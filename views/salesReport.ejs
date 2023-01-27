@@ -122,7 +122,12 @@
                     <button type="submit" class="btn btn-primary" >Submit</button>
                 </div>
                 </span>
+                <div class="text d-flex justify-content-end" style="color: red;">
+                    <b><h4><%= locals.data %></h4></b>
+                 </div>
             </form>
+           
+
             </div>
 <!-- Button trigger modal -->
 <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -178,22 +183,14 @@
                     <th>Total Amount</th>
                 </tr>
             </thead>
-            <tfoot>
-                <tr>
-                    <th>User Id</th>
-                    <th>Order Details</th>
-                    <th>Order Status</th>
-                    <th>Payment Method</th>
-                    <th>Total Amount</th>
-                </tr>
-            </tfoot>
+           
             <tbody>
                 <% orderDetails.forEach((data)=>{ %>
               <tr>
                 </span><td><%=data._id%></td>
                 <% let date =data.orderDate %>
-         <% const format = new Date(date  ); %>
-         <% const todate = format.toLocaleDateString(); %>
+                <% const format = new Date(date  ); %>
+                <% const todate = format.toLocaleDateString(); %>
                 <td><%=todate%></td>
                 <td><%=data.orderStatus%></td>
                 <td> <%=data.paymentMethod%> </td>

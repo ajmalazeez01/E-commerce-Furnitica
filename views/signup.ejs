@@ -20,9 +20,11 @@
           <img src="../public/proimg/logo.png" />
           <h2 class="title">Furnitica</h2>
           <div class="input-div one">
+            
             <div class="i">
               <i class="fas fa-user"></i>
             </div>
+            
             <div class="div">
               <input
                 type="text"
@@ -35,7 +37,7 @@
               />
             </div>
           </div>
-          <p style="color: brown;" id="userError" class="userError"></p>
+          <p style="color: brown;size: -1px;" id="userError" class="userError"></p>
           <div class="input-div one">
             <div class="i">
               <i class="fas fa-user"></i>
@@ -52,7 +54,7 @@
               />
             </div>
           </div>
-          <p style="color: brown;"id="emailError" class="emailError"></p>
+          <p style="color: brown; size: -1px;"id="emailError" class="emailError"></p>
 
           <div class="input-div pass">
             <div class="i">
@@ -70,7 +72,7 @@
               />
             </div>
           </div>
-          <p style="color: brown;" id="passwordError" class="passwordError"></p>
+          <p style="color: brown;size: -1px;" id="passwordError" class="passwordError"></p>
 
           <div class="input-div pass">
             <div class="i">
@@ -88,7 +90,7 @@
               />
             </div>
           </div>
-          <p style="color: brown;" id="CpasswordError" class="CpasswordError"></p>
+          <p style="color: brown;size: -1px;" id="CpasswordError" class="CpasswordError"></p>
 
           <div class="input-div pass">
             <div class="i">
@@ -106,7 +108,7 @@
               />
             </div>
           </div>
-          <p style="color: brown;" id="phoneError" class="phoneError"></p>
+          <p style="color: brown;size: -1px;" id="phoneError" class="phoneError"></p>
 
 
           <p><%=locals.error%></p>
@@ -178,19 +180,29 @@
 		  function validatePassword(){
 		  var password = document.getElementById('password').value
 		  if(password.length < 8){
-			passwordError.innerHTML = 'password is required [above 8 character]'
+			passwordError.innerHTML = 'password 8 character is required'
 			password.focus()
+			return false;
+		  }
+      if(!password.match(/^(?=.*[!@#$%^&*])(?=.{8,})/)){
+			passwordError.innerHTML = 'one special character needed'
 			return false;
 		  }
 		  passwordError.innerHTML = '';
 			return true;
+
+      
 		  }
 
     function validateCPassword(){
 		  var cpassword = document.getElementById('cpassword').value
 		  if(cpassword.length < 8){
-			CpasswordError.innerHTML = 'password is required [above 8 character]'
+			CpasswordError.innerHTML = 'password 8 character is required'
 			cpassword.focus()
+			return false;
+		  }
+      if(!cpassword.match(/^(?=.*[!@#$%^&*])(?=.{8,})/)){
+			CpasswordError.innerHTML = 'one special character needed'
 			return false;
 		  }
 		  CpasswordError.innerHTML = '';

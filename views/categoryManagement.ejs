@@ -181,27 +181,55 @@
                      <td><img src="/public/proimg/<%=categorydata.image%>" alt="image"style="width:100px,;" alt="image"></td>                       
                      <td><%=categorydata.name%></td>
                                             
-                     <!-- <td><%if(categorydata.status==true){%>
-                        <p class = "badge badge-success">Active</p>
-                        <%} else {%>
-                        <p class = "badge badge-danger">Inactive</p>
-                        <%}%>
-                      </td> -->
+                     
         
                       <td>
                                                 
                       <%if(categorydata.status==true){%>
-                      <a href="/categoryblock?id=<%=categorydata._id%>" onclick="return confirm('are you sure change access to <%=categorydata.name%>')"><button type="button" class="badge badge-success ml-2"style="width:100px;">BLOCK</button></a>
+                      <button data-bs-toggle="modal" data-bs-target="#<%=categorydata.name%>" type="button" class="badge badge-success ml-2"style="width:100px;">BLOCK</button>
                                                
                       <%} else {%>
-                      <a href="/categoryblock?id=<%=categorydata._id%>" onclick="return confirm('are you sure change access to <%=categorydata.name%>')"><button type="button" class="badge badge-danger ml-2"style="width:100px;">UNBLOCK</button></a>
+                        <%console.log(categorydata._id)%>
+                      <button data-bs-toggle="modal" data-bs-target="#<%=categorydata.name%>" type="button" class="badge badge-danger ml-2"style="width:100px;">UNBLOCK</button>
                       <%}%>
-                                          
+      
                       <a href="/editcategory?id=<%= categorydata._id %>"><button type="button" class="badge badge-primary"style="width:100px;">Edit</button>
                       
                       </a>
       
-                           <a  href="/deletecategory?id=<%= categorydata._id %>"><button type="button" class="badge badge-warning"style="width:100px;">Delete</button></a>      
+                           <a  href="/deletecategory?id=<%= categorydata._id %>"><button type="button" class="badge badge-warning"style="width:100px;">Delete</button></a>    
+                           
+                         
+
+                           <!-- ------------------------------------------------------ -->
+    <div class="modal" id="<%=categorydata.name%>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      
+        <div class="modal-body">
+                <p>Are you Sure You want to change <%=categorydata.name%></p>
+              </div>
+              <div class="modal-footer">
+                <%if(categorydata.status==true){%>
+                    <a href="/categoryblock?id=<%=categorydata._id%>" type="button" class="btn btn-primary">Save changes</a>
+
+                    <%} else {%>
+                               <a href="/categoryblock?id=<%=categorydata._id%>" type="button" class="btn btn-primary">Save changes</a>
+
+                        <%}%>
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+      </div>
+    </div>
+  </div>
+
+<!-- ----------------------------------------------- -->
+
                               
                          </td>
                                  
