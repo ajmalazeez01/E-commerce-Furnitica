@@ -80,8 +80,6 @@ const userBlock = async (req, res) => {
   try {
     const id = req.query.id;
     const userdata = await userCollection.findById({ _id: id });
-    console.log(userdata);
-    // eslint-disable-next-line eqeqeq
     if (userdata.status == true) {
       await userCollection.updateOne({ _id: id }, { $set: { status: false } });
       res.redirect("/user");
@@ -130,29 +128,6 @@ const insertProduct = async (req, res) => {
   }
 };
 
-// produtc management block and unbloxk
-// const productBlock = async (req, res) => {
-//   try {
-//     const id = req.query.id;
-//     const productdata = await productCollection.findById({ _id: id });
-//     // eslint-disable-next-line eqeqeq
-//     if (productdata.status == true) {
-//       await productCollection.updateOne(
-//         { _id: id },
-//         { $set: { status: false } }
-//       );
-//       res.redirect("/product");
-//     } else {
-//       await productCollection.updateOne(
-//         { _id: id },
-//         { $set: { status: true } }
-//       );
-//       res.redirect("/product");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 //edit get method
 const editProduct = async (req, res) => {
@@ -191,7 +166,6 @@ const postEditProduct = async (req, res) => {
 
       res.redirect("/product");
     } else {
-      console.log("else");
       await productCollection.findByIdAndUpdate(
         { _id: id },
         {
@@ -212,40 +186,6 @@ const postEditProduct = async (req, res) => {
   }
 };
 
-// const postEditProduct=async(req,res)=>{
-//   try {
-//     let id=req.query.id
-//     // if(typeof(req.file.filename==='undefined')){
-//       console.log("hi");
-//       console.log(id);
-//       await productCollection.findByIdAndUpdate({_id:id},
-//         {$set:{
-//           name: req.body.name,
-//            category: req.body.category,
-//              description: req.body.description,
-//             brand: req.body.brand,
-//             stock: req.body.stock,
-//             price: req.body.price,
-//         }});
-//         res.redirect('/product')
-//       console.log('else');
-//       await productCollection.findByIdAndUpdate({_id:id},
-//         {$set:{
-//           name: req.body.name,
-//                   category: req.body.category,
-//                   description: req.body.description,
-//                   brand: req.body.brand,
-//                   stock: req.body.stock,
-//                   price: req.body.price,
-//                   image: req.file.filename,
-//         }})
-//         res.redirect('/product')
-//       }
-//     // }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 const deleteproduct = async (req, res) => {
   try {
@@ -261,7 +201,6 @@ const category = async (req, res) => {
   try {
     const data = req.query.wrong;
     const categoryData = await categoryCollection.find({});
-    // console.log(categoryData);
     res.render("categoryManagement", { categoryData, data });
   } catch (error) {
     console.log(error);
@@ -297,7 +236,6 @@ const insertCategory = async (req, res) => {
     const name = req.body.name.toUpperCase();
     const image = req.file.filename;
     const categoryExist = await categoryCollection.findOne({ name: name });
-    console.log(categoryExist);
     if (categoryExist) {
       res.redirect("/category?wrong=category already exist");
     } else {
@@ -326,26 +264,12 @@ const editCategory = async (req, res) => {
   }
 };
 
-// const postEditCategory = async (req, res) => {
-//   try {
-//     const id = req.body.id;
-//     await categoryCollection.findByIdAndUpdate(
-//       { _id: id },
-//       { $set: { name: req.body.name.toUpperCase() } }
-//     );
-//     res.redirect("/category");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+
 
 const postEditCategory = async (req, res) => {
   try {
     const id = req.query.id;
-    console.log(id);
-    console.log(req.body);
     if (req.file) {
-      console.log("if");
       await categoryCollection.findByIdAndUpdate(
         { _id: id },
         {
@@ -358,7 +282,6 @@ const postEditCategory = async (req, res) => {
 
       res.redirect("/category");
     } else {
-      console.log("else");
       await categoryCollection.findByIdAndUpdate(
         { _id: id },
         {
@@ -374,37 +297,7 @@ const postEditCategory = async (req, res) => {
   }
 };
 
-//edit post method
-// const postEditCategory = async (req, res) => {
-//   try {
-//     const name = req.params.name;
-//     if (typeof req.file === "undefined") {
-//       const category = await categoryCollection.updateOne(
-//         { name: name },
 
-//         {
-//           $set: {
-//             name: req.body.name,
-//           },
-//         }
-//       );
-//       res.redirect("/category");
-//     } else {
-//       const category = await categoryCollection.updateOne(
-//         { name: name },
-
-//         {
-//           $set: {
-//             name: req.body.name,
-//             image: req.file.filename,
-//           },
-//         }
-//       );
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 const deleteCategory = async (req, res) => {
   try {

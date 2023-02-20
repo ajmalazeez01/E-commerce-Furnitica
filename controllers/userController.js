@@ -36,10 +36,10 @@ const insertUser = async (req, res) => {
     console.log(nodemailer.OTP);
 
     nodemailer.mailTransporter.sendMail(mailDetails, (err) => {
-      if (err) {
-        console.log(err, "error");
+      if (error) {
+        console.log(error);
       } else {
-        res.render("otp.ejs");
+        res.render("otp");
         console.log("OTP mailed");
       }
     });
@@ -109,7 +109,6 @@ const userHome = async (req, res) => {
       category: req.query.category,
       status: true,
     });
-    console.log(bannerDetails);
     res.render("userHome", {
       product,
       category,
@@ -308,34 +307,6 @@ var posteditAddress = async (req, res) => {
   }
 };
 
-//post edit profile address
-// const posteditAddress = async (req, res) => {
-//   try {
-//     const name = req.params.name;
-//     console.log(name);
-//     {
-//       await userCollection.updateOne(
-//         { name: name },
-
-//         {
-//           $set: {
-//             name: req.body.name,
-//             addressline1: req.body.addressline1,
-//             addressline2: req.body.addressline2,
-//             district: req.body.district,
-//             state: req.body.state,
-//             country: req.body.country,
-//             pin: req.body.pin,
-//             mobile: req.body.mobile,
-//           },
-//         }
-//       );
-//       res.redirect("/profile");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 //delete address
 let deleteAddress = async (req, res) => {

@@ -121,7 +121,6 @@ const add_to_cart = async (req, res) => {
         await addCart.save();
         const cartData = await cartCollection.findOne({ userId: id });
         const count = cartData.cartItem.length;
-        //  console.log(count);
         res.json({ success: true, count });
       }
     } else {
@@ -158,7 +157,6 @@ const productQtySub = async (req, res) => {
     const data = req.body;
     const proId = data.Id;
     const qty = parseInt(data.qty);
-    console.log(data.qty);
     const productData = await productCollection.findOne({ _id: proId });
     if (productData.stock > 0) {
       if (qty > 1) {
@@ -275,7 +273,7 @@ const wishList = async (req, res) => {
       res.json({ success: true, count });
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -754,7 +752,6 @@ const postCheckOut = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.redirect("/404");
   }
 };
 
@@ -769,7 +766,6 @@ paypal.configure({
 const couponCheck = async (req, res) => {
   try {
     const code = req.body.input;
-    // console.log(code);
     let total = req.body.total;
     couponCollection.findOne({ code: code }).then((couponExist) => {
       if (couponExist) {
@@ -785,7 +781,6 @@ const couponCheck = async (req, res) => {
             .findOne({ code: code }, { users: { $elemMatch: { userId: id } } })
             .then((exist) => {
               if (exist.users.length === 0) {
-                console.log(couponExist.minAmount);
                 if (total >= couponExist.minAmount) {
                   res.json({ couponApplied: couponExist });
                 } else {

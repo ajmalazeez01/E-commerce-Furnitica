@@ -11,6 +11,4 @@ module.exports={
     }),
     OTP:`${Math.floor(1000+Math.random()*9000)}`,
 }
-// console.log(process.env.EMAIL);
-// console.log(process.env.PASSWORD);
 
