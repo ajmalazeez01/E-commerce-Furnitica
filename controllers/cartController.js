@@ -249,7 +249,7 @@ const wishList = async (req, res) => {
       let wishlistEx = wish.wishList.findIndex(
         (wishList) => wishList.productId == id
       );
-      if (wishlistEx != -1) {
+      if (wishlistEx != -1      ) {
         res.json({ wish: true });
       } else {
         await wishlistCollection.updateOne(
