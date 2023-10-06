@@ -46,6 +46,41 @@ const insertUser = async (req, res) => {
   }
 };
 
+
+// const insertUser = async (req, res) => {
+//   // signup post
+//   try {
+//     userData = req.body;
+//     const email = userData.email;
+//     const password = userData.password;
+//     const cpassword = userData.cpassword;
+//     const user = await userCollection.findOne({ email: email });
+//     if (email == user.email && password == user.password) {
+//       if (password !== cpassword) {
+//         res.render("signup", { warning: "incorrect password" });
+//       }
+//       res.render("signup", { error: "you already have a member" });
+//     }
+//   } catch (error) {
+//     const mailDetails = {
+//       from: "ajmalazeez776@gmail.com",
+//       to: req.body.email,
+//       subject: "Furnitica REGISTRATION",
+//       html: `<p>Your OTP for registering in furnitica is ${nodemailer.OTP}</p>`,
+//     };
+//     console.log(nodemailer.OTP);
+
+//     nodemailer.mailTransporter.sendMail(mailDetails, (err) => {
+//       if (error) {
+//         console.log(error);
+//       } else {
+//         res.render("otp");
+//         console.log("OTP mailed");
+//       }
+//     });
+//   }
+// };
+
 const otp = (req, res) => {
   res.render("otp");
 };
