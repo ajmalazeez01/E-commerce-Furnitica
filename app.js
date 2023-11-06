@@ -69,8 +69,7 @@ app.use((req, res) => {
   res.status(404).render("errorPage", { url: req.url });
 });
 
-// For post listening
+
 app.listen(port, () =>
   console.log(`http://localhost:${port}`)
 );
-// sdfgfdsgsdfgfdgs
