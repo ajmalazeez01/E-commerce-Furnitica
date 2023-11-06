@@ -18,11 +18,14 @@
   "name": "week---project",
   "version": "1.0.0",
   "main": "app.js",
+  "scripts": {
+    "start": "app.js ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ajmalazeez01/project-furnitica.git"
@@ -31,5 +34,6 @@
     "url": "https://github.com/ajmalazeez01/project-furnitica/issues"
   },
   "homepage": "https://github.com/ajmalazeez01/project-furnitica#readme",
+  
   "description": ""
 }
